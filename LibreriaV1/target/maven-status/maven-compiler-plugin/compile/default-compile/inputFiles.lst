@@ -1,17 +1,17 @@
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\configuraciones\ConfiguracionesSeguridad.java
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\controladores\AutorController.java
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\repositorios\AutorRepositorio.java
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\entidades\Editorial.java
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\servicios\EditorialServicio.java
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\servicios\AutorServicio.java
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\entidades\Libro.java
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\repositorios\LibroRepositorio.java
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\servicios\LibroServicio.java
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\controladores\LibroController.java
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\errores\ErrorServicio.java
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\controladores\ErroresController.java
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\controladores\EditorialController.java
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\entidades\Autor.java
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\controladores\PortalController.java
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\LIbreriaApplication.java
-C:\Users\Lucas\Documents\NetBeansProjects\Proyectos libreria\Libreria\src\main\java\egg\web\libreria\repositorios\EditorialRepositorio.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\controladores\ErroresController.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\errores\ErrorServicio.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\controladores\PortalController.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\LIbreriaApplication.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\entidades\Editorial.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\entidades\Libro.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\controladores\AutorController.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\controladores\LibroController.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\repositorios\LibroRepositorio.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\repositorios\AutorRepositorio.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\entidades\Autor.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\servicios\EditorialServicio.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\servicios\LibroServicio.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\repositorios\EditorialRepositorio.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\servicios\AutorServicio.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\configuraciones\ConfiguracionesSeguridad.java
+C:\Users\Lucas\Documents\NetBeansProjects\Proyects-libreria-versions\LibreriaV1\src\main\java\egg\web\libreria\controladores\EditorialController.java

@@ -25,7 +25,7 @@
                     <div class="mb-3">
                         <label for="isbn" class="col col-form-label">ISBN</label>
                         <div class="col-sm-10 w-100">
-                            <input type="number" class="form-control" id="isbn" name="isbn" th:value="${isbn}"/>
+                            <input type="text" class="form-control" id="isbn" name="isbn" th:value="${isbn}"/>
                         </div>
                     </div>
 
@@ -37,9 +37,9 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="anio" class="col col-form-label">Año</label>
+                        <label for="fechaPublicacion" class="col col-form-label">Fecha publicacion</label>
                         <div class="col-sm-10 w-100">
-                            <input type="number" class="form-control" id="anio" name="anio" th:value="${anio}"/>
+                            <input type="date" class="form-control" id="fechaPublicacion" name="fechaPublicacion" th:value="${fechaPublicacion}"/>
                         </div>
                     </div>
 
@@ -59,19 +59,6 @@
                                 id="ejemplaresPrestados"
                                 name="ejemplaresPrestados"
                                 th:value="${ejemplaresPrestados}"
-                                />
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="ejemplaresRestantes" class="col col-form-label">Ejem. restantes</label>
-                        <div class="col-sm-10 w-100">
-                            <input
-                                type="number"
-                                class="form-control"
-                                id="ejemplaresRestantes"
-                                name="ejemplaresRestantes"
-                                th:value="${ejemplaresRestantes}"
                                 />
                         </div>
                     </div>

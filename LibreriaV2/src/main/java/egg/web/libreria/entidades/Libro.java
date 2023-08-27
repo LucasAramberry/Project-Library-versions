@@ -20,7 +20,7 @@ public class Libro {
     @Column(nullable = true)
     private String titulo;
     @Temporal(TemporalType.DATE)
-    private Date anio;
+    private Date fechaPublicacion;
     private Integer ejemplares;
     private Integer ejemplaresPrestados;
     private Integer ejemplaresRestantes;
@@ -54,12 +54,12 @@ public class Libro {
         this.titulo = titulo;
     }
 
-    public Date getAnio() {
-        return anio;
+    public Date getFechaPublicacion() {
+        return fechaPublicacion;
     }
 
-    public void setAnio(Date anio) {
-        this.anio = anio;
+    public void setFechaPublicacion(Date fechaPublicacion) {
+        this.fechaPublicacion = fechaPublicacion;
     }
 
     public Integer getEjemplares() {

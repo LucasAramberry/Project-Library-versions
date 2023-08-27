@@ -11,6 +11,7 @@ import egg.web.libreria.servicios.LibroServicio;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,9 +57,10 @@ public class LibroController {
     }
 
     @PostMapping("/registrar-libro")
-    public String registrarLibro(ModelMap modelo, @RequestParam String isbn, @RequestParam String titulo, @RequestParam Date anio, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam Integer ejemplaresRestantes, @RequestParam String idAutor, @RequestParam String idEditorial) {
+    public String registrarLibro(ModelMap modelo, @RequestParam String isbn, @RequestParam String titulo, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaPublicacion, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam String idAutor, @RequestParam String idEditorial) {
+
         try {
-            libroServicio.registrar(isbn, titulo, anio, ejemplares, ejemplaresPrestados, idAutor, idEditorial);
+            libroServicio.registrar(isbn, titulo, fechaPublicacion, ejemplares, ejemplaresPrestados, idAutor, idEditorial);
         } catch (ErrorServicio ex) {
             modelo.put("error", ex.getMessage());
 
@@ -70,10 +72,9 @@ public class LibroController {
 
             modelo.put("isbn", isbn);
             modelo.put("titulo", titulo);
-            modelo.put("anio", anio);
+            modelo.put("fechaPublicacion", fechaPublicacion);
             modelo.put("ejemplares", ejemplares);
             modelo.put("ejemplaresPrestados", ejemplaresPrestados);
-            modelo.put("ejemplaresRestantes", ejemplaresRestantes);
             modelo.put("idAutor", idAutor);
             modelo.put("idEditorial", idEditorial);
 
@@ -104,11 +105,11 @@ public class LibroController {
     }
 
     @PostMapping("/actualizar-libro")
-    public String modificarLibro(ModelMap modelo, @RequestParam String id, @RequestParam String isbn, @RequestParam String titulo, @RequestParam Date anio, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam Integer ejemplaresRestantes, @RequestParam String idAutor, @RequestParam String idEditorial) {
+    public String modificarLibro(ModelMap modelo, @RequestParam String id, @RequestParam String isbn, @RequestParam String titulo, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaPublicacion, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam Integer ejemplaresRestantes, @RequestParam String idAutor, @RequestParam String idEditorial) {
         Libro libro = null;
         try {
             libro = libroServicio.buscarLibroPorId(id);
-            libroServicio.modificar(id, isbn, titulo, anio, ejemplares, ejemplaresPrestados, idAutor, idEditorial);
+            libroServicio.modificar(id, isbn, titulo, fechaPublicacion, ejemplares, ejemplaresPrestados, idAutor, idEditorial);
             return "redirect:/libros/mostrar";
         } catch (ErrorServicio ex) {
             List<Autor> autores = autorRepositorio.findAll();

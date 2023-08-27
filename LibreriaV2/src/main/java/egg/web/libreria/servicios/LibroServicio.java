@@ -28,16 +28,16 @@ public class LibroServicio {
     private EditorialRepositorio editorialRepositorio;
 
     @Transactional
-    public void registrar(String isbn, String titulo, Date anio, Integer ejemplares, Integer ejemplaresPrestados, String idAutor, String idEditorial) throws ErrorServicio {
+    public void registrar(String isbn, String titulo, Date fechaPublicacion, Integer ejemplares, Integer ejemplaresPrestados, String idAutor, String idEditorial) throws ErrorServicio {
         Autor autor = autorRepositorio.getOne(idAutor);
         Editorial editorial = editorialRepositorio.findById(idEditorial).get();
 
-        validar(isbn, titulo, anio, ejemplares, ejemplaresPrestados, autor, editorial);
+        validar(isbn, titulo, fechaPublicacion, ejemplares, ejemplaresPrestados, autor, editorial);
 
         Libro l = new Libro();
         l.setIsbn(isbn);
         l.setTitulo(titulo);
-        l.setAnio(anio);
+        l.setFechaPublicacion(fechaPublicacion);
         l.setEjemplares(ejemplares);
         l.setEjemplaresPrestados(ejemplaresPrestados);
         l.setEjemplaresRestantes(ejemplares - ejemplaresPrestados);
@@ -49,7 +49,7 @@ public class LibroServicio {
     }
 
     @Transactional
-    public void modificar(String id, String isbn, String titulo, Date anio, Integer ejemplares, Integer ejemplaresPrestados, String idAutor, String idEditorial) throws ErrorServicio {
+    public void modificar(String id, String isbn, String titulo, Date fechaPublicacion, Integer ejemplares, Integer ejemplaresPrestados, String idAutor, String idEditorial) throws ErrorServicio {
 
         Optional<Libro> respuesta = libroRepositorio.findById(id);
 
@@ -59,11 +59,11 @@ public class LibroServicio {
             Autor autor = autorRepositorio.getOne(idAutor);
             Editorial editorial = editorialRepositorio.findById(idEditorial).get();
             
-            validar(isbn, titulo, anio, ejemplares, ejemplaresPrestados, autor, editorial);
+            validar(isbn, titulo, fechaPublicacion, ejemplares, ejemplaresPrestados, autor, editorial);
             
             libro.setIsbn(isbn);
             libro.setTitulo(titulo);
-            libro.setAnio(anio);
+            libro.setFechaPublicacion(fechaPublicacion);
             libro.setEjemplares(ejemplares);
             libro.setEjemplaresPrestados(ejemplaresPrestados);
 
@@ -127,14 +127,14 @@ public class LibroServicio {
         }
     }
 
-    private void validar(String isbn, String titulo, Date anio, Integer ejemplares, Integer ejemplaresPrestados, Autor autor, Editorial editorial) throws ErrorServicio {
+    private void validar(String isbn, String titulo, Date fechaPublicacion, Integer ejemplares, Integer ejemplaresPrestados, Autor autor, Editorial editorial) throws ErrorServicio {
         if (isbn == null || isbn.isEmpty() || isbn.length() < 13 || isbn.length() > 13) {
             throw new ErrorServicio("El isbn del libro no puede ser nulo y debe contener 13 numeros");
         }
         if (titulo == null || titulo.isEmpty()) {
             throw new ErrorServicio("El titulo del libro no puede ser nulo");
         }
-        if (anio == null || anio.getYear() < 0 || anio.getYear() > 2023) {
+        if (fechaPublicacion == null || fechaPublicacion.getYear() < 0 || fechaPublicacion.getYear() > 2023) {
             throw new ErrorServicio("El año ingresado no registra ningun libro");
         }
         if (ejemplares < 0) {

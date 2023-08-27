@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/clientes")
 public class ClienteController {
     
-    @GetMapping("/mostrar")
-    public String mostrar(){
-        
-        return "clientes.html";
-    }
+//    @GetMapping("/mostrar")
+//    public String mostrar(){
+//        
+//        return "clientes.html";
+//    }
 }

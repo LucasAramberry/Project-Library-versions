@@ -88,21 +88,17 @@
                         <label for="idAutor" class="col col-form-label">Autor</label>
                         <div class="col-sm-10 w-100">
                             <select class="form-control" id="idAutor"  name="idAutor">
-                                <option th:value="${libro.autor.id}" th:text="${libro.autor.nombre}"></option>
-                                <option th:each="autor : ${autores}" th:if="${autor.id != libro.autor.id}" th:value="${autor.id}" th:text="${autor.nombre}"></option>
+                                <option th:each="autor : ${autores}" th:value="${autor.id}" th:text="${autor.nombre}" th:selected="${libro.autor != null && autor.id == libro.autor.id}"></option>
                             </select>
                         </div>
-                        <!--<input type="text" class="form-control" id="idAutor"  name="idAutor"  th:value="${idAutor}"/>-->
                     </div>
 
                     <div class="mb-3">
                         <label for="idEditorial" class="col col-form-label">Editorial</label>
                         <div class="col-sm-10 w-100">
                             <select class="form-control" id="idEditorial"  name="idEditorial">
-                                <option th:value="${libro.editorial.id}" th:text="${libro.editorial.nombre}"></option>
-                                <option th:each="editorial : ${editoriales}" th:if="${editorial.id != libro.editorial.id}" th:value="${editorial.id}" th:text="${editorial.nombre}"></option>
+                                <option th:each="editorial : ${editoriales}" th:value="${editorial.id}" th:text="${editorial.nombre}" th:selected="${libro.editorial != null && editorial.id == libro.editorial.id}"></option>
                             </select>
-                            <!--<input type="text" class="form-control" id="idEditorial"   name="idEditorial" th:value="${idEditorial}"/>-->
                         </div>
                     </div>
 
