@@ -15,18 +15,25 @@ public class Libro {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
-    @Column(nullable = true, unique = true)
+
+    @Column(name = "ISBN", nullable = true, unique = true)
     private String isbn;
-    @Column(nullable = true)
+
+    @Column(name = "Titulo", nullable = true)
     private String titulo;
+
     @Temporal(TemporalType.DATE)
     private Date fechaPublicacion;
+
     private Integer ejemplares;
     private Integer ejemplaresPrestados;
     private Integer ejemplaresRestantes;
+
     private Boolean alta;
+
     @OneToOne
     private Autor autor;
+
     @OneToOne
     private Editorial editorial;
 

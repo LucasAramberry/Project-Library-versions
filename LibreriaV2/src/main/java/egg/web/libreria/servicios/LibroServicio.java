@@ -55,17 +55,18 @@ public class LibroServicio {
 
         if (respuesta.isPresent()) {
             Libro libro = respuesta.get();
-            
+
             Autor autor = autorRepositorio.getOne(idAutor);
             Editorial editorial = editorialRepositorio.findById(idEditorial).get();
-            
+
             validar(isbn, titulo, fechaPublicacion, ejemplares, ejemplaresPrestados, autor, editorial);
-            
+
             libro.setIsbn(isbn);
             libro.setTitulo(titulo);
             libro.setFechaPublicacion(fechaPublicacion);
             libro.setEjemplares(ejemplares);
             libro.setEjemplaresPrestados(ejemplaresPrestados);
+            libro.setEjemplaresRestantes(ejemplares - ejemplaresPrestados);
 
             libro.setAutor(autor);
             libro.setEditorial(editorial);
@@ -75,15 +76,15 @@ public class LibroServicio {
             throw new ErrorServicio("No se encontro el libro solicitado para modificar");
         }
     }
-    
+
     @Transactional
-    public void eliminar(String idLibro) throws ErrorServicio{
+    public void eliminar(String idLibro) throws ErrorServicio {
         Optional<Libro> respuesta = libroRepositorio.findById(idLibro);
 
         if (respuesta.isPresent()) {
             Libro libro = respuesta.get();
             libroRepositorio.delete(libro);
-        }else{
+        } else {
             throw new ErrorServicio("No se encontro el libro solicitado para eliminar");
         }
     }
@@ -115,7 +116,7 @@ public class LibroServicio {
             throw new ErrorServicio("Error al habilitar el libro solicitado");
         }
     }
-    
+
     @Transactional
     public Libro buscarLibroPorId(String id) throws ErrorServicio {
         Optional<Libro> respuesta = libroRepositorio.findById(id);
@@ -127,6 +128,32 @@ public class LibroServicio {
         }
     }
 
+    @Transactional
+    public void prestarLibro(Libro libro) throws ErrorServicio {
+        if (libro != null) {
+            if (libro.getEjemplaresRestantes() >= 1) {
+                libro.setEjemplaresPrestados(libro.getEjemplaresPrestados() + 1);
+                libro.setEjemplaresRestantes(libro.getEjemplaresRestantes() - 1);
+                libroRepositorio.save(libro);
+            } else {
+                throw new ErrorServicio("El libro ingresado no tiene mas ejemplares disponibles");
+            }
+        } else {
+            throw new ErrorServicio("El libro no esta disponible");
+        }
+    }
+
+    @Transactional
+    public void devolverLibro(Libro libro) throws ErrorServicio {
+        if (libro != null) {
+                libro.setEjemplaresPrestados(libro.getEjemplaresPrestados() - 1);
+                libro.setEjemplaresRestantes(libro.getEjemplaresRestantes() + 1);
+                libroRepositorio.save(libro);
+        } else {
+            throw new ErrorServicio("Error al devolver el libro.");
+        }
+    }
+
     private void validar(String isbn, String titulo, Date fechaPublicacion, Integer ejemplares, Integer ejemplaresPrestados, Autor autor, Editorial editorial) throws ErrorServicio {
         if (isbn == null || isbn.isEmpty() || isbn.length() < 13 || isbn.length() > 13) {
             throw new ErrorServicio("El isbn del libro no puede ser nulo y debe contener 13 numeros");
@@ -134,14 +161,14 @@ public class LibroServicio {
         if (titulo == null || titulo.isEmpty()) {
             throw new ErrorServicio("El titulo del libro no puede ser nulo");
         }
-        if (fechaPublicacion == null || fechaPublicacion.getYear() < 0 || fechaPublicacion.getYear() > 2023) {
-            throw new ErrorServicio("El año ingresado no registra ningun libro");
+        if (fechaPublicacion == null || fechaPublicacion.getYear() > 2023) {
+            throw new ErrorServicio("Fecha de publicacion invalida.");
         }
-        if (ejemplares < 0) {
-            throw new ErrorServicio("Los ejemplares del libro no pueden ser negativos");
+        if (ejemplares <= 0) {
+            throw new ErrorServicio("Cantidad de ejemplares del libro invalida.");
         }
         if (ejemplaresPrestados < 0 || ejemplaresPrestados > ejemplares) {
-            throw new ErrorServicio("Los ejemplares prestados del libro no pueden ser mayores a la cantidad de ejemplares ni -0");
+            throw new ErrorServicio("Cantidad de ejemplares prestados del libro invalida");
         }
         if (autor == null) {
             throw new ErrorServicio("El autor del libro no puede ser nulo");

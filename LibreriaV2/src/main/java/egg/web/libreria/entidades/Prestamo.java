@@ -13,13 +13,18 @@ public class Prestamo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
     @Temporal(TemporalType.DATE)
     private Date fechaPrestamo;
+    
     @Temporal(TemporalType.DATE)
     private Date fechaDevolucion;
+    
     private Boolean alta;
+    
     @OneToOne
     private Libro libro;
+    
     @OneToOne
     private Cliente cliente;
 

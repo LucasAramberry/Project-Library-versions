@@ -105,7 +105,7 @@ public class LibroController {
     }
 
     @PostMapping("/actualizar-libro")
-    public String modificarLibro(ModelMap modelo, @RequestParam String id, @RequestParam String isbn, @RequestParam String titulo, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaPublicacion, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam Integer ejemplaresRestantes, @RequestParam String idAutor, @RequestParam String idEditorial) {
+    public String modificarLibro(ModelMap modelo, @RequestParam String id, @RequestParam String isbn, @RequestParam String titulo, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaPublicacion, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam String idAutor, @RequestParam String idEditorial) {
         Libro libro = null;
         try {
             libro = libroServicio.buscarLibroPorId(id);
@@ -121,11 +121,11 @@ public class LibroController {
             modelo.put("libro", libro);
 
             modelo.put("error", ex.getMessage());
-            
+
             return "modificar-libro.html";
         }
     }
-    
+
     @GetMapping("/baja")
     public String baja(ModelMap modelo, @RequestParam String id) {
         try {
@@ -145,7 +145,7 @@ public class LibroController {
         }
         return "redirect:/libros/mostrar";
     }
-    
+
     @GetMapping("/eliminar")
     public String eliminar(ModelMap modelo, @RequestParam String id) {
         try {

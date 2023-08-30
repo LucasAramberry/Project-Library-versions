@@ -43,12 +43,12 @@ public class ClienteServicio {
     @Transactional
     public void modificar(Integer id, String nombre, String apellido, String documento, String telefono) throws ErrorServicio {
 
+        validar(documento, nombre, apellido, telefono);
+        
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
 
         if (respuesta.isPresent()) {
             Cliente cliente = respuesta.get();
-
-            validar(documento, nombre, apellido, telefono);
 
             cliente.setNombre(nombre);
             cliente.setApellido(apellido);
@@ -120,7 +120,7 @@ public class ClienteServicio {
         if (apellido == null || apellido.isEmpty()) {
             throw new ErrorServicio("Apellido invalido.");
         }
-        if (documento == null || documento.isEmpty() || documento.length() > 10 || documento.length() < 7) {
+        if (documento == null || documento.isEmpty() && (documento.length() < 7 && documento.length() > 10)) {
             throw new ErrorServicio("Documento invalido.");
         }
         if (telefono == null || telefono.isEmpty() || telefono.length() < 10 || telefono.length() > 10) {
