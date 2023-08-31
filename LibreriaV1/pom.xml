@@ -11,7 +11,7 @@
     <groupId>egg.web</groupId>
     <artifactId>libreria</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>LIbreria</name>
+    <name>LIbreriaV1</name>
     <description>Proyecto libreria online</description>
     <properties>
         <java.version>17</java.version>
