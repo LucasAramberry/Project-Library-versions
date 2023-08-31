@@ -27,7 +27,7 @@ public class ClienteServicio {
     @Transactional
     public void registar(String nombre, String apellido, String documento, String telefono) throws ErrorServicio {
 
-        validar(documento, nombre, apellido, telefono);
+        validar(nombre, apellido, documento, telefono);
 
         Cliente cliente = new Cliente();
 
@@ -43,8 +43,8 @@ public class ClienteServicio {
     @Transactional
     public void modificar(Integer id, String nombre, String apellido, String documento, String telefono) throws ErrorServicio {
 
-        validar(documento, nombre, apellido, telefono);
-        
+        validar(nombre, apellido, documento, telefono);
+
         Optional<Cliente> respuesta = clienteRepositorio.findById(id);
 
         if (respuesta.isPresent()) {
@@ -120,7 +120,7 @@ public class ClienteServicio {
         if (apellido == null || apellido.isEmpty()) {
             throw new ErrorServicio("Apellido invalido.");
         }
-        if (documento == null || documento.isEmpty() && (documento.length() < 7 && documento.length() > 10)) {
+        if (documento == null || documento.isEmpty() || (documento.length() < 7 || documento.length() > 10)) {
             throw new ErrorServicio("Documento invalido.");
         }
         if (telefono == null || telefono.isEmpty() || telefono.length() < 10 || telefono.length() > 10) {

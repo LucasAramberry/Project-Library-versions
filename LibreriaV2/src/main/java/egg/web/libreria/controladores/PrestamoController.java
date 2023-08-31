@@ -10,6 +10,7 @@ import egg.web.libreria.repositorios.PrestamoRepositorio;
 import egg.web.libreria.servicios.ClienteServicio;
 import egg.web.libreria.servicios.LibroServicio;
 import egg.web.libreria.servicios.PrestamoServicio;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,9 @@ public class PrestamoController {
 
     @GetMapping("/registro-prestamo")
     public String registroPrestamo(ModelMap model) {
+        //colocamos la fecha actual para al crear el prestamo nos setee la fecha del dia en q se hizo
+        model.addAttribute("fechaPrestamo", LocalDate.now());
+
         List<Libro> libros = libroRepositorio.findAll();
         model.put("libros", libros);
 

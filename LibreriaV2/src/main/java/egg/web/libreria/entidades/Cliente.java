@@ -12,12 +12,12 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(nullable = true, unique = true)
-    private String documento;
     @Column(nullable = true)
     private String nombre;
     @Column(nullable = true)
     private String apellido;
+    @Column(nullable = true, unique = true)
+    private String documento;
     @Column(unique = true)
     private String telefono;
     private Boolean alta;
@@ -28,14 +28,6 @@ public class Cliente {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getDocumento() {
-        return documento;
-    }
-
-    public void setDocumento(String documento) {
-        this.documento = documento;
     }
 
     public String getNombre() {
@@ -54,6 +46,14 @@ public class Cliente {
         this.apellido = apellido;
     }
 
+    public String getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(String documento) {
+        this.documento = documento;
+    }
+
     public String getTelefono() {
         return telefono;
     }
@@ -69,5 +69,4 @@ public class Cliente {
     public void setAlta(Boolean alta) {
         this.alta = alta;
     }
-
 }

@@ -6,6 +6,7 @@ import egg.web.libreria.entidades.Prestamo;
 import egg.web.libreria.errores.ErrorServicio;
 import egg.web.libreria.repositorios.LibroRepositorio;
 import egg.web.libreria.repositorios.PrestamoRepositorio;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -119,6 +120,13 @@ public class PrestamoServicio {
 
         if (respuesta.isPresent()) {
             Prestamo prestamo = respuesta.get();
+            
+            //chequeamos que la fecha de devolucion sea posterior a la actual para poder volver habilitar el prestamo
+            if (prestamo.getFechaDevolucion().after(new Date())) {
+                //realizamos el seteo del ejemplar prestado en el libro nuevo
+                libroServicio.prestarLibro(prestamo.getLibro());
+            }
+            
             prestamo.setAlta(true);
 
             prestamoRepositorio.save(prestamo);
@@ -143,7 +151,9 @@ public class PrestamoServicio {
         if (respuesta.isPresent()) {
             Prestamo prestamo = respuesta.get();
             prestamo.setFechaDevolucion(new Date());
-            // editar ejemplar prestado en libro
+            
+            //devolvemos el libro por deshabilitar el prestamo
+            libroServicio.devolverLibro(prestamo.getLibro());
 
             prestamoRepositorio.save(prestamo);
         } else {
@@ -153,7 +163,8 @@ public class PrestamoServicio {
 
     private void validar(Date fechaPrestamo, Date fechaDevolucion, Libro libro, Cliente cliente) throws ErrorServicio {
 
-        if (fechaPrestamo == null || fechaPrestamo.after(new Date()) || fechaPrestamo.before(fechaDevolucion)) {
+//        if (fechaPrestamo == null || fechaPrestamo.after(new Date()) || fechaPrestamo.before(fechaDevolucion)) {
+        if (fechaPrestamo == null) {
             throw new ErrorServicio("Fecha de prestamo invalida.");
         }
         if (fechaDevolucion == null || fechaDevolucion.before(fechaPrestamo) || fechaDevolucion.equals(fechaPrestamo)) {
