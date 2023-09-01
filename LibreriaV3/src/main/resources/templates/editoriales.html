@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Editoriales</title>
+    <head th:replace="/fragments/head :: head"></head>
+</head>
+<body>
+    <nav th:replace="/fragments/navbar :: nav"></nav>
+
+    <h1>Editoriales</h1>
+
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <!--<th scope="col">ID</th>-->
+                <th scope="col">Nombre</th>
+                <th scope="col">Alta/Baja</th>
+                <th scope="col">Editar Editorial</th>
+                <th scope="col">Eliminar Editorial</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="editorial : ${editoriales}">
+                <!--<th scope="row">1</th>-->
+                <td th:text="${editorial.nombre}"></td>
+
+                <td>
+                    <a th:if="${editorial.alta == false}" th:href="@{/editoriales/alta(id=__${editorial.id}__)}">
+                        <button type="button" class="btn btn-success btn-sm">Dar alta</button>
+                    </a>
+                    <a th:unless="${editorial.alta == false}" th:href="@{/editoriales/baja(id=__${editorial.id}__)}">
+                        <button type="button" class="btn btn-danger btn-sm">Dar baja</button>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="@{/editoriales/modificar-editorial(id=__${editorial.id}__)}">
+                        <button type="button" class="btn btn-primary btn-sm">Modificar</button>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="@{/editoriales/eliminar(id=__${editorial.id}__)}">
+                        <button type="button" class="btn btn-primary btn-sm">Eliminar</button>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <a href="/editoriales/registro-editorial" class="btn btn-warning" tabindex="-1" role="button">Agregar editorial</a>
+    </div>
+
+    <footer th:replace="/fragments/footer :: footer"></footer>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"
+    ></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"
+    ></script>
+</body>
+</html>

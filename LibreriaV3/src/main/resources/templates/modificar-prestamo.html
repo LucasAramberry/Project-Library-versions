@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Modificar libro</title>
+    <head th:replace="/fragments/head :: head"></head>
+</head>
+
+<body>
+    <nav th:replace="/fragments/navbar :: nav"></nav>
+
+    <a href="/prestamos/mostrar">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+
+    <h1 class="mb-3">Modificar prestamo</h1>
+
+    <div class="d-flex justify-content-center">
+        <div class="w-75 text-light d-flex justify-content-center">
+            <div class="w-25 mb-3">
+                
+                <form th:action="@{/prestamos/actualizar-prestamo}" method="POST">
+
+                    <p th:if="${error != null}" th:text="${error}" class="error"></p>
+
+                    <input hidden th:value="${prestamo.id}" name="id" required>
+
+                    <div class="mb-3">
+                        <label for="fechaPrestamo" class="col col-form-label">Fecha prestamo</label>
+                        <div class="col-sm-10 w-100">
+                            <input type="date" readonly class="form-control" id="fechaPrestamo" name="fechaPrestamo" th:value="${prestamo.fechaPrestamo}"/>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="fechaDevolucion" class="col col-form-label">Fecha devolucion</label>
+                        <div class="col-sm-10 w-100">
+                            <input type="date" required class="form-control" id="fechaDevolucion" name="fechaDevolucion" th:value="${prestamo.fechaDevolucion}"/>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="idLibro" class="col col-form-label">Libro</label>
+                        <div class="col-sm-10 w-100">
+                            <select class="form-control" id="idLibro"  name="idLibro">
+                                <option th:each="libro : ${libros}" th:value="${libro.id}" th:text="${libro.titulo}" th:selected="${prestamo.libro != null && libro.id == prestamo.libro.id}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="idCliente" class="col col-form-label">Cliente</label>
+                        <div class="col-sm-10 w-100">
+                            <select class="form-control" id="idCliente"  name="idCliente">
+                                <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nombre}" th:selected="${prestamo.cliente != null && cliente.id == prestamo.cliente.id}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 col-6 mx-auto boton-libro">
+                        <button type="submit" class="btn btn-primary">Modificar</button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="/fragments/footer :: footer"></footer>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"
+    ></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"
+    ></script>
+</body>
+</html>
