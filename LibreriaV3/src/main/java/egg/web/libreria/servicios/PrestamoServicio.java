@@ -1,12 +1,10 @@
 package egg.web.libreria.servicios;
 
-import egg.web.libreria.entidades.Cliente;
 import egg.web.libreria.entidades.Libro;
 import egg.web.libreria.entidades.Prestamo;
+import egg.web.libreria.entidades.Usuario;
 import egg.web.libreria.errores.ErrorServicio;
-import egg.web.libreria.repositorios.LibroRepositorio;
 import egg.web.libreria.repositorios.PrestamoRepositorio;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -23,14 +21,14 @@ public class PrestamoServicio {
     @Autowired
     private PrestamoRepositorio prestamoRepositorio;
     @Autowired
-    private LibroRepositorio libroRepositorio;
-    @Autowired
     private LibroServicio libroServicio;
+    @Autowired
+    private NotificacionServicio notificacionServicio;
 
     @Transactional
-    public void registar(Date fechaPrestamo, Date fechaDevolucion, Libro libro, Cliente cliente) throws ErrorServicio {
+    public void registar(Date fechaPrestamo, Date fechaDevolucion, Libro libro, Usuario usuario) throws ErrorServicio {
 
-        validar(fechaPrestamo, fechaDevolucion, libro, cliente);
+        validar(fechaPrestamo, fechaDevolucion, libro, usuario);
 
         //realizar el seteo del ejemplar prestado en el libro
         libroServicio.prestarLibro(libro);
@@ -39,27 +37,28 @@ public class PrestamoServicio {
 
         prestamo.setFechaPrestamo(fechaPrestamo);
         prestamo.setFechaDevolucion(fechaDevolucion);
-        prestamo.setAlta(true);
+        prestamo.setAlta(new Date());
 
         prestamo.setLibro(libro);
-        prestamo.setCliente(cliente);
+        prestamo.setUsuario(usuario);
 
         prestamoRepositorio.save(prestamo);
+
+        notificacionServicio.enviar("Realizaste el prestamo de un libro.", "Libreria web", usuario.getMail());
     }
 
     @Transactional
-    public void modificar(Integer id, Date fechaPrestamo, Date fechaDevolucion, Libro libro, Cliente cliente) throws ErrorServicio {
+    public void modificar(Integer id, Date fechaPrestamo, Date fechaDevolucion, Libro libro, Usuario usuario) throws ErrorServicio {
 
         Optional<Prestamo> respuesta = prestamoRepositorio.findById(id);
 
         if (respuesta.isPresent()) {
             Prestamo prestamo = respuesta.get();
 
-            validar(fechaPrestamo, fechaDevolucion, libro, cliente);
+            validar(fechaPrestamo, fechaDevolucion, libro, usuario);
 
             prestamo.setFechaPrestamo(fechaPrestamo);
             prestamo.setFechaDevolucion(fechaDevolucion);
-            prestamo.setAlta(true);
 
             if (prestamo.getLibro() != libro) {
                 //realizamos el seteo del ejemplar prestado en el libro nuevo
@@ -69,7 +68,7 @@ public class PrestamoServicio {
             }
 
             prestamo.setLibro(libro);
-            prestamo.setCliente(cliente);
+            prestamo.setUsuario(usuario);
 
             prestamoRepositorio.save(prestamo);
         } else {
@@ -86,7 +85,7 @@ public class PrestamoServicio {
 
             //verificamos si el prestamo esta dado de alta ya que debemos devolver el ejemplar
             // si esta de baja dando la baja automaticamente se devuelve el ejemplar del libro
-            if (prestamo.getAlta() == true) {
+            if (prestamo.getBaja() == null) {
                 libroServicio.devolverLibro(prestamo.getLibro());
             }
 
@@ -102,11 +101,11 @@ public class PrestamoServicio {
 
         if (respuesta.isPresent()) {
             Prestamo prestamo = respuesta.get();
-            
+
             //devolvemos el libro por deshabilitar el prestamo
             libroServicio.devolverLibro(prestamo.getLibro());
-            
-            prestamo.setAlta(false);
+
+            prestamo.setBaja(new Date());
 
             prestamoRepositorio.save(prestamo);
         } else {
@@ -120,14 +119,14 @@ public class PrestamoServicio {
 
         if (respuesta.isPresent()) {
             Prestamo prestamo = respuesta.get();
-            
+
             //chequeamos que la fecha de devolucion sea posterior a la actual para poder volver habilitar el prestamo
             if (prestamo.getFechaDevolucion().after(new Date())) {
                 //realizamos el seteo del ejemplar prestado en el libro nuevo
                 libroServicio.prestarLibro(prestamo.getLibro());
             }
-            
-            prestamo.setAlta(true);
+
+            prestamo.setBaja(null);
 
             prestamoRepositorio.save(prestamo);
         } else {
@@ -151,7 +150,7 @@ public class PrestamoServicio {
         if (respuesta.isPresent()) {
             Prestamo prestamo = respuesta.get();
             prestamo.setFechaDevolucion(new Date());
-            
+
             //devolvemos el libro por deshabilitar el prestamo
             libroServicio.devolverLibro(prestamo.getLibro());
 
@@ -161,7 +160,7 @@ public class PrestamoServicio {
         }
     }
 
-    private void validar(Date fechaPrestamo, Date fechaDevolucion, Libro libro, Cliente cliente) throws ErrorServicio {
+    private void validar(Date fechaPrestamo, Date fechaDevolucion, Libro libro, Usuario usuario) throws ErrorServicio {
 
 //        if (fechaPrestamo == null || fechaPrestamo.after(new Date()) || fechaPrestamo.before(fechaDevolucion)) {
         if (fechaPrestamo == null) {
@@ -170,8 +169,8 @@ public class PrestamoServicio {
         if (fechaDevolucion == null || fechaDevolucion.before(fechaPrestamo) || fechaDevolucion.equals(fechaPrestamo)) {
             throw new ErrorServicio("Fecha de prestamo invalida.");
         }
-        if (cliente == null) {
-            throw new ErrorServicio("Cliente invalido.");
+        if (usuario == null) {
+            throw new ErrorServicio("usuario invalido.");
         }
         if (libro == null) {
             throw new ErrorServicio("Libro invalido.");

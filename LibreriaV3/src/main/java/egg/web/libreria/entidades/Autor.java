@@ -24,7 +24,7 @@ public class Autor {
     @Temporal(TemporalType.TIMESTAMP)
     private Date baja;
 
-    @ManyToOne
+    @OneToOne
     private Foto foto;
 
     public String getId() {

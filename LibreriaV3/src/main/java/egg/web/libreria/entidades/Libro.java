@@ -39,7 +39,7 @@ public class Libro {
     @Temporal(TemporalType.TIMESTAMP)
     private Date baja;
 
-    @ManyToOne
+    @OneToMany
     private Foto foto;
 
     @OneToOne

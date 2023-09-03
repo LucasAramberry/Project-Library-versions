@@ -13,20 +13,24 @@ public class Prestamo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    
+
     @Temporal(TemporalType.DATE)
     private Date fechaPrestamo;
-    
+
     @Temporal(TemporalType.DATE)
     private Date fechaDevolucion;
-    
-    private Boolean alta;
-    
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date alta;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date baja;
+
     @OneToOne
     private Libro libro;
-    
+
     @OneToOne
-    private Cliente cliente;
+    private Usuario usuario;
 
     public Integer getId() {
         return id;
@@ -60,20 +64,28 @@ public class Prestamo {
         this.libro = libro;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
-    public Boolean getAlta() {
+    public Date getAlta() {
         return alta;
     }
 
-    public void setAlta(Boolean alta) {
+    public void setAlta(Date alta) {
         this.alta = alta;
+    }
+
+    public Date getBaja() {
+        return baja;
+    }
+
+    public void setBaja(Date baja) {
+        this.baja = baja;
     }
 
 }

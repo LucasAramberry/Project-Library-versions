@@ -1,12 +1,15 @@
 package egg.web.libreria.servicios;
 
 import egg.web.libreria.entidades.Autor;
+import egg.web.libreria.entidades.Foto;
 import egg.web.libreria.errores.ErrorServicio;
 import egg.web.libreria.repositorios.AutorRepositorio;
+import java.util.Date;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -17,20 +20,38 @@ public class AutorServicio {
 
     @Autowired
     private AutorRepositorio autorRepositorio;
+    @Autowired
+    private FotoServicio fotoServicio;
 
+    /**
+     * metodo para registar autor
+     * @param archivo
+     * @param nombre
+     * @throws ErrorServicio 
+     */
     @Transactional
-    public void registrar(String nombre) throws ErrorServicio {
+    public void registrar(MultipartFile archivo, String nombre) throws ErrorServicio {
         validar(nombre);
 
         Autor a = new Autor();
         a.setNombre(nombre);
-        a.setAlta(true);
+        a.setAlta(new Date());
+        
+        Foto foto = fotoServicio.guardar(archivo);
+        a.setFoto(foto);
 
         autorRepositorio.save(a);
     }
 
+    /**
+     * metodo para modificar autor
+     * @param archivo
+     * @param id
+     * @param nombre
+     * @throws ErrorServicio 
+     */
     @Transactional
-    public void modificar(String id, String nombre) throws ErrorServicio {
+    public void modificar(MultipartFile archivo, String id, String nombre) throws ErrorServicio {
         validar(nombre);
 
         Optional<Autor> respuesta = autorRepositorio.findById(id);
@@ -39,12 +60,25 @@ public class AutorServicio {
             Autor a = respuesta.get();
             a.setNombre(nombre);
 
+            String idFoto = null;
+            if (a.getFoto() != null) {
+                idFoto = a.getFoto().getId();
+            }
+
+            Foto foto = fotoServicio.actualizar(idFoto, archivo);
+            a.setFoto(foto);
+            
             autorRepositorio.save(a);
         } else {
             throw new ErrorServicio("No se encontro el autor solicitado");
         }
     }
 
+    /**
+     * metodo para eliminar autor
+     * @param idAutor
+     * @throws ErrorServicio 
+     */
     @Transactional
     public void eliminar(String idAutor) throws ErrorServicio {
         Optional<Autor> respuesta = autorRepositorio.findById(idAutor);
@@ -57,13 +91,18 @@ public class AutorServicio {
         }
     }
 
+    /**
+     * metodo para deshabilitar autor
+     * @param id
+     * @throws ErrorServicio 
+     */
     @Transactional
     public void deshabilitar(String id) throws ErrorServicio {
         Optional<Autor> respuesta = autorRepositorio.findById(id);
 
         if (respuesta.isPresent()) {
             Autor a = respuesta.get();
-            a.setAlta(false);
+            a.setBaja(new Date());
 
             autorRepositorio.save(a);
         } else {
@@ -71,13 +110,18 @@ public class AutorServicio {
         }
     }
 
+    /**
+     * Metodo para habilitar autor
+     * @param id
+     * @throws ErrorServicio 
+     */
     @Transactional
     public void habilitar(String id) throws ErrorServicio {
         Optional<Autor> respuesta = autorRepositorio.findById(id);
 
         if (respuesta.isPresent()) {
             Autor a = respuesta.get();
-            a.setAlta(true);
+            a.setBaja(null);
 
             autorRepositorio.save(a);
         } else {
@@ -85,6 +129,12 @@ public class AutorServicio {
         }
     }
 
+    /**
+     * metodo para buscar autor por id
+     * @param id
+     * @return
+     * @throws ErrorServicio 
+     */
     @Transactional
     public Autor buscarAutorPorId(String id) throws ErrorServicio {
         Optional<Autor> respuesta = autorRepositorio.findById(id);
@@ -96,6 +146,11 @@ public class AutorServicio {
         }
     }
 
+    /**
+     * metodo para validar atributos
+     * @param nombre
+     * @throws ErrorServicio 
+     */
     private void validar(String nombre) throws ErrorServicio {
         if (nombre == null || nombre.isEmpty()) {
             throw new ErrorServicio("El nombre del autor no puede ser nulo");
