@@ -52,9 +52,9 @@ public class UsuarioServicio implements UserDetailsService {
      * @throws ErrorServicio
      */
     @Transactional
-    public void registar(MultipartFile archivo, String nombre, String apellido, String documento, String telefono, Sexo sexo, Integer idZona, String mail, String clave) throws ErrorServicio {
+    public void registar(MultipartFile archivo, String nombre, String apellido, String documento, String telefono, Sexo sexo, Integer idZona, String mail, String clave, String clave2) throws ErrorServicio {
 
-        validar(nombre, apellido, documento, telefono, mail, clave, sexo);
+        validar(nombre, apellido, documento, telefono, mail, clave, clave2, sexo);
 
         Usuario usuario = new Usuario();
 
@@ -79,7 +79,7 @@ public class UsuarioServicio implements UserDetailsService {
 
         usuarioRepositorio.save(usuario);
 
-        notificacionServicio.enviar("Bienvenidos a la Libreria!", "Libreria web", usuario.getMail());
+//        notificacionServicio.enviar("Bienvenidos a la Libreria!", "Libreria web", usuario.getMail());
     }
 
     /**
@@ -97,9 +97,9 @@ public class UsuarioServicio implements UserDetailsService {
      * @throws ErrorServicio
      */
     @Transactional
-    public void modificar(MultipartFile archivo, String id, String nombre, String apellido, String documento, String telefono, Sexo sexo, Integer idZona, String mail, String clave) throws ErrorServicio {
+    public void modificar(MultipartFile archivo, String id, String nombre, String apellido, String documento, String telefono, Sexo sexo, Integer idZona, String mail, String clave, String clave2) throws ErrorServicio {
 
-        validar(nombre, apellido, documento, telefono, mail, clave, sexo);
+        validar(nombre, apellido, documento, telefono, mail, clave, clave2, sexo);
 
         Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
 
@@ -222,7 +222,7 @@ public class UsuarioServicio implements UserDetailsService {
      * @param sexo
      * @throws ErrorServicio
      */
-    private void validar(String nombre, String apellido, String documento, String telefono, String mail, String clave, Sexo sexo) throws ErrorServicio {
+    private void validar(String nombre, String apellido, String documento, String telefono, String mail, String clave, String clave2, Sexo sexo) throws ErrorServicio {
 
         if (nombre == null || nombre.isEmpty()) {
             throw new ErrorServicio("El nombre no puede ser nulo.");
@@ -242,9 +242,12 @@ public class UsuarioServicio implements UserDetailsService {
         if (clave == null || clave.isEmpty() || clave.length() < 6) {
             throw new ErrorServicio("Clave invalida. La clave debe ser contener al menos 6 digitos.");
         }
-        if (sexo == null) {
-            throw new ErrorServicio("El sexo no puede ser nulo.");
+        if (!clave.equals(clave2)) {
+            throw new ErrorServicio("Las contraseñas deben ser iguales.");
         }
+//        if (sexo == null) {
+//            throw new ErrorServicio("El sexo no puede ser nulo.");
+//        }
     }
 
     @Override

@@ -14,14 +14,14 @@
         <div class="w-75 text-light d-flex justify-content-center">
             <div class="w-25 mb-3">
 
-                <form th:action="@{/registro}" method="POST" enctype="multipart/form-data">
+                <form th:action="@{/logincheck}" method="POST" enctype="multipart/form-data">
 
                     <p th:if="${error != null}" th:text="${error}" class="error"></p>
 
                     <div class="mb-3">
-                        <label for="email" class="col col-form-label">E-mail</label>
+                        <label for="username" class="col col-form-label">E-mail</label>
                         <div class="col-sm-10 w-100">
-                            <input type="email" class="form-control" id="email" name="email" th:value="${email}"/>
+                            <input type="email" class="form-control" id="username" name="username" th:value="${username}"/>
                         </div>
                     </div>
 

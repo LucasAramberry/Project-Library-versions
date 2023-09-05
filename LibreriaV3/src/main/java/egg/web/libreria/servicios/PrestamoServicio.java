@@ -44,7 +44,7 @@ public class PrestamoServicio {
 
         prestamoRepositorio.save(prestamo);
 
-        notificacionServicio.enviar("Realizaste el prestamo de un libro.", "Libreria web", usuario.getMail());
+//        notificacionServicio.enviar("Realizaste el prestamo de un libro.", "Libreria web", usuario.getMail());
     }
 
     @Transactional

@@ -23,97 +23,97 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/editoriales")
 public class EditorialController {
 
-    @Autowired
-    private EditorialServicio editorialServicio;
-    @Autowired
-    private EditorialRepositorio editorialRepositorio;
-
-    @GetMapping("/mostrar")
-    public String editoriales(ModelMap modelo) {
-        List<Editorial> editoriales = editorialRepositorio.findAll();
-
-        modelo.put("editoriales", editoriales);
-
-        return "editoriales.html";
-    }
-
-    @GetMapping("/registro-editorial")
-    public String registroEditorial() {
-        return "add-editorial.html";
-    }
-
-    @PostMapping("/registrar-editorial")
-    public String registrarEditorial(ModelMap modelo, @RequestParam String nombre) {
-        try {
-            editorialServicio.registrar(nombre);
-        } catch (ErrorServicio ex) {
-            modelo.put("error", ex.getMessage());
-
-            modelo.put("nombre", nombre);
-
-            return "add-editorial.html";
-        }
-        modelo.put("titulo", "Registro exitoso!");
-        modelo.put("descripcion", "La editorial ingresado fue registrado correctamente.");
-        return "exito.html";
-    }
-
-    @GetMapping("/modificar-editorial")
-    public String modificarEditorial(ModelMap modelo, @RequestParam String id) {
-
-        try {
-            Editorial editorial = editorialServicio.buscarEditorialPorId(id);
-            modelo.addAttribute("editorial", editorial);
-        } catch (ErrorServicio ex) {
-            modelo.addAttribute("error", ex.getMessage());
-        }
-
-        return "modificar-editorial.html";
-    }
-
-    @PostMapping("/actualizar-editorial")
-    public String modificarEditorial(ModelMap modelo, @RequestParam String id, @RequestParam String nombre) {
-
-        Editorial editorial = null;
-
-        try {
-            editorial = editorialServicio.buscarEditorialPorId(id);
-            editorialServicio.modificar(id, nombre);
-            return "redirect:/editoriales/mostrar";
-        } catch (ErrorServicio ex) {
-            modelo.put("editorial", editorial);
-            modelo.put("error", ex.getMessage());
-            return "modificar-editorial.html";
-        }
-    }
-
-    @GetMapping("/baja")
-    public String baja(ModelMap modelo, @RequestParam String id) {
-        try {
-            editorialServicio.deshabilitar(id);
-        } catch (ErrorServicio ex) {
-            modelo.put("error", ex.getMessage());
-        }
-        return "redirect:/editoriales/mostrar";
-    }
-    
-    @GetMapping("/alta")
-    public String alta(ModelMap modelo, @RequestParam String id) {
-        try {
-            editorialServicio.habilitar(id);
-        } catch (ErrorServicio ex) {
-            modelo.put("error", ex.getMessage());
-        }
-        return "redirect:/editoriales/mostrar";
-    }
-    
-    @GetMapping("/eliminar")
-    public String eliminar(ModelMap modelo, @RequestParam String id) {
-        try {
-            editorialServicio.eliminar(id);
-        } catch (ErrorServicio ex) {
-            modelo.put("error", ex.getMessage());
-        }
-        return "redirect:/editoriales/mostrar";
-    }
+//    @Autowired
+//    private EditorialServicio editorialServicio;
+//    @Autowired
+//    private EditorialRepositorio editorialRepositorio;
+//
+//    @GetMapping("/mostrar")
+//    public String editoriales(ModelMap modelo) {
+//        List<Editorial> editoriales = editorialRepositorio.findAll();
+//
+//        modelo.put("editoriales", editoriales);
+//
+//        return "editoriales.html";
+//    }
+//
+//    @GetMapping("/registro-editorial")
+//    public String registroEditorial() {
+//        return "add-editorial.html";
+//    }
+//
+//    @PostMapping("/registrar-editorial")
+//    public String registrarEditorial(ModelMap modelo, @RequestParam String nombre) {
+//        try {
+//            editorialServicio.registrar(nombre);
+//        } catch (ErrorServicio ex) {
+//            modelo.put("error", ex.getMessage());
+//
+//            modelo.put("nombre", nombre);
+//
+//            return "add-editorial.html";
+//        }
+//        modelo.put("titulo", "Registro exitoso!");
+//        modelo.put("descripcion", "La editorial ingresado fue registrado correctamente.");
+//        return "exito.html";
+//    }
+//
+//    @GetMapping("/modificar-editorial")
+//    public String modificarEditorial(ModelMap modelo, @RequestParam String id) {
+//
+//        try {
+//            Editorial editorial = editorialServicio.buscarEditorialPorId(id);
+//            modelo.addAttribute("editorial", editorial);
+//        } catch (ErrorServicio ex) {
+//            modelo.addAttribute("error", ex.getMessage());
+//        }
+//
+//        return "modificar-editorial.html";
+//    }
+//
+//    @PostMapping("/actualizar-editorial")
+//    public String modificarEditorial(ModelMap modelo, @RequestParam String id, @RequestParam String nombre) {
+//
+//        Editorial editorial = null;
+//
+//        try {
+//            editorial = editorialServicio.buscarEditorialPorId(id);
+//            editorialServicio.modificar(id, nombre);
+//            return "redirect:/editoriales/mostrar";
+//        } catch (ErrorServicio ex) {
+//            modelo.put("editorial", editorial);
+//            modelo.put("error", ex.getMessage());
+//            return "modificar-editorial.html";
+//        }
+//    }
+//
+//    @GetMapping("/baja")
+//    public String baja(ModelMap modelo, @RequestParam String id) {
+//        try {
+//            editorialServicio.deshabilitar(id);
+//        } catch (ErrorServicio ex) {
+//            modelo.put("error", ex.getMessage());
+//        }
+//        return "redirect:/editoriales/mostrar";
+//    }
+//    
+//    @GetMapping("/alta")
+//    public String alta(ModelMap modelo, @RequestParam String id) {
+//        try {
+//            editorialServicio.habilitar(id);
+//        } catch (ErrorServicio ex) {
+//            modelo.put("error", ex.getMessage());
+//        }
+//        return "redirect:/editoriales/mostrar";
+//    }
+//    
+//    @GetMapping("/eliminar")
+//    public String eliminar(ModelMap modelo, @RequestParam String id) {
+//        try {
+//            editorialServicio.eliminar(id);
+//        } catch (ErrorServicio ex) {
+//            modelo.put("error", ex.getMessage());
+//        }
+//        return "redirect:/editoriales/mostrar";
+//    }
 }
