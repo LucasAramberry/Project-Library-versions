@@ -44,7 +44,7 @@ public class ZonaServicio {
      * @throws ErrorServicio 
      */
     @Transactional
-    public void modificar(Integer id, String nombre, String descripcion) throws ErrorServicio {
+    public void modificar(String id, String nombre, String descripcion) throws ErrorServicio {
         validar(nombre, descripcion);
 
         Optional<Zona> respuesta = zonaRepositorio.findById(id);
@@ -66,7 +66,7 @@ public class ZonaServicio {
      * @throws ErrorServicio 
      */
     @Transactional
-    public void eliminar(Integer id) throws ErrorServicio {
+    public void eliminar(String id) throws ErrorServicio {
         Optional<Zona> respuesta = zonaRepositorio.findById(id);
 
         if (respuesta.isPresent()) {
@@ -85,7 +85,7 @@ public class ZonaServicio {
      * @throws ErrorServicio
      */
     @Transactional
-    public Zona buscarZonaPorId(Integer id) throws ErrorServicio {
+    public Zona buscarZonaPorId(String id) throws ErrorServicio {
         Optional<Zona> respuesta = zonaRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Zona zona = respuesta.get();

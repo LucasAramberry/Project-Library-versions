@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,6 +21,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -52,7 +55,7 @@ public class UsuarioServicio implements UserDetailsService {
      * @throws ErrorServicio
      */
     @Transactional
-    public void registar(MultipartFile archivo, String nombre, String apellido, String documento, String telefono, Sexo sexo, Integer idZona, String mail, String clave, String clave2) throws ErrorServicio {
+    public void registar(MultipartFile archivo, String nombre, String apellido, String documento, String telefono, Sexo sexo, String idZona, String mail, String clave, String clave2) throws ErrorServicio {
 
         validar(nombre, apellido, documento, telefono, mail, clave, clave2, sexo);
 
@@ -65,8 +68,8 @@ public class UsuarioServicio implements UserDetailsService {
         usuario.setSexo(sexo);
 
         Zona zona = zonaServicio.buscarZonaPorId(idZona);
-
         usuario.setZona(zona);
+        
         usuario.setMail(mail);
 
         String encriptada = new BCryptPasswordEncoder().encode(clave);
@@ -97,7 +100,7 @@ public class UsuarioServicio implements UserDetailsService {
      * @throws ErrorServicio
      */
     @Transactional
-    public void modificar(MultipartFile archivo, String id, String nombre, String apellido, String documento, String telefono, Sexo sexo, Integer idZona, String mail, String clave, String clave2) throws ErrorServicio {
+    public void modificar(MultipartFile archivo, String id, String nombre, String apellido, String documento, String telefono, Sexo sexo, String idZona, String mail, String clave, String clave2) throws ErrorServicio {
 
         validar(nombre, apellido, documento, telefono, mail, clave, clave2, sexo);
 
@@ -194,6 +197,23 @@ public class UsuarioServicio implements UserDetailsService {
     }
 
     /**
+     * Metodo para buscar usuario por id
+     * @param id
+     * @return
+     * @throws ErrorServicio 
+     */
+    @Transactional
+    public Usuario buscarUsuarioPorId(String id) throws ErrorServicio {
+        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+        if (respuesta.isPresent()) {
+            Usuario usuario = respuesta.get();
+            return usuario;
+        } else {
+            throw new ErrorServicio("No se encontro el usuario solicitado");
+        }
+    }
+    
+    /**
      * Metodo para buscar usuario por mail
      *
      * @param mail
@@ -257,15 +277,13 @@ public class UsuarioServicio implements UserDetailsService {
 
             List<GrantedAuthority> permisos = new ArrayList<>();
 
-            GrantedAuthority p1 = new SimpleGrantedAuthority("MODULO_FOTOS");
+            GrantedAuthority p1 = new SimpleGrantedAuthority("ROLE_USUARIO_REGISTRADO");
             permisos.add(p1);
 
-            GrantedAuthority p2 = new SimpleGrantedAuthority("MODULO_MASCOTAS");
-            permisos.add(p2);
-
-            GrantedAuthority p3 = new SimpleGrantedAuthority("MODULO_VOTOS");
-            permisos.add(p3);
-
+            ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+            HttpSession session = attr.getRequest().getSession(true);
+            session.setAttribute("usuariosession", usuario);
+            
             User user = new User(usuario.getMail(), usuario.getClave(), permisos);
             return user;
         } else {

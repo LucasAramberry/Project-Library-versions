@@ -35,6 +35,10 @@ table {
     color: red;
 }
 
+.logout{
+    color: green;
+}
+
 .bg-none{
     background-image: none;
 }

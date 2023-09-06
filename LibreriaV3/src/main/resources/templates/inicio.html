@@ -4,17 +4,20 @@
         <title>Libreria - Inicio</title>
     <head th:replace="/fragments/head :: head"></head>
 </head>
-<body class="bg-none bg-danger">
+<body>
+
     <nav th:replace="/fragments/navbar :: nav"></nav>
 
-    <section class="centrar">
-        <h2 class="text-center text-light" th:text="${codigo}"></h2>
-        <p class="text-center text-light" th:text="${mensaje == null ? 'Intenta nuevamente' : mensaje}"></p>
-        <a class="enlaces-sub d-flex justify-content-center" href="/">
-            <button type="button" class="btn btn-danger btn-sm">Volver</button>
+    <section class="text-center text-light centrar">
+        <!--<img class="img-fluid" src="../img/libro.jpg" alt="Libros"/>-->
+        <h1 class="titulo font-monospace t-stroke t-shadow-halftone glitch" data-text="¡Bienvenidos a la Libreria!">¡Bienvenidos a la Libreria!</h1>
+        <h1 th:if="${session.usuariosession != null}" th:text="${session.usuariosession.nombre + ' ' + session.usuariosession.apellido}">Hola usuario!</h1>
+        <a class="enlaces-sub" th:href="@{/usuario/editar-perfil(id=__${session.usuariosession.id}__)}">
+            <button type="button" class="btn btn-danger btn-sm">Configurar Perfil</button>
         </a>
+
     </section>
-    
+
     <footer th:replace="/fragments/footer :: footer"></footer>
 
     <script

@@ -31,9 +31,10 @@ public class ConfiguracionesSeguridad extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+//        http
         http.headers().frameOptions().sameOrigin().and()
                 .authorizeRequests()
-                .antMatchers("/css/*", "/js/*", "/img/*").permitAll()
+                .antMatchers("/css/*", "/js/*", "/img/*", "/**").permitAll()
                 .and().formLogin()
                 .loginPage("/login") // Que formulario esta mi login
                 .loginProcessingUrl("/logincheck")
@@ -43,7 +44,7 @@ public class ConfiguracionesSeguridad extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and().logout() // Aca configuro la salida
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
-                .permitAll();
+                .logoutSuccessUrl("/login")//a q url viaje cuando se deslogue de manera correcta
+                .permitAll().and().csrf().disable();
     }
 }

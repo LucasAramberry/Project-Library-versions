@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
  * @author Lucas
  */
 @Repository
-public interface ZonaRepositorio extends JpaRepository<Zona, Integer> {
+public interface ZonaRepositorio extends JpaRepository<Zona, String> {
 
 }

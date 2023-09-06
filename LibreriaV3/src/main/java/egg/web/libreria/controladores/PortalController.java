@@ -9,6 +9,7 @@ import egg.web.libreria.repositorios.ZonaRepositorio;
 import egg.web.libreria.servicios.UsuarioServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,11 +38,25 @@ public class PortalController {
         return "index.html";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_USUARIO_REGISTRADO')")
+    @GetMapping("/inicio")
+    public String inicio() {
+        return "inicio.html";
+    }
+    
     @GetMapping("/login")
-    public String login() {
+    public String login(@RequestParam(required = false) String error,@RequestParam(required = false) String logout, ModelMap model) {
+        if (error != null) {
+            model.put("error", "Email o contraseña incorrectos.");
+        }
+        //No funciona el mensaje resolver
+        if (logout != null) {
+            model.put("logout", "Ha salido correctamente de la plataforma.");
+        }
+        
         return "login.html";
     }
-
+    
     @GetMapping("/registro")
     public String registro(ModelMap modelo) {
         List<Zona> zonas = zonaRepositorio.findAll();
@@ -51,9 +66,9 @@ public class PortalController {
     }
 
     @PostMapping("/registrar")
-    public String registro(ModelMap modelo, MultipartFile archivo, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String documento, @RequestParam String telefono, @RequestParam(required = false) Sexo sexo, @RequestParam(required = false) Integer idZona, @RequestParam String mail, @RequestParam String clave, @RequestParam String clave2) {
+    public String registro(ModelMap modelo, MultipartFile archivo, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String documento, @RequestParam String telefono, @RequestParam(required = false) Sexo sexo, @RequestParam(required = false) String idZona, @RequestParam String mail, @RequestParam String clave, @RequestParam String clave2) {
         try {
-            usuarioServicio.registar(archivo, nombre, apellido, documento, telefono, Sexo.Mujer, 1, mail, clave, clave2);
+            usuarioServicio.registar(archivo, nombre, apellido, documento, telefono, Sexo.Mujer, idZona, mail, clave, clave2);
         } catch (ErrorServicio ex) {
             List<Zona> zonas = zonaRepositorio.findAll();
             modelo.put("zonas", zonas);
