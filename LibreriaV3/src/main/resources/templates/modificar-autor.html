@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Modificar autor</title>
+        <title>Libreria - Modificar autor</title>
     <head th:replace="/fragments/head :: head"></head>
 </head>
 
@@ -22,7 +22,7 @@
 
                     <p th:if="${error != null}" th:text="${error}" class="error"></p>
 
-                    <input hidden th:value="${autor.id}" name="id">
+                    <input type="hidden" th:value="${autor.id}" name="id">
 
                     <div class="mb-3">
                         <label for="nombre" class="col col-form-label">Nombre</label>
@@ -31,10 +31,22 @@
                         </div>
                     </div>
 
+                    <div class="mb-3">
+                        <label for="archivo" class="col col-form-label">Foto</label>
+                        <div class="col-sm-10 w-100">
+                            <input type="file" class="form-control" id="archivo" name="archivo"/>
+                        </div>
+                    </div>
+
                     <div class="d-grid gap-2 col-6 mx-auto">
                         <button type="submit" class="btn btn-primary">Modificar</button>
                     </div>
                 </form>
+            </div>
+            <div class="w-25">
+                <div class="img-a-e">
+                    <img th:if="${autor.foto != null}" class="rounded mx-auto d-block" th:src="${'/foto/autor/' + autor.id}" width="180px" height="190px" alt="Imagen"/>
+                </div>
             </div>
         </div>
     </div>

@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Autores</title>
+        <title>Libreria - Autores</title>
     <head th:replace="/fragments/head :: head"></head>
 </head>
 <body>
     <nav th:replace="/fragments/navbar :: nav"></nav>
 
-    <h1>Autores</h1>
+    <h1>Lista Autores</h1>
 
     <table class="table table-dark table-striped">
         <thead>
             <tr>
-                <!--<th scope="col">ID</th>-->
                 <th scope="col">Nombre</th>
                 <th scope="col">Alta/Baja</th>
                 <th scope="col">Editar autor</th>
@@ -21,14 +20,14 @@
         </thead>
         <tbody>
             <tr th:each="autor : ${autores}">
-                <!--<th scope="row">1</th>-->
+
                 <td th:text="${autor.nombre}"></td>
 
                 <td>
-                    <a th:if="${autor.alta == false}" th:href="@{/autores/alta(id=__${autor.id}__)}">
+                    <a th:if="${autor.baja != null}" th:href="@{/autores/alta(id=__${autor.id}__)}">
                         <button type="button" class="btn btn-success btn-sm">Dar alta</button>
                     </a>
-                    <a th:unless="${autor.alta == false}" th:href="@{/autores/baja(id=__${autor.id}__)}">
+                    <a th:unless="${autor.baja != null}" th:href="@{/autores/baja(id=__${autor.id}__)}">
                         <button type="button" class="btn btn-danger btn-sm">Dar baja</button>
                     </a>
                 </td>
@@ -52,8 +51,7 @@
             class="btn btn-warning"
             tabindex="-1"
             role="button"
-            >Agregar autor</a
-        >
+            >Agregar autor</a>
     </div>
 
     <footer th:replace="/fragments/footer :: footer"></footer>

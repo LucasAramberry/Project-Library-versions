@@ -49,14 +49,16 @@
                     <div class="mb-3">
                         <label for="sexo" class="col col-form-label">Sexo</label>
                         <div class="col-sm-10 w-100">
-                            <input type="text" class="form-control" id="sexo" name="sexo" th:value="${sexo}"/>
+                            <select class="form-select" id="sexo" name="sexo">
+                                <option th:each="sexo : ${sexos}" th:value="${sexo}" th:text="${sexo}"></option>
+                            </select>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="idZona" class="col col-form-label">Zona</label>
                         <div class="col-sm-10 w-100">
-                            <select class="form-control" id="idZona" name="idZona">
+                            <select class="form-select" id="idZona" name="idZona">
                                 <option th:each="zona : ${zonas}" th:value="${zona.id}" th:text="${zona.nombre}"></option>
                             </select>
                         </div>

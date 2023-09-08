@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Prestamos</title>
+        <title>Libreria - Prestamos</title>
     <head th:replace="/fragments/head :: head"></head>
 </head>
 <body>
     <nav th:replace="/fragments/navbar :: nav"></nav>
 
-    <h1>Prestamos</h1>
+    <h1>Lista Prestamos</h1>
 
     <table class="table table-dark table-striped">
         <thead>
@@ -15,7 +15,7 @@
                 <th scope="col">Fecha prestamo</th>
                 <th scope="col">Fecha devolucion</th>
                 <th scope="col">Libro</th>
-                <th scope="col">Cliente</th>
+                <th scope="col">Usuario</th>
                 <th scope="col">Alta/Baja</th>
                 <th scope="col">Editar</th>
                 <th scope="col">Eliminar</th>
@@ -26,7 +26,7 @@
                 <td th:text="${prestamo.fechaPrestamo}"></td>
                 <td th:text="${prestamo.fechaDevolucion}"></td>
                 <td th:text="${prestamo.libro.titulo}"></td>
-                <td th:text="${prestamo.cliente.nombre}"></td>
+                <td th:text="${prestamo.usuario.mail}"></td>
 
                 <td>
                     <a th:if="${prestamo.alta == false}" th:href="@{/prestamos/alta(id=__${prestamo.id}__)}">

@@ -6,6 +6,7 @@ import egg.web.libreria.entidades.Usuario;
 import egg.web.libreria.errores.ErrorServicio;
 import egg.web.libreria.repositorios.PrestamoRepositorio;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class PrestamoServicio {
     private NotificacionServicio notificacionServicio;
 
     @Transactional
-    public void registar(Date fechaPrestamo, Date fechaDevolucion, Libro libro, Usuario usuario) throws ErrorServicio {
+    public void registrar(Date fechaPrestamo, Date fechaDevolucion, Libro libro, Usuario usuario) throws ErrorServicio {
 
         validar(fechaPrestamo, fechaDevolucion, libro, usuario);
 
@@ -145,6 +146,23 @@ public class PrestamoServicio {
         }
     }
 
+    @Transactional
+    public List<Prestamo> buscarPrestamosPorUsuario(String id) throws ErrorServicio {
+        List<Prestamo> prestamosUsuario = prestamoRepositorio.buscarPrestamoPorUsuario(id);
+        return prestamosUsuario;
+    }
+
+    @Transactional
+    public List<Prestamo> listaPrestamos() throws ErrorServicio {
+        List<Prestamo> listaPrestamos = prestamoRepositorio.findAll();
+        if (listaPrestamos != null) {
+            return listaPrestamos;
+        } else {
+            throw new ErrorServicio("No se encuentra ningun prestamo.");
+        }
+    }
+
+    @Transactional
     public void devolucion(Integer id) throws ErrorServicio {
         Optional<Prestamo> respuesta = prestamoRepositorio.findById(id);
         if (respuesta.isPresent()) {
@@ -170,7 +188,7 @@ public class PrestamoServicio {
             throw new ErrorServicio("Fecha de prestamo invalida.");
         }
         if (usuario == null) {
-            throw new ErrorServicio("usuario invalido.");
+            throw new ErrorServicio("Usuario invalido.");
         }
         if (libro == null) {
             throw new ErrorServicio("Libro invalido.");

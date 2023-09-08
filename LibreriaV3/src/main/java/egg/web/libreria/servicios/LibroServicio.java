@@ -20,9 +20,9 @@ public class LibroServicio {
     @Autowired
     private LibroRepositorio libroRepositorio;
     @Autowired
-    private AutorRepositorio autorRepositorio;
+    private AutorServicio autorServicio;
     @Autowired
-    private EditorialRepositorio editorialRepositorio;
+    private EditorialServicio editorialServicio;
     @Autowired
     private FotoServicio fotoServicio;
 
@@ -42,8 +42,8 @@ public class LibroServicio {
      */
     @Transactional
     public void registrar(MultipartFile archivo, String isbn, String titulo, String descripcion, Date fechaPublicacion, Integer cantidadPaginas, Integer ejemplares, Integer ejemplaresPrestados, String idAutor, String idEditorial) throws ErrorServicio {
-        Autor autor = autorRepositorio.getOne(idAutor);
-        Editorial editorial = editorialRepositorio.findById(idEditorial).get();
+        Autor autor = autorServicio.buscarAutorPorId(idAutor);
+        Editorial editorial = editorialServicio.buscarEditorialPorId(idEditorial);
 
         validar(isbn, titulo, descripcion, fechaPublicacion, cantidadPaginas, ejemplares, ejemplaresPrestados, autor, editorial);
 
@@ -89,8 +89,8 @@ public class LibroServicio {
         if (respuesta.isPresent()) {
             Libro libro = respuesta.get();
 
-            Autor autor = autorRepositorio.getOne(idAutor);
-            Editorial editorial = editorialRepositorio.findById(idEditorial).get();
+            Autor autor = autorServicio.buscarAutorPorId(idAutor);
+        Editorial editorial = editorialServicio.buscarEditorialPorId(idEditorial);
 
             validar(isbn, titulo,descripcion, fechaPublicacion, cantidadPaginas, ejemplares, ejemplaresPrestados, autor, editorial);
 
@@ -248,9 +248,9 @@ public class LibroServicio {
         if (titulo == null || titulo.isEmpty()) {
             throw new ErrorServicio("El titulo del libro no puede ser nulo");
         }
-//        if (descripcion == null || descripcion.isEmpty()) {
-//            throw new ErrorServicio("La descripcion del libro no puede ser nula");
-//        }
+        if (descripcion == null || descripcion.isEmpty()) {
+            throw new ErrorServicio("La descripcion del libro no puede ser nula");
+        }
         if (fechaPublicacion == null || fechaPublicacion.getYear() > 2023) {
             throw new ErrorServicio("Fecha de publicacion invalida.");
         }

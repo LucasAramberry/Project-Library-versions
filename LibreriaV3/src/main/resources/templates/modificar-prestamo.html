@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Modificar libro</title>
+        <title>Libreria - Modificar libro</title>
     <head th:replace="/fragments/head :: head"></head>
 </head>
 
@@ -22,7 +22,7 @@
 
                     <p th:if="${error != null}" th:text="${error}" class="error"></p>
 
-                    <input hidden th:value="${prestamo.id}" name="id" required>
+                    <input type="hidden" th:value="${prestamo.id}" name="id" required>
 
                     <div class="mb-3">
                         <label for="fechaPrestamo" class="col col-form-label">Fecha prestamo</label>
@@ -48,10 +48,10 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="idCliente" class="col col-form-label">Cliente</label>
+                        <label for="idUsuario" class="col col-form-label">Usuario</label>
                         <div class="col-sm-10 w-100">
-                            <select class="form-control" id="idCliente"  name="idCliente">
-                                <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nombre}" th:selected="${prestamo.cliente != null && cliente.id == prestamo.cliente.id}"></option>
+                            <select class="form-control" id="idUsuario"  name="idUsuario">
+                                <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nombre}" th:selected="${prestamo.usuario != null && usuario.id == prestamo.usuario.id}"></option>
                             </select>
                         </div>
                     </div>

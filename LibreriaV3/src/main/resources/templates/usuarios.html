@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Clientes</title>
+        <title>Libreria - Usuarios</title>
     <head th:replace="/fragments/head :: head"></head>
 </head>
 <body>
     <nav th:replace="/fragments/navbar :: nav"></nav>
 
-    <h1>Clientes</h1>
+    <h1>Lista Usuarios</h1>
 
     <table class="table table-dark table-striped">
         <thead>
@@ -16,37 +16,52 @@
                 <th scope="col">Apellido</th>
                 <th scope="col">Documento</th>
                 <th scope="col">Telefono</th>
+                <th scope="col">Zona</th>
+                <th scope="col">Sexo</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Fecha alta</th>
+                <th scope="col">Fecha baja</th>
                 <th scope="col">Alta/Baja</th>
                 <th scope="col">Editar autor</th>
                 <th scope="col">Eliminar autor</th>
             </tr>
         </thead>
         <tbody>
-            <tr th:each="cliente : ${clientes}">
+            <tr th:each="usuario : ${usuarios}">
 
-                <td th:text="${cliente.nombre}"></td>
+                <td th:text="${usuario.nombre}"></td>
 
-                <td th:text="${cliente.apellido}"></td>
+                <td th:text="${usuario.apellido}"></td>
 
-                <td th:text="${cliente.documento}"></td>
+                <td th:text="${usuario.documento}"></td>
 
-                <td th:text="${cliente.telefono}"></td>
+                <td th:text="${usuario.telefono}"></td>
+                
+                <td th:text="${usuario.zona.nombre}"></td>
+                
+                <td th:text="${usuario.sexo}"></td>
+                
+                <td th:text="${usuario.mail}"></td>
+                
+                <td th:text="${usuario.alta}"></td>
+                
+                <td th:text="${usuario.baja}"></td>
 
                 <td>
-                    <a th:if="${cliente.alta == false}" th:href="@{/clientes/alta(id=__${cliente.id}__)}">
+                    <a th:if="${usuario.baja != null}" th:href="@{/usuario/alta(id=__${usuario.id}__)}">
                         <button type="button" class="btn btn-success btn-sm">Dar alta</button>
                     </a>
-                    <a th:unless="${cliente.alta == false}" th:href="@{/clientes/baja(id=__${cliente.id}__)}">
+                    <a th:unless="${usuario.baja != null}" th:href="@{/usuario/baja(id=__${usuario.id}__)}">
                         <button type="button" class="btn btn-danger btn-sm">Dar baja</button>
                     </a>
                 </td>
                 <td>
-                    <a th:href="@{/clientes/modificar-cliente(id=__${cliente.id}__)}">
+                    <a th:href="@{/usuario/modificar-usuario(id=__${usuario.id}__)}">
                         <button type="button" class="btn btn-primary btn-sm">Modificar</button>
                     </a>
                 </td>
                 <td>
-                    <a th:href="@{/clientes/eliminar(id=__${cliente.id}__)}">
+                    <a th:href="@{/usuario/eliminar(id=__${usuario.id}__)}">
                         <button type="button" class="btn btn-primary btn-sm">Eliminar</button>
                     </a>
                 </td>
@@ -56,11 +71,11 @@
 
     <div class="d-grid gap-2 col-6 mx-auto">
         <a
-            href="/clientes/registro-cliente"
+            href="/usuario/registro"
             class="btn btn-warning"
             tabindex="-1"
             role="button"
-            >Agregar cliente</a
+            >Agregar usuario</a
         >
     </div>
 

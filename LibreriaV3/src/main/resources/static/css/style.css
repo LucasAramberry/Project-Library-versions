@@ -266,3 +266,13 @@ table {
 .enlaces-sub:hover{
     color: darkgray;
 }
+
+.img-usuario{
+    margin-top: 60%;
+    margin-left: 25%;
+}
+
+.img-a-e{
+    margin-top: 10%;
+    margin-left: 25%;
+}

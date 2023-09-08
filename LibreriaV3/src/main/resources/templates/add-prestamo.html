@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" >
     <head>
-        <title>Agregar prestamo</title>
+        <title>Libreria - Registrar Prestamo</title>
     <head th:replace="/fragments/head :: head"></head>
 </head>
 
@@ -12,7 +12,7 @@
         <i class="fas fa-arrow-left"></i>
     </a>
 
-    <h1 class="mb-3">Ingresar prestamo</h1>
+    <h1 class="mb-3">Registrar prestamo</h1>
 
     <div class="d-flex justify-content-center">
         <div class="w-75 text-light d-flex justify-content-center">
@@ -28,7 +28,7 @@
                             <input type="date" readonly class="form-control" id="fechaPrestamo" name="fechaPrestamo" th:value="${fechaPrestamo}"/>
                         </div>
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="fechaDevolucion" class="col col-form-label">Fecha devolucion</label>
                         <div class="col-sm-10 w-100">
@@ -45,14 +45,18 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="idCliente" class="col col-form-label">Cliente</label>
-                        <div class="col-sm-10 w-100">
-                            <select class="form-control" id="idCliente"  name="idCliente">
-                                <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nombre}"></option>
-                            </select>
-                        </div>
-                    </div>
+                    <!--                    <div class="mb-3">
+                                            <label for="idUsuario" class="col col-form-label">Usuario</label>
+                                            <div class="col-sm-10 w-100">
+                                                <select class="form-control" id="idUsuario"  name="idUsuario">
+                                                    <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nombre}"></option>
+                                                </select>
+                                            </div>
+                                        </div>-->
+<!--                    este input lo activamos si en el controlador activamos que el id venga del html 
+                    colocando el atributo como requerido-->
+                    
+                    <!--<input type="hidden" class="form-control" id="idUsuario" name="idUsuario" th:value="${session.usuariosession.id}"/>-->
 
                     <div class="d-grid gap-2 col-6 mx-auto boton-libro">
                         <button type="submit" class="btn btn-primary">Agregar</button>

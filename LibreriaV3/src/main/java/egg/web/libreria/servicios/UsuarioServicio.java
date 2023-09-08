@@ -1,15 +1,10 @@
 package egg.web.libreria.servicios;
 
-import egg.web.libreria.entidades.Foto;
-import egg.web.libreria.entidades.Usuario;
-import egg.web.libreria.entidades.Zona;
+import egg.web.libreria.entidades.*;
 import egg.web.libreria.enumeraciones.Sexo;
 import egg.web.libreria.errores.ErrorServicio;
 import egg.web.libreria.repositorios.UsuarioRepositorio;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -265,9 +260,9 @@ public class UsuarioServicio implements UserDetailsService {
         if (!clave.equals(clave2)) {
             throw new ErrorServicio("Las contraseñas deben ser iguales.");
         }
-//        if (sexo == null) {
-//            throw new ErrorServicio("El sexo no puede ser nulo.");
-//        }
+        if (sexo == null) {
+            throw new ErrorServicio("El sexo no puede ser nulo.");
+        }
     }
 
     @Override
@@ -279,6 +274,8 @@ public class UsuarioServicio implements UserDetailsService {
 
             GrantedAuthority p1 = new SimpleGrantedAuthority("ROLE_USUARIO_REGISTRADO");
             permisos.add(p1);
+//            GrantedAuthority p2 = new SimpleGrantedAuthority("ROLE_ADMINISTRADOR_REGISTRADO");
+//            permisos.add(p2);
 
             ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
             HttpSession session = attr.getRequest().getSession(true);
