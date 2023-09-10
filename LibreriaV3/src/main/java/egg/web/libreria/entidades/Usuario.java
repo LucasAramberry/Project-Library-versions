@@ -1,5 +1,6 @@
 package egg.web.libreria.entidades;
 
+import egg.web.libreria.enumeraciones.Rol;
 import egg.web.libreria.enumeraciones.Sexo;
 import java.util.Date;
 import javax.persistence.*;
@@ -16,17 +17,19 @@ public class Usuario {
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
-    
+
     private String nombre;
     private String apellido;
 
     @Column(unique = true)
     private String documento;
-    
+
     private String telefono;
 
     @Enumerated(EnumType.STRING)
     private Sexo sexo;
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
 
     @ManyToOne
     private Zona zona;
@@ -41,7 +44,6 @@ public class Usuario {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date alta;
-    
     @Temporal(TemporalType.TIMESTAMP)
     private Date baja;
 
@@ -123,6 +125,14 @@ public class Usuario {
 
     public void setSexo(Sexo sexo) {
         this.sexo = sexo;
+    }
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
     }
 
     public Zona getZona() {

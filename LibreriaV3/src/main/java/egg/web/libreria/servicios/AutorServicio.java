@@ -5,6 +5,7 @@ import egg.web.libreria.entidades.Foto;
 import egg.web.libreria.errores.ErrorServicio;
 import egg.web.libreria.repositorios.AutorRepositorio;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,10 @@ public class AutorServicio {
 
     /**
      * metodo para registar autor
+     *
      * @param archivo
      * @param nombre
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void registrar(MultipartFile archivo, String nombre) throws ErrorServicio {
@@ -36,7 +38,7 @@ public class AutorServicio {
         Autor a = new Autor();
         a.setNombre(nombre);
         a.setAlta(new Date());
-        
+
         Foto foto = fotoServicio.guardar(archivo);
         a.setFoto(foto);
 
@@ -45,10 +47,11 @@ public class AutorServicio {
 
     /**
      * metodo para modificar autor
+     *
      * @param archivo
      * @param id
      * @param nombre
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void modificar(MultipartFile archivo, String id, String nombre) throws ErrorServicio {
@@ -67,17 +70,18 @@ public class AutorServicio {
 
             Foto foto = fotoServicio.actualizar(idFoto, archivo);
             a.setFoto(foto);
-            
+
             autorRepositorio.save(a);
         } else {
-            throw new ErrorServicio("No se encontro el autor solicitado");
+            throw new ErrorServicio("No se encontro el autor solicitado para modificar.");
         }
     }
 
     /**
      * metodo para eliminar autor
+     *
      * @param idAutor
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void eliminar(String idAutor) throws ErrorServicio {
@@ -87,14 +91,15 @@ public class AutorServicio {
             Autor autor = respuesta.get();
             autorRepositorio.delete(autor);
         } else {
-            throw new ErrorServicio("No se encontro el autor solicitado para eliminar");
+            throw new ErrorServicio("No se encontro el autor solicitado para eliminar.");
         }
     }
 
     /**
      * metodo para deshabilitar autor
+     *
      * @param id
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void deshabilitar(String id) throws ErrorServicio {
@@ -106,14 +111,15 @@ public class AutorServicio {
 
             autorRepositorio.save(a);
         } else {
-            throw new ErrorServicio("Error al deshabilitar el autor solicitado");
+            throw new ErrorServicio("Error al deshabilitar el autor solicitado.");
         }
     }
 
     /**
      * Metodo para habilitar autor
+     *
      * @param id
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void habilitar(String id) throws ErrorServicio {
@@ -125,35 +131,47 @@ public class AutorServicio {
 
             autorRepositorio.save(a);
         } else {
-            throw new ErrorServicio("Error al habilitar el autor solicitado");
+            throw new ErrorServicio("Error al habilitar el autor solicitado.");
         }
     }
 
     /**
      * metodo para buscar autor por id
+     *
      * @param id
      * @return
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public Autor buscarAutorPorId(String id) throws ErrorServicio {
-        Optional<Autor> respuesta = autorRepositorio.findById(id);
+        Optional<Autor> respuesta = autorRepositorio.findById(id);//autorRepositorio.getOne(id)//autorRepositorio.getById(id)
         if (respuesta.isPresent()) {
             Autor autor = respuesta.get();
             return autor;
         } else {
-            throw new ErrorServicio("No se encontro el autor solicitado");
+            throw new ErrorServicio("No se encontro el autor solicitado por id.");
+        }
+    }
+
+    @Transactional
+    public List<Autor> listarAutores() throws ErrorServicio {
+        List<Autor> autores = autorRepositorio.findAll();
+        if (autores != null) {
+            return autores;
+        }else{
+            throw new ErrorServicio("No se encontro ningun autor.");
         }
     }
 
     /**
      * metodo para validar atributos
+     *
      * @param nombre
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     private void validar(String nombre) throws ErrorServicio {
         if (nombre == null || nombre.isEmpty()) {
-            throw new ErrorServicio("El nombre del autor no puede ser nulo");
+            throw new ErrorServicio("El nombre del autor no puede ser nulo.");
         }
     }
 }

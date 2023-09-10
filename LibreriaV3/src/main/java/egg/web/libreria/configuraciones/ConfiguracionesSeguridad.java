@@ -44,7 +44,7 @@ public class ConfiguracionesSeguridad extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and().logout() // Aca configuro la salida
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")//a q url viaje cuando se deslogue de manera correcta
+                .logoutSuccessUrl("/login?logout")//a q url viaje cuando se desloguee de manera correcta
                 .permitAll().and().csrf().disable();
     }
 }

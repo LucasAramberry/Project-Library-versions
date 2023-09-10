@@ -4,6 +4,7 @@ import egg.web.libreria.entidades.*;
 import egg.web.libreria.errores.ErrorServicio;
 import egg.web.libreria.repositorios.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,10 @@ public class LibroServicio {
     @Autowired
     private FotoServicio fotoServicio;
 
+//------------------------------METODOS CRUD-----------------------------------
     /**
      * Metodo para registrar libro
+     *
      * @param archivo
      * @param isbn
      * @param titulo
@@ -38,7 +41,7 @@ public class LibroServicio {
      * @param ejemplaresPrestados
      * @param idAutor
      * @param idEditorial
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void registrar(MultipartFile archivo, String isbn, String titulo, String descripcion, Date fechaPublicacion, Integer cantidadPaginas, Integer ejemplares, Integer ejemplaresPrestados, String idAutor, String idEditorial) throws ErrorServicio {
@@ -68,6 +71,7 @@ public class LibroServicio {
 
     /**
      * metodo para modificar libro
+     *
      * @param archivo
      * @param id
      * @param isbn
@@ -79,7 +83,7 @@ public class LibroServicio {
      * @param ejemplaresPrestados
      * @param idAutor
      * @param idEditorial
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void modificar(MultipartFile archivo, String id, String isbn, String titulo, String descripcion, Date fechaPublicacion, Integer cantidadPaginas, Integer ejemplares, Integer ejemplaresPrestados, String idAutor, String idEditorial) throws ErrorServicio {
@@ -90,9 +94,9 @@ public class LibroServicio {
             Libro libro = respuesta.get();
 
             Autor autor = autorServicio.buscarAutorPorId(idAutor);
-        Editorial editorial = editorialServicio.buscarEditorialPorId(idEditorial);
+            Editorial editorial = editorialServicio.buscarEditorialPorId(idEditorial);
 
-            validar(isbn, titulo,descripcion, fechaPublicacion, cantidadPaginas, ejemplares, ejemplaresPrestados, autor, editorial);
+            validar(isbn, titulo, descripcion, fechaPublicacion, cantidadPaginas, ejemplares, ejemplaresPrestados, autor, editorial);
 
             libro.setIsbn(isbn);
             libro.setTitulo(titulo);
@@ -113,17 +117,18 @@ public class LibroServicio {
 
             Foto foto = fotoServicio.actualizar(idFoto, archivo);
             libro.setFoto(foto);
-            
+
             libroRepositorio.save(libro);
         } else {
-            throw new ErrorServicio("No se encontro el libro solicitado para modificar");
+            throw new ErrorServicio("No se encontro el libro solicitado para modificar.");
         }
     }
 
     /**
      * metodo para eliminar libro
+     *
      * @param idLibro
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void eliminar(String idLibro) throws ErrorServicio {
@@ -133,14 +138,15 @@ public class LibroServicio {
             Libro libro = respuesta.get();
             libroRepositorio.delete(libro);
         } else {
-            throw new ErrorServicio("No se encontro el libro solicitado para eliminar");
+            throw new ErrorServicio("No se encontro el libro solicitado para eliminar.");
         }
     }
 
     /**
      * Metodo para deshabilitar libro
+     *
      * @param id
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void deshabilitar(String id) throws ErrorServicio {
@@ -152,14 +158,15 @@ public class LibroServicio {
 
             libroRepositorio.save(libro);
         } else {
-            throw new ErrorServicio("Error al deshabilitar el libro solicitado");
+            throw new ErrorServicio("Error al deshabilitar el libro solicitado.");
         }
     }
 
     /**
      * Metodo para habilitar libro
+     *
      * @param id
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void habilitar(String id) throws ErrorServicio {
@@ -171,31 +178,16 @@ public class LibroServicio {
 
             libroRepositorio.save(libro);
         } else {
-            throw new ErrorServicio("Error al habilitar el libro solicitado");
+            throw new ErrorServicio("Error al habilitar el libro solicitado.");
         }
     }
 
     /**
-     * Metodo para buscar libro por id
-     * @param id
-     * @return
-     * @throws ErrorServicio 
-     */
-    @Transactional
-    public Libro buscarLibroPorId(String id) throws ErrorServicio {
-        Optional<Libro> respuesta = libroRepositorio.findById(id);
-        if (respuesta.isPresent()) {
-            Libro libro = respuesta.get();
-            return libro;
-        } else {
-            throw new ErrorServicio("No se encontro el libro solicitado");
-        }
-    }
-
-    /**
-     * Metodo prestamo libro. Cuando prestamos restamos los restantes y sumamos a prestados 
+     * Metodo prestamo libro. Cuando prestamos restamos los restantes y sumamos
+     * a prestados
+     *
      * @param libro
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void prestarLibro(Libro libro) throws ErrorServicio {
@@ -205,7 +197,7 @@ public class LibroServicio {
                 libro.setEjemplaresRestantes(libro.getEjemplaresRestantes() - 1);
                 libroRepositorio.save(libro);
             } else {
-                throw new ErrorServicio("El libro ingresado no tiene mas ejemplares disponibles");
+                throw new ErrorServicio("El libro ingresado no tiene suficientes ejemplares disponibles para realizar el préstamo.");
             }
         } else {
             throw new ErrorServicio("El libro no esta disponible");
@@ -214,8 +206,9 @@ public class LibroServicio {
 
     /**
      * metodo para devolver el libro que prestamos
+     *
      * @param libro
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void devolverLibro(Libro libro) throws ErrorServicio {
@@ -228,8 +221,106 @@ public class LibroServicio {
         }
     }
 
+//----------------------------METODOS CONSULTA DB------------------------------
+    /**
+     * Metodo para buscar libro por id
+     *
+     * @param id
+     * @return
+     * @throws ErrorServicio
+     */
+    @Transactional
+    public Libro buscarLibroPorId(String id) throws ErrorServicio {
+        Optional<Libro> respuesta = libroRepositorio.findById(id);//libroRepositorio.getById(id)//libroRepositorio.getOne(id)
+        if (respuesta.isPresent()) {
+            Libro libro = respuesta.get();
+            return libro;
+        } else {
+            throw new ErrorServicio("No se encontro el libro solicitado");
+        }
+    }
+
+    /**
+     * Metodo que devuelve la lista de libros
+     * @return
+     * @throws ErrorServicio 
+     */
+    @Transactional
+    public List<Libro> listarLibros() throws ErrorServicio {
+        List<Libro> libros = libroRepositorio.findAll();
+        if (libros != null) {
+            return libros;
+        } else {
+            throw new ErrorServicio("No se encontro ningun libro.");
+        }
+    }
+
+    /**
+     * Metodo para buscar libro/s por autor
+     *
+     * @param idAutor
+     * @return
+     */
+    @Transactional
+    public List<Libro> buscarLibrosPorAutor(String idAutor) throws ErrorServicio {
+        List<Libro> libros = libroRepositorio.buscarLibrosPorAutor(idAutor);
+        if (libros != null) {
+            return libros;
+        } else {
+            throw new ErrorServicio("No se encontro ningun libro por autor.");
+        }
+    }
+
+    /**
+     * Metodo para buscar libro/s por editorial
+     *
+     * @param idEditorial
+     * @return
+     */
+    @Transactional
+    public List<Libro> buscarLibrosPorEditorial(String idEditorial) throws ErrorServicio {
+        List<Libro> libros = libroRepositorio.buscarLibrosPorEditorial(idEditorial);
+        if (libros != null) {
+            return libros;
+        } else {
+            throw new ErrorServicio("No se encontro ningun libro por editorial.");
+        }
+    }
+
+    /**
+     * Metodo para traer una lista de todos los libros activos
+     *
+     * @return
+     */
+    @Transactional
+    public List<Libro> listarLibrosActivos() throws ErrorServicio {
+        List<Libro> libros = libroRepositorio.listaLibrosActivos();
+        if (libros != null) {
+            return libros;
+        } else {
+            throw new ErrorServicio("Error al obtener libros activos.");
+        }
+    }
+
+    /**
+     * Metodo para traer una lista de todos los libros activos
+     *
+     * @return
+     */
+    @Transactional
+    public List<Libro> listarLibrosInactivos() throws ErrorServicio {
+        List<Libro> libros = libroRepositorio.listaLibrosInactivos();
+        if (libros != null) {
+            return libros;
+        } else {
+            throw new ErrorServicio("Error al obtener libros inactivos.");
+        }
+    }
+
+//----------------------------METODO VALIDACION-----------------------------------
     /**
      * metodo de validacion de atributos
+     *
      * @param isbn
      * @param titulo
      * @param descripcion
@@ -239,35 +330,35 @@ public class LibroServicio {
      * @param ejemplaresPrestados
      * @param autor
      * @param editorial
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     private void validar(String isbn, String titulo, String descripcion, Date fechaPublicacion, Integer cantidadPaginas, Integer ejemplares, Integer ejemplaresPrestados, Autor autor, Editorial editorial) throws ErrorServicio {
-        if (isbn == null || isbn.isEmpty() || isbn.length() < 13 || isbn.length() > 13) {
-            throw new ErrorServicio("El isbn del libro no puede ser nulo y debe contener 13 numeros");
+        if (isbn == null || isbn.isEmpty() || isbn.length() != 13) {
+            throw new ErrorServicio("El isbn no puede ser nulo y debe contener 13 caracteres");
         }
         if (titulo == null || titulo.isEmpty()) {
-            throw new ErrorServicio("El titulo del libro no puede ser nulo");
+            throw new ErrorServicio("El titulo no puede ser nulo");
         }
         if (descripcion == null || descripcion.isEmpty()) {
-            throw new ErrorServicio("La descripcion del libro no puede ser nula");
+            throw new ErrorServicio("La descripcion no puede ser nula");
         }
         if (fechaPublicacion == null || fechaPublicacion.getYear() > 2023) {
             throw new ErrorServicio("Fecha de publicacion invalida.");
         }
-        if (cantidadPaginas <= 0) {
-            throw new ErrorServicio("Cantidad de paginas del libro invalida.");
+        if (cantidadPaginas <= 1) {
+            throw new ErrorServicio("Cantidad de paginas invalida.");
         }
         if (ejemplares <= 0) {
-            throw new ErrorServicio("Cantidad de ejemplares del libro invalida.");
+            throw new ErrorServicio("Cantidad de ejemplares invalida.");
         }
         if (ejemplaresPrestados < 0 || ejemplaresPrestados > ejemplares) {
-            throw new ErrorServicio("Cantidad de ejemplares prestados del libro invalida");
+            throw new ErrorServicio("Cantidad de ejemplares prestados invalida.");
         }
         if (autor == null) {
-            throw new ErrorServicio("El autor del libro no puede ser nulo");
+            throw new ErrorServicio("El autor no puede ser nulo.");
         }
         if (editorial == null) {
-            throw new ErrorServicio("La editorial del libro no puede ser nulo");
+            throw new ErrorServicio("La editorial no puede ser nula.");
         }
     }
 }

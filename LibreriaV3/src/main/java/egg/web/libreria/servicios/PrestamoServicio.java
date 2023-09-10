@@ -26,6 +26,15 @@ public class PrestamoServicio {
     @Autowired
     private NotificacionServicio notificacionServicio;
 
+    /**
+     * Metodo para registrar un prestamo
+     *
+     * @param fechaPrestamo
+     * @param fechaDevolucion
+     * @param libro
+     * @param usuario
+     * @throws ErrorServicio
+     */
     @Transactional
     public void registrar(Date fechaPrestamo, Date fechaDevolucion, Libro libro, Usuario usuario) throws ErrorServicio {
 
@@ -48,6 +57,16 @@ public class PrestamoServicio {
 //        notificacionServicio.enviar("Realizaste el prestamo de un libro.", "Libreria web", usuario.getMail());
     }
 
+    /**
+     * Metodo para modificar un prestamo
+     *
+     * @param id
+     * @param fechaPrestamo
+     * @param fechaDevolucion
+     * @param libro
+     * @param usuario
+     * @throws ErrorServicio
+     */
     @Transactional
     public void modificar(Integer id, Date fechaPrestamo, Date fechaDevolucion, Libro libro, Usuario usuario) throws ErrorServicio {
 
@@ -73,10 +92,16 @@ public class PrestamoServicio {
 
             prestamoRepositorio.save(prestamo);
         } else {
-            throw new ErrorServicio("No se encontro el prestamo solicitado para modificar");
+            throw new ErrorServicio("No se encontro el prestamo solicitado para modificar.");
         }
     }
 
+    /**
+     * metodo para eliminar un prestamo
+     *
+     * @param idPrestamo
+     * @throws ErrorServicio
+     */
     @Transactional
     public void eliminar(Integer idPrestamo) throws ErrorServicio {
         Optional<Prestamo> respuesta = prestamoRepositorio.findById(idPrestamo);
@@ -92,10 +117,16 @@ public class PrestamoServicio {
 
             prestamoRepositorio.delete(prestamo);
         } else {
-            throw new ErrorServicio("No se encontro el prestamo solicitado para eliminar");
+            throw new ErrorServicio("No se encontro el prestamo solicitado para eliminar.");
         }
     }
 
+    /**
+     * Metodo para deshabilitar un prestamo
+     *
+     * @param id
+     * @throws ErrorServicio
+     */
     @Transactional
     public void deshabilitar(Integer id) throws ErrorServicio {
         Optional<Prestamo> respuesta = prestamoRepositorio.findById(id);
@@ -110,10 +141,16 @@ public class PrestamoServicio {
 
             prestamoRepositorio.save(prestamo);
         } else {
-            throw new ErrorServicio("Error al deshabilitar el prestamo solicitado");
+            throw new ErrorServicio("Error al deshabilitar el prestamo solicitado.");
         }
     }
 
+    /**
+     * Metodo para habilitar un prestamo
+     *
+     * @param id
+     * @throws ErrorServicio
+     */
     @Transactional
     public void habilitar(Integer id) throws ErrorServicio {
         Optional<Prestamo> respuesta = prestamoRepositorio.findById(id);
@@ -131,10 +168,17 @@ public class PrestamoServicio {
 
             prestamoRepositorio.save(prestamo);
         } else {
-            throw new ErrorServicio("Error al habilitar el prestamo solicitado");
+            throw new ErrorServicio("Error al habilitar el prestamo solicitado.");
         }
     }
 
+    /**
+     * metodo para buscar prestamos por id
+     *
+     * @param id
+     * @return
+     * @throws ErrorServicio
+     */
     @Transactional
     public Prestamo buscarPrestamoPorId(Integer id) throws ErrorServicio {
         Optional<Prestamo> respuesta = prestamoRepositorio.findById(id);
@@ -142,24 +186,18 @@ public class PrestamoServicio {
             Prestamo prestamo = respuesta.get();
             return prestamo;
         } else {
-            throw new ErrorServicio("No se encontro el prestamo solicitado");
+            throw new ErrorServicio("No se encontro el prestamo solicitado por id.");
         }
     }
 
     @Transactional
     public List<Prestamo> buscarPrestamosPorUsuario(String id) throws ErrorServicio {
-        List<Prestamo> prestamosUsuario = prestamoRepositorio.buscarPrestamoPorUsuario(id);
-        return prestamosUsuario;
+        return prestamoRepositorio.buscarPrestamoPorUsuario(id);
     }
 
     @Transactional
     public List<Prestamo> listaPrestamos() throws ErrorServicio {
-        List<Prestamo> listaPrestamos = prestamoRepositorio.findAll();
-        if (listaPrestamos != null) {
-            return listaPrestamos;
-        } else {
-            throw new ErrorServicio("No se encuentra ningun prestamo.");
-        }
+        return prestamoRepositorio.findAll();
     }
 
     @Transactional
@@ -180,8 +218,7 @@ public class PrestamoServicio {
 
     private void validar(Date fechaPrestamo, Date fechaDevolucion, Libro libro, Usuario usuario) throws ErrorServicio {
 
-//        if (fechaPrestamo == null || fechaPrestamo.after(new Date()) || fechaPrestamo.before(fechaDevolucion)) {
-        if (fechaPrestamo == null) {
+        if (fechaPrestamo == null || fechaPrestamo.after(fechaDevolucion)) {
             throw new ErrorServicio("Fecha de prestamo invalida.");
         }
         if (fechaDevolucion == null || fechaDevolucion.before(fechaPrestamo) || fechaDevolucion.equals(fechaPrestamo)) {

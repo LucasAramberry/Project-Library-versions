@@ -1,6 +1,7 @@
 package egg.web.libreria.servicios;
 
 import egg.web.libreria.entidades.*;
+import egg.web.libreria.enumeraciones.Rol;
 import egg.web.libreria.enumeraciones.Sexo;
 import egg.web.libreria.errores.ErrorServicio;
 import egg.web.libreria.repositorios.UsuarioRepositorio;
@@ -61,10 +62,11 @@ public class UsuarioServicio implements UserDetailsService {
         usuario.setDocumento(documento);
         usuario.setTelefono(telefono);
         usuario.setSexo(sexo);
+        usuario.setRol(Rol.USUARIO);
 
         Zona zona = zonaServicio.buscarZonaPorId(idZona);
         usuario.setZona(zona);
-        
+
         usuario.setMail(mail);
 
         String encriptada = new BCryptPasswordEncoder().encode(clave);
@@ -110,7 +112,6 @@ public class UsuarioServicio implements UserDetailsService {
             usuario.setTelefono(telefono);
             usuario.setSexo(sexo);
 
-            //buscar zona por id crear metodo en zona servicio que envie excepcion si no decuelve nada
             Zona zona = zonaServicio.buscarZonaPorId(idZona);
             usuario.setZona(zona);
 
@@ -129,7 +130,7 @@ public class UsuarioServicio implements UserDetailsService {
 
             usuarioRepositorio.save(usuario);
         } else {
-            throw new ErrorServicio("No se encontro el usuario solicitado para modificar");
+            throw new ErrorServicio("No se encontro el usuario solicitado para modificar.");
         }
     }
 
@@ -147,7 +148,7 @@ public class UsuarioServicio implements UserDetailsService {
             Usuario usuario = respuesta.get();
             usuarioRepositorio.delete(usuario);
         } else {
-            throw new ErrorServicio("No se encontro el usuario solicitado para eliminar");
+            throw new ErrorServicio("No se encontro el usuario solicitado para eliminar.");
         }
     }
 
@@ -193,9 +194,10 @@ public class UsuarioServicio implements UserDetailsService {
 
     /**
      * Metodo para buscar usuario por id
+     *
      * @param id
      * @return
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public Usuario buscarUsuarioPorId(String id) throws ErrorServicio {
@@ -207,7 +209,7 @@ public class UsuarioServicio implements UserDetailsService {
             throw new ErrorServicio("No se encontro el usuario solicitado");
         }
     }
-    
+
     /**
      * Metodo para buscar usuario por mail
      *
@@ -248,14 +250,14 @@ public class UsuarioServicio implements UserDetailsService {
         if (documento == null || documento.isEmpty() || (documento.length() < 7 || documento.length() > 10)) {
             throw new ErrorServicio("El documento no puede ser nulo.");
         }
-        if (telefono == null || telefono.isEmpty() || telefono.length() < 10 || telefono.length() > 10) {
+        if (telefono == null || telefono.isEmpty() || telefono.length() != 10) {
             throw new ErrorServicio("El telefono no puede ser nulo.");
         }
         if (mail == null || mail.isEmpty()) {
-            throw new ErrorServicio("El mail no puede ser nulo.");
+            throw new ErrorServicio("El email no puede ser nulo.");
         }
         if (clave == null || clave.isEmpty() || clave.length() < 6) {
-            throw new ErrorServicio("Clave invalida. La clave debe ser contener al menos 6 digitos.");
+            throw new ErrorServicio("Clave invalida. Debe contener al menos 6 digitos.");
         }
         if (!clave.equals(clave2)) {
             throw new ErrorServicio("Las contraseñas deben ser iguales.");
@@ -265,6 +267,31 @@ public class UsuarioServicio implements UserDetailsService {
         }
     }
 
+    @Transactional
+    public Usuario getById(String id) {
+        return usuarioRepositorio.getById(id);
+    }
+
+    @Transactional
+    public Usuario getOne(String id) {
+        return usuarioRepositorio.getOne(id);
+    }
+
+    @Transactional
+    public List<Usuario> findAll() {
+        return usuarioRepositorio.findAll();
+    }
+
+    @Transactional
+    public List<Usuario> buscarActivos() {
+        return usuarioRepositorio.buscarActivos();
+    }
+
+    @Transactional
+    public List<Usuario> buscarInactivos() {
+        return usuarioRepositorio.buscarInactivos();
+    }
+
     @Override
     public UserDetails loadUserByUsername(String mail) throws UsernameNotFoundException {
         Usuario usuario = usuarioRepositorio.buscarPorMail(mail);
@@ -272,15 +299,13 @@ public class UsuarioServicio implements UserDetailsService {
 
             List<GrantedAuthority> permisos = new ArrayList<>();
 
-            GrantedAuthority p1 = new SimpleGrantedAuthority("ROLE_USUARIO_REGISTRADO");
+            GrantedAuthority p1 = new SimpleGrantedAuthority("ROLE_" + usuario.getRol());
             permisos.add(p1);
-//            GrantedAuthority p2 = new SimpleGrantedAuthority("ROLE_ADMINISTRADOR_REGISTRADO");
-//            permisos.add(p2);
 
             ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
             HttpSession session = attr.getRequest().getSession(true);
             session.setAttribute("usuariosession", usuario);
-            
+
             User user = new User(usuario.getMail(), usuario.getClave(), permisos);
             return user;
         } else {

@@ -16,8 +16,8 @@
 
                 <form th:action="@{/logincheck}" method="POST">
 
-                    <p th:if="${error != null}" th:text="${error}" class="error"></p>
-                    <p th:if="${logout != null}" th:text="${logout}" class="logout"></p>
+                    <p th:if="${error} != null" th:text="${error}" class="error"></p>
+                    <p th:if="${logout} != null" th:text="${logout}" class="logout"></p>
 
                     <div class="mb-3">
                         <label for="username" class="col col-form-label">E-mail</label>

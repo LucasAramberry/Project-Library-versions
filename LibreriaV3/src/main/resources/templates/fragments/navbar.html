@@ -38,10 +38,10 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/editoriales/mostrar">Editoriales</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('ROLE_USUARIO_REGISTRADO')">
                     <a class="nav-link" href="/prestamos/mostrar">Prestamos</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')" >
                     <a class="nav-link" href="/usuario/mostrar">Usuarios</a>
                 </li>
             </ul>

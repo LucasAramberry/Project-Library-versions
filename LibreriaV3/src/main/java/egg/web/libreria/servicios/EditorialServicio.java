@@ -5,6 +5,7 @@ import egg.web.libreria.entidades.Foto;
 import egg.web.libreria.errores.ErrorServicio;
 import egg.web.libreria.repositorios.EditorialRepositorio;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,7 @@ public class EditorialServicio {
             
             editorialRepositorio.save(e);
         } else {
-            throw new ErrorServicio("No se encontro la editorial solicitado");
+            throw new ErrorServicio("No se encontro la editorial solicitada para modificar.");
         }
     }
 
@@ -105,7 +106,7 @@ public class EditorialServicio {
 
             editorialRepositorio.save(e);
         } else {
-            throw new ErrorServicio("Error al deshabilitar la editorial solicitado");
+            throw new ErrorServicio("Error al deshabilitar la editorial solicitada.");
         }
     }
 
@@ -123,7 +124,7 @@ public class EditorialServicio {
 
             editorialRepositorio.save(e);
         } else {
-            throw new ErrorServicio("Error al deshabilitar la editorial solicitado");
+            throw new ErrorServicio("Error al deshabilitar la editorial solicitada.");
         }
     }
     
@@ -140,10 +141,21 @@ public class EditorialServicio {
             Editorial editorial = respuesta.get();
             return editorial;
         } else {
-            throw new ErrorServicio("No se encontro el editorial solicitado");
+            throw new ErrorServicio("No se encontro la editorial solicitada por id.");
         }
     }
 
+    
+    @Transactional
+    public List<Editorial> listarEditoriales() throws ErrorServicio {
+        List<Editorial> editoriales = editorialRepositorio.findAll();
+        if (editoriales != null) {
+            return editoriales;
+        }else{
+            throw new ErrorServicio("No se encontro ninguna editorial.");
+        }
+    }
+    
     /**
      * Metodo para validar atributos
      * @param nombre
