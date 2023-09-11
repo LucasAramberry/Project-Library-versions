@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author Lucas
  */
-@PreAuthorize("hasAnyRole('ROLE_USUARIO_REGISTRADO')")
+@PreAuthorize("hasAnyRole('ROLE_USUARIO')")
 @Controller
 @RequestMapping("/prestamos")
 public class PrestamoController {

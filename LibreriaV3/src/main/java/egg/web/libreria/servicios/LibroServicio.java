@@ -242,8 +242,9 @@ public class LibroServicio {
 
     /**
      * Metodo que devuelve la lista de libros
+     *
      * @return
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public List<Libro> listarLibros() throws ErrorServicio {
@@ -262,13 +263,14 @@ public class LibroServicio {
      * @return
      */
     @Transactional
-    public List<Libro> buscarLibrosPorAutor(String idAutor) throws ErrorServicio {
-        List<Libro> libros = libroRepositorio.buscarLibrosPorAutor(idAutor);
-        if (libros != null) {
-            return libros;
-        } else {
-            throw new ErrorServicio("No se encontro ningun libro por autor.");
-        }
+    public List<Libro> buscarLibrosPorAutor(String idAutor) {
+        return libroRepositorio.buscarLibrosPorAutor(idAutor);
+//        List<Libro> libros = libroRepositorio.buscarLibrosPorAutor(idAutor);
+//        if (libros != null) {
+//            return libros;
+//        } else {
+//            throw new ErrorServicio("No se encontro ningun libro por autor.");
+//        }
     }
 
     /**
@@ -278,13 +280,14 @@ public class LibroServicio {
      * @return
      */
     @Transactional
-    public List<Libro> buscarLibrosPorEditorial(String idEditorial) throws ErrorServicio {
-        List<Libro> libros = libroRepositorio.buscarLibrosPorEditorial(idEditorial);
-        if (libros != null) {
-            return libros;
-        } else {
-            throw new ErrorServicio("No se encontro ningun libro por editorial.");
-        }
+    public List<Libro> buscarLibrosPorEditorial(String idEditorial) {
+        return libroRepositorio.buscarLibrosPorEditorial(idEditorial);
+//        List<Libro> libros = libroRepositorio.buscarLibrosPorEditorial(idEditorial);
+//        if (libros != null) {
+//            return libros;
+//        } else {
+//            throw new ErrorServicio("No se encontro ningun libro por editorial.");
+//        }
     }
 
     /**
@@ -293,13 +296,14 @@ public class LibroServicio {
      * @return
      */
     @Transactional
-    public List<Libro> listarLibrosActivos() throws ErrorServicio {
-        List<Libro> libros = libroRepositorio.listaLibrosActivos();
-        if (libros != null) {
-            return libros;
-        } else {
-            throw new ErrorServicio("Error al obtener libros activos.");
-        }
+    public List<Libro> listarLibrosActivos() {
+        return libroRepositorio.listaLibrosActivos();
+//        List<Libro> libros = libroRepositorio.listaLibrosActivos();
+//        if (libros != null) {
+//            return libros;
+//        } else {
+//            throw new ErrorServicio("Error al obtener libros activos.");
+//        }
     }
 
     /**
@@ -308,13 +312,14 @@ public class LibroServicio {
      * @return
      */
     @Transactional
-    public List<Libro> listarLibrosInactivos() throws ErrorServicio {
-        List<Libro> libros = libroRepositorio.listaLibrosInactivos();
-        if (libros != null) {
-            return libros;
-        } else {
-            throw new ErrorServicio("Error al obtener libros inactivos.");
-        }
+    public List<Libro> listarLibrosInactivos() {
+        return libroRepositorio.listaLibrosInactivos();
+//        List<Libro> libros = libroRepositorio.listaLibrosInactivos();
+//        if (libros != null) {
+//            return libros;
+//        } else {
+//            throw new ErrorServicio("Error al obtener libros inactivos.");
+//        }
     }
 
 //----------------------------METODO VALIDACION-----------------------------------

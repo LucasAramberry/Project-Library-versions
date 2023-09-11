@@ -152,15 +152,52 @@ public class AutorServicio {
             throw new ErrorServicio("No se encontro el autor solicitado por id.");
         }
     }
-
+    
+    /**
+     * metodo para buscar autor por nombre
+     *
+     * @param nombre
+     * @return
+     * @throws ErrorServicio
+     */
     @Transactional
-    public List<Autor> listarAutores() throws ErrorServicio {
-        List<Autor> autores = autorRepositorio.findAll();
-        if (autores != null) {
-            return autores;
-        }else{
-            throw new ErrorServicio("No se encontro ningun autor.");
+    public Autor buscarAutorPorNombre(String nombre) throws ErrorServicio {
+        Autor autor = autorRepositorio.buscarPorNombre(nombre);
+        if (autor != null) {
+            return autor;
+        } else {
+            throw new ErrorServicio("No se encontro el autor solicitado por nombre.");
         }
+    }
+    
+    /**
+     * Metodo para listar autores
+     *
+     * @return
+     */
+    @Transactional
+    public List<Autor> listarAutores(){
+        return autorRepositorio.findAll();
+    }
+
+    /**
+     * Metodo para listar autores activos
+     *
+     * @return
+     */
+    @Transactional
+    public List<Autor> listaAutoresActivos() {
+        return autorRepositorio.buscarActivos();
+    }
+
+    /**
+     * Metodo para listar autores inactivos
+     *
+     * @return
+     */
+    @Transactional
+    public List<Autor> listaAutoresInactivos() {
+        return autorRepositorio.buscarInactivos();
     }
 
     /**

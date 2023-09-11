@@ -113,7 +113,7 @@
             </div>
             <div class="w-25">
                 <div class="img-usuario">
-                    <img th:if="${libro.foto != null}" class="rounded mx-auto d-block" th:src="${'/foto/libro/' + libro.id}" width="180px" height="190px" alt="Imagen"/>
+                    <img th:if="${libro.foto != null}" class="rounded mx-auto d-block" th:src="@{'/foto/libro/' + ${libro.id}}" width="180px" height="190px" alt="Imagen"/>
                 </div>
             </div>
         </div>

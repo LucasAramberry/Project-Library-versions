@@ -7,52 +7,158 @@
 <body>
     <nav th:replace="/fragments/navbar :: nav"></nav>
 
-    <h1>Lista Autores</h1>
+    <!--    <h1>Lista Autores</h1>
+    
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Alta/Baja</th>
+                    <th scope="col">Editar autor</th>
+                    <th scope="col">Eliminar autor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="autor : ${autores}">
+    
+                    <td th:text="${autor.nombre}"></td>
+    
+                    <td>
+                        <a th:if="${autor.baja != null}" th:href="@{/autores/alta(id=__${autor.id}__)}">
+                            <button type="button" class="btn btn-success btn-sm">Dar alta</button>
+                        </a>
+                        <a th:unless="${autor.baja != null}" th:href="@{/autores/baja(id=__${autor.id}__)}">
+                            <button type="button" class="btn btn-danger btn-sm">Dar baja</button>
+                        </a>
+                    </td>
+                    <td>
+                        <a th:href="@{/autores/modificar-autor(id=__${autor.id}__)}">
+                            <button type="button" class="btn btn-primary btn-sm">Modificar</button>
+                        </a>
+                    </td>
+                    <td>
+                        <a th:href="@{/autores/eliminar(id=__${autor.id}__)}">
+                            <button type="button" class="btn btn-primary btn-sm">Eliminar</button>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <a
+                href="/autores/registro-autor"
+                class="btn btn-warning"
+                tabindex="-1"
+                role="button"
+                >Agregar autor</a>
+        </div>-->
 
-    <table class="table table-dark table-striped">
-        <thead>
-            <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Alta/Baja</th>
-                <th scope="col">Editar autor</th>
-                <th scope="col">Eliminar autor</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="autor : ${autores}">
+    <!--SECCION ADMINISTRADOR-->
+    <div sec:authorize="hasRole('ADMIN')">
 
-                <td th:text="${autor.nombre}"></td>
 
-                <td>
-                    <a th:if="${autor.baja != null}" th:href="@{/autores/alta(id=__${autor.id}__)}">
-                        <button type="button" class="btn btn-success btn-sm">Dar alta</button>
-                    </a>
-                    <a th:unless="${autor.baja != null}" th:href="@{/autores/baja(id=__${autor.id}__)}">
-                        <button type="button" class="btn btn-danger btn-sm">Dar baja</button>
-                    </a>
-                </td>
-                <td>
-                    <a th:href="@{/autores/modificar-autor(id=__${autor.id}__)}">
-                        <button type="button" class="btn btn-primary btn-sm">Modificar</button>
-                    </a>
-                </td>
-                <td>
-                    <a th:href="@{/autores/eliminar(id=__${autor.id}__)}">
-                        <button type="button" class="btn btn-primary btn-sm">Eliminar</button>
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        <h1 id="tituloEditorial">GESTIONAR AUTORES</h1>
 
-    <div class="d-grid gap-2 col-6 mx-auto">
-        <a
-            href="/autores/registro-autor"
-            class="btn btn-warning"
-            tabindex="-1"
-            role="button"
-            >Agregar autor</a>
+        <div class="text-white text-center" style="width: 800px; margin: 1% auto">
+            <h5>Para dar de alta oprima <i class="fa fa-arrow-up"></i>, si desea dar de baja oprima <i class="fa fa-ban"></i>, si desea modificar oprima <i class="fas fa-feather-alt"></i>, si desea eliminar presione <i class="fas fa-archive"></i> y si desea agregar un autor presione el boton Añadir.</h5>
+        </div>
+        <div class="botones">            
+            <a th:href="@{/autores/registroAutor}" class="btn btn-dark btn-lg btn-block active" role="button" aria-pressed="true">Añadir autor</a>
+            <a th:href="@{/autores/mostrarAutores}" class="btn btn-dark btn-lg btn-block active" role="button" aria-pressed="true">Mostrar autores</a>
+            <a href="#" class="btn btn-danger btn-lg btn-block active" role="button" aria-pressed="true">Eliminar autores</a>
+            <a href="/" class="btn btn-success btn-lg btn-block active" role="button" aria-pressed="true">Volver</a>
+        </div>
+
+        <div>
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 400px">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">¿Activo?</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody th:each="autor : ${autores}">
+                    <tr>
+                        <th scope="row" th:text="${autor.id}"></th>
+                        <td th:text="${autor.nombre}"></td>
+                        <td>
+                            <i th:if="${autor.alta}" class="fa fa-circle text-success"></i>
+                            <i th:unless="${autor.alta}" class="fa fa-circle" style="color:red;"></i>
+                        </td>
+                        <td>
+                            <a th:href="@{/autores/alta/__${autor.id}__}" title="Alta"><i class="fa fa-arrow-up"></i></a>
+                            <a th:href="@{/autores/baja/__${autor.id}__}" title="Baja"><i class="fa fa-ban"></i></a> 
+                            <a th:href="@{/autores/modificar/__${autor.id}__}" title="Modificar"><i class="fas fa-feather-alt"></i></a>
+                            <a th:href="@{/autores/delete/__${autor.id}__}" title="Eliminar"><i class="fas fa-archive"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div id="agregar-button">
+                <a th:href="@{/autores/registroAutor}">Añadir Autor <i class="fas fa-plus"></i></a>
+            </div>
+
+        </div>
     </div>
+
+    <!--SECCION USUARIO-->
+    <!--<div sec:authorize="hasRole('USUARIO')">-->
+
+        <div class="filtrar bg-dark text-white">
+
+            <div><h5>Buscar libro por Autor</h5></div>
+
+            <div>
+
+                <form action="/autores" method="GET" enctype="multipart/form-data">
+
+                    <select class="filtrar-select" name="idAutor">
+                        <option th:if="${autorSelected} == null" selected disabled value="">Seleccionar</option>
+                        <option th:if="${autorSelected} != null" selected th:value="${autorSelected.id}"><span th:text="${autorSelected.nombre}"></span></option>
+                        <option th:each="autor : ${autoresA}" th:value="${autor.id}" th:text="${autor.nombre}"></option>
+                    </select>
+
+                    <div class="filtrar-boton">
+                        <button th:if="${autorSelected} != null" type="submit" class="btn btn-dark" formaction="/autores" formmethod="GET">Borrar filtro</button>
+                        <button type="submit" class="btn btn-warning">Filtrar</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <div class="contenedor">
+            <div class="contenedorHijo" th:each="libro : ${libros}">
+                <div class="card mb-3 bg-dark text-white" style="max-width: 550px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img th:src="@{'/foto/libro/' + ${libro.id}}" class="img-fluid rounded-start" alt="Portada">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${libro.titulo}"></h5><br>
+                                <ul>
+                                    <li th:text="'ISBN: ' + ${libro.isbn}"></li>
+                                    <li th:text="'AUTOR: ' + ${libro.autor.nombre}"></li>
+                                    <li th:text="'EDITORIAL: ' + ${libro.editorial.nombre}"></li>
+                                    <li th:text="'EJEMPLARES DISPONIBLES: ' + ${libro.ejemplaresRestantes}"></li>
+                                </ul>
+                                <div class="form-group2">
+                                    <a class="btn btn-warning" th:href="@{/libros/mostrarLibro/__${libro.id}__}" role="button">Ver más</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!--</div>-->
 
     <footer th:replace="/fragments/footer :: footer"></footer>
 

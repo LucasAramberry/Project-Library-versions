@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author Lucas
  */
-@PreAuthorize("hasAnyRole('ROLE_USUARIO_REGISTRADO')")
+@PreAuthorize("hasAnyRole('ROLE_USUARIO')")
 @Controller
 @RequestMapping("/editoriales")
 public class EditorialController {
@@ -29,18 +29,9 @@ public class EditorialController {
     @Autowired
     private EditorialRepositorio editorialRepositorio;
 
-    @GetMapping("/mostrar")
-    public String editoriales(ModelMap modelo) {
-        List<Editorial> editoriales = editorialRepositorio.findAll();
-
-        modelo.put("editoriales", editoriales);
-
-        return "editoriales.html";
-    }
-
     @GetMapping("/registro-editorial")
     public String registroEditorial() {
-        return "add-editorial.html";
+        return "registro-editorial.html";
     }
 
     @PostMapping("/registrar-editorial")
@@ -52,7 +43,7 @@ public class EditorialController {
 
             modelo.put("nombre", nombre);
 
-            return "add-editorial.html";
+            return "registro-editorial.html";
         }
         modelo.put("titulo", "Registro exitoso!");
         modelo.put("descripcion", "La editorial ingresado fue registrado correctamente.");

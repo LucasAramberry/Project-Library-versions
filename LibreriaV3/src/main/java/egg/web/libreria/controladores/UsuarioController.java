@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author Lucas
  */
-@PreAuthorize("hasAnyRole('ROLE_USUARIO_REGISTRADO')")
+@PreAuthorize("hasAnyRole('ROLE_USUARIO')")
 @Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
@@ -47,7 +47,7 @@ public class UsuarioController {
     @Autowired
     private ZonaRepositorio zonaRepositorio;
 
-    @PreAuthorize("hasAnyRole('ROLE_USUARIO_REGISTRADO')")
+    @PreAuthorize("hasAnyRole('ROLE_USUARIO')")
     @GetMapping("/editar-perfil")
     public String editarPerfil(HttpSession session, ModelMap modelo, @RequestParam String id) {
 
@@ -71,7 +71,7 @@ public class UsuarioController {
         return "perfil.html";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USUARIO_REGISTRADO')")
+    @PreAuthorize("hasAnyRole('ROLE_USUARIO')")
     @PostMapping("/actualizar-perfil")
     public String actualizarPerfil(ModelMap modelo, HttpSession session, MultipartFile archivo, @RequestParam String id, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String documento, @RequestParam String telefono, @RequestParam Sexo sexo, @RequestParam String idZona, @RequestParam String mail, @RequestParam String clave, @RequestParam String clave2) {
         Usuario usuario = null;

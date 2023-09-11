@@ -1,9 +1,15 @@
 package egg.web.libreria.controladores;
 
+import egg.web.libreria.entidades.Autor;
+import egg.web.libreria.entidades.Editorial;
+import egg.web.libreria.entidades.Libro;
 import egg.web.libreria.entidades.Zona;
 import egg.web.libreria.enumeraciones.Sexo;
 import egg.web.libreria.errores.ErrorServicio;
 import egg.web.libreria.repositorios.ZonaRepositorio;
+import egg.web.libreria.servicios.AutorServicio;
+import egg.web.libreria.servicios.EditorialServicio;
+import egg.web.libreria.servicios.LibroServicio;
 import egg.web.libreria.servicios.UsuarioServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +34,23 @@ public class PortalController {
     private ZonaRepositorio zonaRepositorio;
     @Autowired
     private UsuarioServicio usuarioServicio;
+    @Autowired
+    private LibroServicio libroServicio;
+    @Autowired
+    private AutorServicio autorServicio;
+    @Autowired
+    private EditorialServicio editorialServicio;
 
     @GetMapping("/")
-    public String index() {
+    public String index(ModelMap modelo, String idAutor, String idEditorial) {
+
+        List<Libro> libros = libroServicio.listarLibrosActivos();
+        modelo.put("libros", libros);
+
         return "index.html";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USUARIO_REGISTRADO')")
+    @PreAuthorize("hasAnyRole('ROLE_USUARIO')")
     @GetMapping("/inicio")
     public String inicio() {
         return "inicio.html";
@@ -85,5 +101,39 @@ public class PortalController {
         modelo.put("titulo", "Bienvenido a la Libreria!");
         modelo.put("descripcion", "Tu usuario fue registrado de manera satisfactoria.");
         return "exito.html";
+    }
+
+    @GetMapping("/autores")
+    public String autores(ModelMap modelo, String idAutor) {
+
+        List<Autor> listaActivos = autorServicio.listaAutoresActivos();
+        modelo.addAttribute("autoresA", listaActivos);
+
+        List<Autor> autores = autorServicio.listarAutores();
+        modelo.addAttribute("autores", autores);
+
+        modelo.addAttribute("autorSelected", null);
+
+        List<Libro> libros = libroServicio.buscarLibrosPorAutor(idAutor);
+        modelo.addAttribute("libros", libros);
+
+        return "autores.html";
+    }
+
+    @GetMapping("/editoriales")
+    public String editoriales(ModelMap modelo, String idEditorial) {
+
+        List<Editorial> listaEditoriales = editorialServicio.listarEditoriales();
+        modelo.addAttribute("editoriales", listaEditoriales);
+
+        List<Editorial> listaActivos = editorialServicio.listaEditorialesActivas();
+        modelo.addAttribute("editorialesA", listaActivos);
+
+        modelo.addAttribute("editorialSelected", null);
+
+        List<Libro> libros = libroServicio.buscarLibrosPorEditorial(idEditorial);
+        modelo.addAttribute("libros", libros);
+
+        return "editoriales.html";
     }
 }

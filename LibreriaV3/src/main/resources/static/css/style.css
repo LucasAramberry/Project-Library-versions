@@ -12,7 +12,7 @@ body {
     min-height: 100%;
     min-width: 100%;
     margin: 0;
-    background-image: linear-gradient(140deg, rgba(0,0,0,1) 40%, rgba(24,24,30,1) 100%, rgba(47,45,45,1) 100%);
+    background: linear-gradient(160deg, rgba(0, 0, 0, 0.93) 20%, #212529 79.9%);
     background-attachment: fixed;
 }
 
@@ -26,17 +26,12 @@ table {
     align-content: center;
 }
 
+a{
+    text-decoration: none;
+}
+
 .boton-libro{
     margin-bottom: 75px;
-}
-
-.pie {
-    margin-top: 50px;
-    padding: 15px;
-}
-
-.pie p {
-    margin-bottom: 0;
 }
 
 .error{
@@ -84,7 +79,7 @@ table {
 }
 
 .centrar{
-    margin: 10% auto;
+    margin: 11rem auto;
 }
 
 .titulo{
@@ -111,86 +106,155 @@ table {
     margin-left: 25%;
 }
 
-#piePag{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
-        width: 100%;
-        height: 13vh;
-    }
+.contenedor{
+    display: flex;
+    /*flex-direction: column;*/
+    flex-wrap: wrap;/*si activamos este desactivas el colum*/
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5rem;
+}
 
-    .fa-instagram{
-        color: #000;
-        margin: 1rem;
-    }
+.contenedorHijo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.2rem;
+}
 
-    .fa-instagram:hover{
-        color: rgb(54, 52, 52);
-    }
+.card{
+    display: flex;
+    flex-direction: column;
+    max-width: 450px;
+}
 
-    #piePag div p{
-        margin-right: 1rem;
-        margin-bottom: 0rem;
-    }
+.imagen-card{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    #enlacesFooter ul{
-        display: flex;
-        flex-direction: row;
-    }
+.filtrar{
+    margin-bottom: 1rem;
+}
 
-    #enlacesFooter ul a{
-        display: flex;
-        justify-content: space-around;
-        text-decoration: none;
-    }
+.pie {
+    margin-top: 5rem;
+    padding: 10px;
+    bottom: 0;
+    position: fixed;
+}
 
-    .liFooter{
-        display: flex;
-        justify-content: space-around;
-        padding: 1rem;
-        color: #000;
-        font-weight: bold;
-        text-align: center;
-    }
+.pie p {
+    margin-bottom: 0;
+}
 
-    .liFooter:hover{
-        color: rgb(43, 38, 38);
-    }
+.enlacesFooter{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0%;
+    margin-bottom: 0;
+}
 
-    button{
-        cursor: pointer;
-    }
+.enlacesFooter ul a{
+    display: flex;
+    justify-content: space-around;
+    text-decoration: none;
+    list-style: none;
+}
 
-    li:hover{
-        opacity: 0.4;
-    }
+.liFooter{
+    display: flex;
+    justify-content: space-around;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    color: #fff;
+    font-weight: lighter;
+    font-size: smaller;
+}
 
-    .containerTyM{
-        color: #fff;
-        margin-top: 2rem;
-        padding: 2rem;
-        width: 100vw;
-    }
+.liFooter:hover{
+    color: rgb(114, 114, 114);
+}
 
-    .containerTyM div{
-        padding: 2rem;
-    }
-    
-    .containerTyM h2{
-        text-align: center;
-        margin-bottom: 2rem;
-    }
+button{
+    cursor: pointer;
+}
 
-    .containerTyM ul{
-        padding: 2rem;
-    }
-    
-    .politicasPrivacidad{
-        color: #fff;
-        margin: 15% auto;
-        text-align: center;
-    }
+li:hover{
+    opacity: 0.4;
+}
+
+/****************************************ESTILOS FILTRAR**************************************/
+
+.filtrar{
+    width: 400px;
+    height: 125px;
+    text-align: center;
+    border-style: double;
+    border-color: brown;
+    margin: 2% auto
+}
+
+.filtrar-select{
+    margin: 1% auto;
+    width: 300px;
+    height: 30px
+}
+
+.filtrar-boton{
+    margin: 2% auto
+}
+
+/***********************************ESTILOS PAGINA LIBRO*****************************************/
+
+.contenedor1{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5rem;
+    padding: 1rem;
+}
+
+.card1{
+    width: 55rem;
+}
+
+.img-fluid1{
+    width: 13.5rem;
+    height: 20rem;
+}
+
+.card-body1{
+    margin: 2% auto;
+}
+
+.card-prestamo{
+/*    display: flex;
+    justify-content: space-around;*/
+    margin: 2% auto;
+}
+
+.fechas{
+    display: flex;
+    justify-content: center;
+    margin: 2% auto;
+}
+
+.inputFecha {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+.card-title1{
+    text-align: center;
+    margin-top: 2%
+}
+
+.items{
+    margin-bottom: 2%;
+    list-style: circle;
+}
 
 /* Estilos para pantallas pequeñas (ejemplo: teléfonos móviles) */
 @media screen and (max-width: 768px) {
@@ -202,4 +266,3 @@ table {
         margin-bottom: 2%;
     }
 }
-

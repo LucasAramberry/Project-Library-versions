@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author Lucas
  */
-@PreAuthorize("hasAnyRole('ROLE_USUARIO_REGISTRADO')")
+@PreAuthorize("hasAnyRole('ROLE_USUARIO')")
 @Controller
 @RequestMapping("/autores")
 public class AutorController {
@@ -29,18 +29,9 @@ public class AutorController {
     @Autowired
     private AutorRepositorio autorRepositorio;
 
-    @GetMapping("/mostrar")
-    public String autores(ModelMap modelo) {
-        List<Autor> autores = autorRepositorio.findAll();
-
-        modelo.put("autores", autores);
-
-        return "autores.html";
-    }
-
     @GetMapping("/registro-autor")
     public String registroAutor() {
-        return "add-autor.html";
+        return "registro-autor.html";
     }
 
     @PostMapping("/registrar-autor")
@@ -52,7 +43,7 @@ public class AutorController {
 
             modelo.put("nombre", nombre);
 
-            return "add-autor.html";
+            return "registro-autor.html";
         }
         modelo.put("titulo", "Registro exitoso!");
         modelo.put("descripcion", "El autor ingresado fue registrado correctamente.");

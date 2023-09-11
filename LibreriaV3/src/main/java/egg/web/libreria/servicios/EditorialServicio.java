@@ -26,9 +26,10 @@ public class EditorialServicio {
 
     /**
      * metodo para registrar editorial
+     *
      * @param archivo
      * @param nombre
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void registrar(MultipartFile archivo, String nombre) throws ErrorServicio {
@@ -37,7 +38,7 @@ public class EditorialServicio {
         Editorial e = new Editorial();
         e.setNombre(nombre);
         e.setAlta(new Date());
-        
+
         Foto foto = fotoServicio.guardar(archivo);
         e.setFoto(foto);
 
@@ -46,10 +47,11 @@ public class EditorialServicio {
 
     /**
      * metodo para modificar editorial
+     *
      * @param archivo
      * @param id
      * @param nombre
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void modificar(MultipartFile archivo, String id, String nombre) throws ErrorServicio {
@@ -68,7 +70,7 @@ public class EditorialServicio {
 
             Foto foto = fotoServicio.actualizar(idFoto, archivo);
             e.setFoto(foto);
-            
+
             editorialRepositorio.save(e);
         } else {
             throw new ErrorServicio("No se encontro la editorial solicitada para modificar.");
@@ -77,8 +79,9 @@ public class EditorialServicio {
 
     /**
      * metodo para eliminar editorial
+     *
      * @param idEditorial
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void eliminar(String idEditorial) throws ErrorServicio {
@@ -94,8 +97,9 @@ public class EditorialServicio {
 
     /**
      * Metodo para deshabilitar editorial
+     *
      * @param id
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void deshabilitar(String id) throws ErrorServicio {
@@ -112,8 +116,9 @@ public class EditorialServicio {
 
     /**
      * Metodo para habilitar editorial
+     *
      * @param id
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public void habilitar(String id) throws ErrorServicio {
@@ -127,12 +132,13 @@ public class EditorialServicio {
             throw new ErrorServicio("Error al deshabilitar la editorial solicitada.");
         }
     }
-    
+
     /**
      * metodo para buscar editorial por id
+     *
      * @param id
      * @return
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     @Transactional
     public Editorial buscarEditorialPorId(String id) throws ErrorServicio {
@@ -145,21 +151,50 @@ public class EditorialServicio {
         }
     }
 
-    
+    /**
+     * Metodo para devolver las editoriales
+     *
+     * @return
+     * @throws ErrorServicio
+     */
     @Transactional
-    public List<Editorial> listarEditoriales() throws ErrorServicio {
-        List<Editorial> editoriales = editorialRepositorio.findAll();
-        if (editoriales != null) {
-            return editoriales;
-        }else{
-            throw new ErrorServicio("No se encontro ninguna editorial.");
-        }
+    public List<Editorial> listarEditoriales() {
+        return editorialRepositorio.findAll();
+//        List<Editorial> editoriales = editorialRepositorio.findAll();
+//        if (editoriales != null) {
+//            return editoriales;
+//        }else{
+//            throw new ErrorServicio("No se encontro ninguna editorial.");
+//        }
     }
-    
+
+    /**
+     * Metodo para devolver las editoriales activas
+     *
+     * @return
+     * @throws ErrorServicio
+     */
+    @Transactional
+    public List<Editorial> listaEditorialesActivas() {
+        return editorialRepositorio.buscarActivos();
+    }
+
+    /**
+     * Metodo para devolver las editoriales inactivas
+     *
+     * @return
+     * @throws ErrorServicio
+     */
+    @Transactional
+    public List<Editorial> listaEditorialesInactivas() throws ErrorServicio {
+        return editorialRepositorio.buscarInactivos();
+    }
+
     /**
      * Metodo para validar atributos
+     *
      * @param nombre
-     * @throws ErrorServicio 
+     * @throws ErrorServicio
      */
     private void validar(String nombre) throws ErrorServicio {
         if (nombre == null || nombre.isEmpty()) {

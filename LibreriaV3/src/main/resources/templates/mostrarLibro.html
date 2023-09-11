@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+    <!--HEAD-->
+    <head>
+        <title>Libreria - Libro</title>
+    </head>
+    <head th:replace="/fragments/head :: head"></head>
+
+    <!--BODY-->
+    <body>
+
+        <!--NAV-->
+        <nav th:replace="/fragments/navbar :: nav"></nav>
+
+        <!--SECCCION USUARIO-->
+        <div class="contenedor1" sec:authorize="hasRole('ROLE_USUARIO')">
+            <div class="contenedorHijo1">
+                <div class="card1 mb-3 bg-dark text-white">
+                    <div class="row g-0">
+                        <div class="col-md-3">
+                            <img th:src="@{'/foto/libro/' + ${libro.id}}" class="img-fluid1 rounded-start" alt="Portada">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body1">
+                                <h5 class="text-center" th:text="${libro.titulo}"></h5><br>
+                                <ul>
+                                    <li class="items" th:text="'ISBN: ' + ${libro.isbn}"></li>
+                                    <li class="items" th:text="'DESCRIPCION: ' + ${libro.descripcion}"></li>
+                                    <li class="items" th:text="'FECHA: ' + ${libro.fechaPublicacion}"></li>
+                                    <li class="items" th:text="'CANTIDAD DE PAGINAS: ' + ${libro.fechaPublicacion}"></li>
+                                    <li class="items" th:text="'AUTOR: ' + ${libro.autor.nombre}"></li>
+                                    <li class="items" th:text="'EDITORIAL: ' + ${libro.editorial.nombre}"></li>
+                                    <li class="items" th:text="'EJEMPLARES DISPONIBLES: ' + ${libro.ejemplaresRestantes}"></li>
+                                </ul>
+                            </div>
+
+                            <div class="card-prestamo">
+                                <form th:action="@{/prestamo/registrar-prestamo}" method="POST">
+                                    <div>
+                                        <div class="text-center">
+                                            <h5>Prestamo</h5>
+                                            <p>Si desea realizar un prestamo de este libro complete lo siguiente:</p>
+                                        </div>
+                                    </div>
+                                    <div class="fechas">
+                                        <div class="inputFecha">
+                                            <label id="colorLabel" for="fechaPrestamo">Fecha Prestamo</label>
+                                            <input type="date" class="form-control" name="fechaPrestamo">
+                                        </div>
+                                        <div class="inputFecha">
+                                            <label id="colorLabel" for="fechaDevolucion">Fecha Devolucion</label>
+                                            <input type="date" class="form-control" name="fechaDevolucion">
+                                        </div>
+
+                                        <div>
+                                            <input type="hidden" class="form-control" name="idLibro" th:value="${libro.id}"/>
+                                        </div>
+
+                                        <div>
+                                            <input type="hidden" class="form-control" name="idUsuario" th:value="${session.usuariosession.id}"/>
+                                        </div>
+
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="form-group2">
+                                            <button type="submit" class="btn btn-danger">Crear Prestamo</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!--SECCION ADMIN-->
+        <div class="contenedor1" sec:authorize="hasRole('ADMIN')">
+            <div class="contenedorHijo1">
+                <div class="card1 mb-3 bg-dark text-white">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img th:src="@{'/foto/libro/' + ${libro.id}}" class="img-fluid1 rounded-start" alt="Portada">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body1">
+                                <!--<a th:href="@{/libros}" title="Volver"><i class="fas fa-arrow-left"></i></a>-->
+                                <h5 class="card-title1" th:text="${libro.titulo}"></h5>
+                                <br>
+                                <ul>
+                                    <li class="items" th:text="'ID: ' + ${libro.id}"></li>
+                                    <li class="items" th:text="'ISBN: ' + ${libro.isbn}"></li>
+                                    <li class="items" th:text="'DESCRIPCION: ' + ${libro.descripcion}"></li>
+                                    <li class="items" th:text="'AUTOR: ' + ${libro.autor.nombre}"></li>
+                                    <li class="items" th:text="'EDITORIAL: ' + ${libro.editorial.nombre}"></li>
+                                    <li class="items" th:text="'AÑO: ' + ${libro.anio}"></li>
+                                    <li class="items" th:text="'EJEMPLARES: ' + ${libro.ejemplares}"></li>
+                                    <li class="items" th:text="'EJEMPLARES PRESTADOS: ' + ${libro.ejemplaresPrestados}"></li>
+                                    <li class="items" th:text="'EJEMPLARES RESTANTES: ' + ${libro.ejemplaresRestantes}"></li>
+                                    <li class="items" th:text="'ACTIVO: ' + ${libro.alta}"></li>
+                                </ul>
+                                <div style="text-align: center">
+                                    <a class="btn btn-warning" th:href="@{/libros/alta/__${libro.id}__}" role="button">DAR ALTA</a>
+                                    <a class="btn btn-warning" th:href="@{/libros/baja/__${libro.id}__}" role="button">DAR BAJA</a>
+                                    <a class="btn btn-warning" th:href="@{/libros/modificar/__${libro.id}__}" role="button">MODIFICAR</a>
+                                    <a class="btn btn-warning" th:href="@{/libros/delete/__${libro.id}__}" role="button">ELIMINAR</a>
+                                    <a class="btn btn-danger" th:href="@{/libros}" role="button">VOLVER</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!--PIE PAGINA-->
+        <footer th:replace="/fragments/footer :: footer"></footer>
+
+    </body>
+
+</html>

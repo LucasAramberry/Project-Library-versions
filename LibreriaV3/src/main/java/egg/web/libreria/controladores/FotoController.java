@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  * @author Lucas
  */
-@PreAuthorize("hasAnyRole('ROLE_USUARIO_REGISTRADO')")
+//@PreAuthorize("hasAnyRole('ROLE_USUARIO')")
 @Controller
 @RequestMapping("/foto")
 public class FotoController {

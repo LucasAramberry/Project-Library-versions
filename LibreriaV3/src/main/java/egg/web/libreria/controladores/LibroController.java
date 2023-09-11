@@ -10,12 +10,15 @@ import egg.web.libreria.repositorios.LibroRepositorio;
 import egg.web.libreria.servicios.LibroServicio;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author Lucas
  */
-@PreAuthorize("hasAnyRole('ROLE_USUARIO_REGISTRADO')")
+@PreAuthorize("hasAnyRole('ROLE_USUARIO')")
 @Controller
 @RequestMapping("/libros")
 public class LibroController {
@@ -46,6 +49,19 @@ public class LibroController {
         model.put("libros", libros);
 
         return "libros.html";
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USUARIO')")
+    @GetMapping("/mostrarLibro/{id}")
+    public String mostrarLibros(@PathVariable String id, ModelMap modelo) {
+
+        try {
+            modelo.put("libro", libroServicio.buscarLibroPorId(id));
+
+            return "mostrarLibro.html";
+        } catch (ErrorServicio ex) {
+            return "redirect:/index";
+        }
     }
 
     @GetMapping("/registro-libro")

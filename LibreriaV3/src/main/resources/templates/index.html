@@ -23,48 +23,48 @@
     <!--SECCION USUARIO sec:authorize="hasRole('USUARIO')" -->
     <div>
         <div>
-                <h1 class="text-center bg-dark text-white">LIBROS DISPONIBLES</h1>
-            </div>
+            <h1 class="text-center bg-dark text-white">LIBROS DISPONIBLES</h1>
+        </div>
 
-            <div class="dropdown text-center form-group2">
-                <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                    Filtrar por...
-                </a>
+                <div class="filtrar dropdown text-center form-group2">
+                    <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filtrar por...
+                    </a>
+        
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item" href="/autores">Autor</a></li>
+                        <li><a class="dropdown-item" href="/editoriales">Editorial</a></li>
+                        <!--<li><a class="dropdown-item" href="/libros">Titulo del libro</a></li>-->
+                    </ul>
+                </div>
 
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <li><a class="dropdown-item" href="/autores">Autor</a></li>
-                    <li><a class="dropdown-item" href="/editoriales">Editorial</a></li>
-                    <!--<li><a class="dropdown-item" href="/libros">Titulo del libro</a></li>-->
-                </ul>
-            </div>
-
-            <div class="contenedor">
-                <div class="contenedorHijo" th:each="libro : ${libros}">
-                    <div class="card mb-3 bg-dark text-white" style="max-width: 550px;">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <img th:src="@{'/foto/libro/' + ${libro.id}}" class="img-fluid rounded-start" alt="Portada">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title" th:text="${libro.titulo}"></h5><br>
-                                        <ul>
-                                            <li th:text="'ISBN: ' + ${libro.isbn}"></li>
-                                            <li th:text="'AUTOR: ' + ${libro.autor.nombre}"></li>
-                                            <li th:text="'EDITORIAL: ' + ${libro.editorial.nombre}"></li>
-                                            <li th:text="'EJEMPLARES DISPONIBLES: ' + ${libro.ejemplaresRestantes}"></li>
-                                        </ul>
-                                        <div class="form-group2">
-                                            <a class="btn btn-warning" th:href="@{/libros/mostrarLibro/__${libro.id}__}" role="button">Ver más</a>
-                                        </div>
+        <div class="contenedor">
+            <div class="contenedorHijo" th:each="libro : ${libros}">
+                <div class="card mb-3 bg-dark text-white">
+                    <div class="row g-0">
+                        <div class="col-md-4 imagen-card">
+                            <img th:src="@{'/foto/libro/' + ${libro.id}}" class="img-fluid rounded-start" alt="Portada">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${libro.titulo}"></h5><br>
+                                <ul>
+                                    <li th:text="'ISBN: ' + ${libro.isbn}"></li>
+                                    <li th:text="'AUTOR: ' + ${libro.autor.nombre}"></li>
+                                    <li th:text="'EDITORIAL: ' + ${libro.editorial.nombre}"></li>
+                                    <li th:text="'EJEMPLARES DISPONIBLES: ' + ${libro.ejemplaresRestantes}"></li>
+                                </ul>
+                                <div class="form-group2 text-center">
+                                    <a class="btn btn-warning" th:href="@{/libros/mostrarLibro/__${libro.id}__}" role="button">Ver más</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
     </div>
-    
+
     <footer th:replace="/fragments/footer :: footer"></footer>
 
     <script
