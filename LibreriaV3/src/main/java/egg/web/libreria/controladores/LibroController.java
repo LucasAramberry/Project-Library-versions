@@ -6,12 +6,10 @@ import egg.web.libreria.entidades.Libro;
 import egg.web.libreria.errores.ErrorServicio;
 import egg.web.libreria.repositorios.AutorRepositorio;
 import egg.web.libreria.repositorios.EditorialRepositorio;
-import egg.web.libreria.repositorios.LibroRepositorio;
 import egg.web.libreria.servicios.LibroServicio;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author Lucas
  */
-@PreAuthorize("hasAnyRole('ROLE_USUARIO')")
 @Controller
 @RequestMapping("/libros")
 public class LibroController {
@@ -36,35 +33,28 @@ public class LibroController {
     @Autowired
     private LibroServicio libroServicio;
     @Autowired
-    private LibroRepositorio libroRepositorio;
-    @Autowired
     private AutorRepositorio autorRepositorio;
     @Autowired
     private EditorialRepositorio editorialRepositorio;
 
-    @GetMapping("/mostrar")
-    public String libros(ModelMap model) {
-        List<Libro> libros = libroRepositorio.findAll();
-
-        model.put("libros", libros);
-
-        return "libros.html";
-    }
-
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USUARIO')")
-    @GetMapping("/mostrarLibro/{id}")
+    @GetMapping("/mostrar/{id}")
     public String mostrarLibros(@PathVariable String id, ModelMap modelo) {
 
         try {
+            //pasamos la fecha actual por si qremos realizar el prestamo
+            modelo.addAttribute("fechaPrestamo", LocalDate.now());
+            
             modelo.put("libro", libroServicio.buscarLibroPorId(id));
 
             return "mostrarLibro.html";
         } catch (ErrorServicio ex) {
-            return "redirect:/index";
+            return "redirect:/libros";
         }
     }
 
-    @GetMapping("/registro-libro")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/registro")
     public String registroLibro(ModelMap modelo) {
         List<Autor> autores = autorRepositorio.findAll();
         List<Editorial> editoriales = editorialRepositorio.findAll();
@@ -75,7 +65,8 @@ public class LibroController {
         return "add-libro.html";
     }
 
-    @PostMapping("/registrar-libro")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PostMapping("/registrar")
     public String registrarLibro(ModelMap modelo, MultipartFile archivo, @RequestParam String isbn, @RequestParam String titulo, @RequestParam String descripcion, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaPublicacion, @RequestParam Integer cantidadPaginas, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam String idAutor, @RequestParam String idEditorial) {
 
         try {
@@ -106,7 +97,8 @@ public class LibroController {
         return "exito.html";
     }
 
-    @GetMapping("/modificar-libro")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/modificar")
     public String modificarLibro(ModelMap modelo, @RequestParam String id) {
 
         List<Autor> autores = autorRepositorio.findAll();
@@ -125,7 +117,8 @@ public class LibroController {
         return "modificar-libro.html";
     }
 
-    @PostMapping("/actualizar-libro")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PostMapping("/actualizar")
     public String modificarLibro(ModelMap modelo, MultipartFile archivo, @RequestParam String id, @RequestParam String isbn, @RequestParam String titulo, @RequestParam String descripcion, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaPublicacion, @RequestParam Integer cantidadPaginas, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam String idAutor, @RequestParam String idEditorial) {
         Libro libro = null;
         try {
@@ -147,6 +140,7 @@ public class LibroController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/baja")
     public String baja(ModelMap modelo, @RequestParam String id) {
         try {
@@ -154,9 +148,10 @@ public class LibroController {
         } catch (ErrorServicio ex) {
             modelo.put("error", ex.getMessage());
         }
-        return "redirect:/libros/mostrar";
+        return "redirect:/libros";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/alta")
     public String alta(ModelMap modelo, @RequestParam String id) {
         try {
@@ -164,9 +159,10 @@ public class LibroController {
         } catch (ErrorServicio ex) {
             modelo.put("error", ex.getMessage());
         }
-        return "redirect:/libros/mostrar";
+        return "redirect:/libros";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/eliminar")
     public String eliminar(ModelMap modelo, @RequestParam String id) {
         try {
@@ -174,6 +170,6 @@ public class LibroController {
         } catch (ErrorServicio ex) {
             modelo.put("error", ex.getMessage());
         }
-        return "redirect:/libros/mostrar";
+        return "redirect:/libros";
     }
 }

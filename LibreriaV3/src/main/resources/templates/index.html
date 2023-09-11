@@ -9,61 +9,27 @@
     <nav th:replace="/fragments/navbar :: nav"></nav>
 
     <section class="text-center text-light centrar">
-        <!--<img class="img-fluid" src="../img/libro.jpg" alt="Libros"/>-->
-        <h1 class="titulo font-monospace t-stroke t-shadow-halftone glitch" data-text="¡Bienvenidos a la Libreria!">¡Bienvenidos a la Libreria!</h1>
-        <h2>
+        <h1 class="titulo font-monospace t-stroke t-shadow-halftone glitch" data-text="¡Bienvenidos a la Libreria!">¡Bienvenido a la Libreria!</h1>
+
+        <h1 class="nombreUsuario" th:if="${session.usuariosession != null}" th:text="${session.usuariosession.nombre + ' ' + session.usuariosession.apellido}"></h1>
+
+        <h2 class="enlacesSub">
             <a class="enlaces-sub" href="/libros/mostrar">Libros</a>
             | 
             <a class="enlaces-sub" href="/autores/mostrar">Autores</a>
             | 
             <a class="enlaces-sub" href="/editoriales/mostrar">Editoriales</a>
         </h2>
-    </section>
 
-    <!--SECCION USUARIO sec:authorize="hasRole('USUARIO')" -->
-    <div>
         <div>
-            <h1 class="text-center bg-dark text-white">LIBROS DISPONIBLES</h1>
+            <a th:if="${session.usuariosession != null}" class="enlaces-sub" th:href="@{/usuario/mis-prestamos(id=__${session.usuariosession.id}__)}">
+                <button type="button" class="btn btn-dark btn">Mis prestamos</button>
+            </a>
+            <a th:if="${session.usuariosession != null}" class="enlaces-sub" th:href="@{/usuario/editar-perfil(id=__${session.usuariosession.id}__)}">
+                <button type="button" class="btn btn-dark btn">Configurar Perfil</button>
+            </a>
         </div>
-
-                <div class="filtrar dropdown text-center form-group2">
-                    <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                        Filtrar por...
-                    </a>
-        
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><a class="dropdown-item" href="/autores">Autor</a></li>
-                        <li><a class="dropdown-item" href="/editoriales">Editorial</a></li>
-                        <!--<li><a class="dropdown-item" href="/libros">Titulo del libro</a></li>-->
-                    </ul>
-                </div>
-
-        <div class="contenedor">
-            <div class="contenedorHijo" th:each="libro : ${libros}">
-                <div class="card mb-3 bg-dark text-white">
-                    <div class="row g-0">
-                        <div class="col-md-4 imagen-card">
-                            <img th:src="@{'/foto/libro/' + ${libro.id}}" class="img-fluid rounded-start" alt="Portada">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title" th:text="${libro.titulo}"></h5><br>
-                                <ul>
-                                    <li th:text="'ISBN: ' + ${libro.isbn}"></li>
-                                    <li th:text="'AUTOR: ' + ${libro.autor.nombre}"></li>
-                                    <li th:text="'EDITORIAL: ' + ${libro.editorial.nombre}"></li>
-                                    <li th:text="'EJEMPLARES DISPONIBLES: ' + ${libro.ejemplaresRestantes}"></li>
-                                </ul>
-                                <div class="form-group2 text-center">
-                                    <a class="btn btn-warning" th:href="@{/libros/mostrarLibro/__${libro.id}__}" role="button">Ver más</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    </section>
 
     <footer th:replace="/fragments/footer :: footer"></footer>
 

@@ -40,7 +40,7 @@ public class ConfiguracionesSeguridad extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/logincheck")
                 .usernameParameter("username") // Como viajan los datos del logueo
                 .passwordParameter("password")// Como viajan los datos del logueo
-                .defaultSuccessUrl("/inicio") // A que URL viaja
+                .defaultSuccessUrl("/") // A que URL viaja
                 .permitAll()
                 .and().logout() // Aca configuro la salida
                 .logoutUrl("/logout")

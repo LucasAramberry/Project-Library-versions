@@ -40,6 +40,8 @@ a{
 
 .logout{
     color: green;
+    font-size: 0.8rem;
+    margin-bottom: 0;
 }
 
 .bg-none{
@@ -61,7 +63,7 @@ a{
 
 .t-shadow-halftone::after {
 
-    content: "¡Bienvenidos a la Libreria!";
+    content: "¡Bienvenido a la Libreria!";
     letter-spacing: 0px;
     -webkit-text-fill-color: transparent;
     -moz-text-fill-color: transparent;
@@ -78,13 +80,26 @@ a{
     transition: all 0.5s ease;
 }
 
+.centrar-boton{
+    margin: 0.2rem;
+}
+
 .centrar{
-    margin: 11rem auto;
+    margin: 8rem auto;
 }
 
 .titulo{
     font-size: 3.5rem;
-    margin-bottom: 2%;
+    margin-bottom: 1.5rem;
+}
+
+.nombreUsuario{
+    color: grey;
+    margin-bottom: 1rem;
+}
+
+.enlacesSub{
+    margin-bottom: 1.2rem;
 }
 
 .enlaces-sub{
@@ -193,7 +208,7 @@ li:hover{
     height: 125px;
     text-align: center;
     border-style: double;
-    border-color: brown;
+    border-color: #212529;
     margin: 2% auto
 }
 
@@ -216,10 +231,6 @@ li:hover{
     padding: 1rem;
 }
 
-.card1{
-    width: 55rem;
-}
-
 .img-fluid1{
     width: 13.5rem;
     height: 20rem;
@@ -230,8 +241,8 @@ li:hover{
 }
 
 .card-prestamo{
-/*    display: flex;
-    justify-content: space-around;*/
+    /*    display: flex;
+        justify-content: space-around;*/
     margin: 2% auto;
 }
 

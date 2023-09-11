@@ -1,25 +1,15 @@
 package egg.web.libreria.controladores;
 
-import egg.web.libreria.entidades.Autor;
-import egg.web.libreria.entidades.Editorial;
-import egg.web.libreria.entidades.Libro;
-import egg.web.libreria.entidades.Zona;
+import egg.web.libreria.entidades.*;
 import egg.web.libreria.enumeraciones.Sexo;
 import egg.web.libreria.errores.ErrorServicio;
 import egg.web.libreria.repositorios.ZonaRepositorio;
-import egg.web.libreria.servicios.AutorServicio;
-import egg.web.libreria.servicios.EditorialServicio;
-import egg.web.libreria.servicios.LibroServicio;
-import egg.web.libreria.servicios.UsuarioServicio;
+import egg.web.libreria.servicios.*;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -42,18 +32,8 @@ public class PortalController {
     private EditorialServicio editorialServicio;
 
     @GetMapping("/")
-    public String index(ModelMap modelo, String idAutor, String idEditorial) {
-
-        List<Libro> libros = libroServicio.listarLibrosActivos();
-        modelo.put("libros", libros);
-
+    public String index(ModelMap modelo) {
         return "index.html";
-    }
-
-    @PreAuthorize("hasAnyRole('ROLE_USUARIO')")
-    @GetMapping("/inicio")
-    public String inicio() {
-        return "inicio.html";
     }
 
     @GetMapping("/login")
@@ -103,8 +83,20 @@ public class PortalController {
         return "exito.html";
     }
 
+    @GetMapping("/libros")
+    public String libros(ModelMap modelo) {
+
+        List<Libro> librosActivos = libroServicio.listarLibrosActivos();
+        modelo.put("librosA", librosActivos);
+
+        List<Libro> libros = libroServicio.listarLibros();
+        modelo.addAttribute("libros", libros);
+
+        return "libros.html";
+    }
+
     @GetMapping("/autores")
-    public String autores(ModelMap modelo, String idAutor) {
+    public String autores(ModelMap modelo, @RequestParam(required = false) String idAutor) {
 
         List<Autor> listaActivos = autorServicio.listaAutoresActivos();
         modelo.addAttribute("autoresA", listaActivos);
@@ -121,7 +113,7 @@ public class PortalController {
     }
 
     @GetMapping("/editoriales")
-    public String editoriales(ModelMap modelo, String idEditorial) {
+    public String editoriales(ModelMap modelo, @RequestParam(required = false) String idEditorial) {
 
         List<Editorial> listaEditoriales = editorialServicio.listarEditoriales();
         modelo.addAttribute("editoriales", listaEditoriales);

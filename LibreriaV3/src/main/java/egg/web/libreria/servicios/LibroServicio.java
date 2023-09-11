@@ -247,13 +247,14 @@ public class LibroServicio {
      * @throws ErrorServicio
      */
     @Transactional
-    public List<Libro> listarLibros() throws ErrorServicio {
-        List<Libro> libros = libroRepositorio.findAll();
-        if (libros != null) {
-            return libros;
-        } else {
-            throw new ErrorServicio("No se encontro ningun libro.");
-        }
+    public List<Libro> listarLibros() {
+        return libroRepositorio.findAll();
+//        List<Libro> libros = libroRepositorio.findAll();
+//        if (libros != null) {
+//            return libros;
+//        } else {
+//            throw new ErrorServicio("No se encontro ningun libro.");
+//        }
     }
 
     /**
