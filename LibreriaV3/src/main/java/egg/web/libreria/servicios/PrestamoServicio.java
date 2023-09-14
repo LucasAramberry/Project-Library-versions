@@ -191,13 +191,23 @@ public class PrestamoServicio {
     }
 
     @Transactional
-    public List<Prestamo> buscarPrestamosPorUsuario(String id) throws ErrorServicio {
+    public List<Prestamo> buscarPrestamosPorUsuario(String id) {
         return prestamoRepositorio.buscarPrestamoPorUsuario(id);
     }
 
     @Transactional
-    public List<Prestamo> listaPrestamos() throws ErrorServicio {
+    public List<Prestamo> listaPrestamos() {
         return prestamoRepositorio.findAll();
+    }
+
+    @Transactional
+    public List<Prestamo> listaPrestamosActivos() {
+        return prestamoRepositorio.buscarActivos();
+    }
+
+    @Transactional
+    public List<Prestamo> listaPrestamosInactivos() {
+        return prestamoRepositorio.buscarInactivos();
     }
 
     @Transactional

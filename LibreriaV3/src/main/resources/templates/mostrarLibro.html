@@ -13,8 +13,9 @@
         <!--NAV-->
         <nav th:replace="/fragments/navbar :: nav"></nav>
 
-        <!--SECCCION USUARIO-->
-        <div class="contenedor1" sec:authorize="hasRole('ROLE_USUARIO')">
+        <!--SECCCION USUARIO Y ADMIN-->
+        <!--<div class="contenedor1" sec:authorize="hasRole('ROLE_USUARIO')">-->
+        <div class="contenedor1">
             <div class="contenedorHijo1">
                 <div class="mb-3 bg-dark text-white">
                     <div class="row g-0">
@@ -25,18 +26,32 @@
                             <div class="card-body1">
                                 <h5 class="text-center" th:text="${libro.titulo}"></h5><br>
                                 <ul>
+                                    <li sec:authorize="hasRole('ADMIN')" class="items" th:text="'ID: ' + ${libro.id}"></li>
                                     <li class="items" th:text="'ISBN: ' + ${libro.isbn}"></li>
                                     <li class="items" th:text="'DESCRIPCION: ' + ${libro.descripcion}"></li>
                                     <li class="items" th:text="'FECHA: ' + ${libro.fechaPublicacion}"></li>
                                     <li class="items" th:text="'CANTIDAD DE PAGINAS: ' + ${libro.fechaPublicacion}"></li>
                                     <li class="items" th:text="'AUTOR: ' + ${libro.autor.nombre}"></li>
                                     <li class="items" th:text="'EDITORIAL: ' + ${libro.editorial.nombre}"></li>
+                                    <li sec:authorize="hasRole('ADMIN')" class="items" th:text="'EJEMPLARES: ' + ${libro.ejemplares}"></li>
+                                    <li sec:authorize="hasRole('ADMIN')" class="items" th:text="'EJEMPLARES PRESTADOS: ' + ${libro.ejemplaresPrestados}"></li>
                                     <li class="items" th:text="'EJEMPLARES DISPONIBLES: ' + ${libro.ejemplaresRestantes}"></li>
-                                </ul>
-                            </div>
+                                    <li sec:authorize="hasRole('ADMIN')" class="items" th:text="'ALTA: ' + ${libro.alta}"></li>
+                                    <li sec:authorize="hasRole('ADMIN')" class="items" th:text="'BAJA: ' + ${libro.baja}"></li>
 
-                            <div class="card-prestamo">
-                                <form th:action="@{/prestamo/registrar-prestamo}" method="POST">
+                                </ul>
+                                <!--SECCION ADMIN-->
+                                <div sec:authorize="hasRole('ADMIN')" class="text-center">
+                                    <a class="btn btn-success" th:if="${libro.baja != null}" th:href="@{/libros/alta(id=__${libro.id}__)}" role="button">DAR ALTA</a>
+                                    <a class="btn btn-danger" th:unless="${libro.baja != null}" th:href="@{/libros/baja(id=__${libro.id}__)}" role="button">DAR BAJA</a>
+                                    <a class="btn btn-warning" th:href="@{/libros/modificar/__${libro.id}__}" role="button">MODIFICAR</a>
+                                    <a class="btn btn-danger" th:href="@{/libros/delete/__${libro.id}__}" role="button">ELIMINAR</a>
+                                    <a class="btn btn-dark" th:href="@{/libros}" role="button">VOLVER</a>
+                                </div>
+                            </div>
+                            <!--SECCION USUARIO-->
+                            <div sec:authorize="hasRole('ROLE_USUARIO')" class="card-prestamo">
+                                <form th:action="@{/prestamos/registrar}" method="POST">
                                     <div>
                                         <div class="text-center">
                                             <h5>Prestamo</h5>
@@ -72,50 +87,8 @@
             </div>
         </div>
 
-
-        <!--SECCION ADMIN-->
-        <div class="contenedor1" sec:authorize="hasRole('ROLE_ADMIN')">
-            <div class="contenedorHijo1">
-                <div class="mb-3 bg-dark text-white">
-                    <div class="row g-0">
-                        <div class="col-md-4 d-flex justify-content-center align-items-center">
-                            <img th:src="@{'/foto/libro/' + ${libro.id}}" class="img-fluid1 rounded-start" alt="Portada">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body1">
-                                <!--<a th:href="@{/libros}" title="Volver"><i class="fas fa-arrow-left"></i></a>-->
-                                <h5 class="card-title1" th:text="${libro.titulo}"></h5>
-                                <br>
-                                <ul>
-                                    <li class="items" th:text="'ID: ' + ${libro.id}"></li>
-                                    <li class="items" th:text="'ISBN: ' + ${libro.isbn}"></li>
-                                    <li class="items" th:text="'DESCRIPCION: ' + ${libro.descripcion}"></li>
-                                    <li class="items" th:text="'AUTOR: ' + ${libro.autor.nombre}"></li>
-                                    <li class="items" th:text="'EDITORIAL: ' + ${libro.editorial.nombre}"></li>
-                                    <li class="items" th:text="'AÑO: ' + ${libro.fechaPublicacion}"></li>
-                                    <li class="items" th:text="'EJEMPLARES: ' + ${libro.ejemplares}"></li>
-                                    <li class="items" th:text="'EJEMPLARES PRESTADOS: ' + ${libro.ejemplaresPrestados}"></li>
-                                    <li class="items" th:text="'EJEMPLARES RESTANTES: ' + ${libro.ejemplaresRestantes}"></li>
-                                    <li class="items" th:text="'ALTA: ' + ${libro.alta}"></li>
-                                    <li class="items" th:text="'BAJA: ' + ${libro.baja}"></li>
-                                </ul>
-                                <div class="text-center">
-                                    <a class="btn btn-success" th:if="${libro.baja != null}" th:href="@{/libros/alta(id=__${libro.id}__)}" role="button">DAR ALTA</a>
-                                    <a class="btn btn-danger" th:unless="${libro.baja != null}" th:href="@{/libros/baja(id=__${libro.id}__)}" role="button">DAR BAJA</a>
-                                    <a class="btn btn-warning" th:href="@{/libros/modificar/__${libro.id}__}" role="button">MODIFICAR</a>
-                                    <a class="btn btn-danger" th:href="@{/libros/delete/__${libro.id}__}" role="button">ELIMINAR</a>
-                                    <a class="btn btn-dark" th:href="@{/libros}" role="button">VOLVER</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!--PIE PAGINA-->
         <footer th:replace="/fragments/footer :: footer"></footer>
 
     </body>
-
 </html>

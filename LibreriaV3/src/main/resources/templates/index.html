@@ -14,15 +14,15 @@
         <h1 class="nombreUsuario" th:if="${session.usuariosession != null}" th:text="${session.usuariosession.nombre + ' ' + session.usuariosession.apellido}"></h1>
 
         <h2 class="enlacesSub">
-            <a class="enlaces-sub" href="/libros/mostrar">Libros</a>
+            <a class="enlaces-sub" href="/libros">Libros</a>
             | 
-            <a class="enlaces-sub" href="/autores/mostrar">Autores</a>
+            <a class="enlaces-sub" href="/autores">Autores</a>
             | 
-            <a class="enlaces-sub" href="/editoriales/mostrar">Editoriales</a>
+            <a class="enlaces-sub" href="/editoriales">Editoriales</a>
         </h2>
 
         <div>
-            <a th:if="${session.usuariosession != null}" class="enlaces-sub" th:href="@{/usuario/mis-prestamos(id=__${session.usuariosession.id}__)}">
+            <a th:if="${session.usuariosession != null}" class="enlaces-sub" th:href="@{/prestamos/mis-prestamos}">
                 <button type="button" class="btn btn-dark btn">Mis prestamos</button>
             </a>
             <a th:if="${session.usuariosession != null}" class="enlaces-sub" th:href="@{/usuario/editar-perfil(id=__${session.usuariosession.id}__)}">

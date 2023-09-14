@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author Lucas
  */
-@PreAuthorize("hasAnyRole('ROLE_USUARIO')")
+@PreAuthorize("hasAnyRole('ROLE_USUARIO', 'ROLE_ADMIN')")
 @Controller
 @RequestMapping("/prestamos")
 public class PrestamoController {
@@ -46,21 +46,13 @@ public class PrestamoController {
     @Autowired
     private UsuarioServicio usuarioServicio;
 
-    @GetMapping("/mostrar")
-    public String mostrar(ModelMap model) {
-
-        List<Prestamo> prestamos = prestamoRepositorio.findAll();
-        model.put("prestamos", prestamos);
-
-        return "prestamos.html";
-    }
-
+    @PreAuthorize("hasAnyRole('ROLE_USUARIO')")
     @GetMapping("/mis-prestamos")
     public String misPrestamos(HttpSession session, ModelMap model) {
 
         Usuario login = (Usuario) session.getAttribute("usuariosession");
         if (login == null) {
-            return "redirect:/inicio";
+            return "redirect:/";
         }
         List<Prestamo> misPrestamos = prestamoRepositorio.buscarPrestamoPorUsuario(login.getId());
         model.put("prestamos", misPrestamos);
@@ -68,8 +60,9 @@ public class PrestamoController {
         return "prestamos.html";
     }
 
-    @GetMapping("/registro-prestamo")
-    public String editarPerfil(HttpSession session, ModelMap model) {
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/registro")
+    public String registroPrestamo(HttpSession session, ModelMap model) {
 
 //        Usuario login = (Usuario) session.getAttribute("usuariosession");
 //        if (login == null) {
@@ -82,13 +75,14 @@ public class PrestamoController {
         return "add-prestamo.html";
     }
 
-    @PostMapping("/registrar-prestamo")
-    public String actualizar(ModelMap modelo, HttpSession session, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaPrestamo, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaDevolucion, @RequestParam String idLibro, @RequestParam(required = false) String idUsuario) {
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USUARIO')")
+    @PostMapping("/registrar")
+    public String registrarPrestamo(ModelMap modelo, HttpSession session, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaPrestamo, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaDevolucion, @RequestParam String idLibro, @RequestParam(required = false) String idUsuario) {
         //Usamos el usuario logueado para obtener el id de la sesion del usuario y
         //no mandarlo a travez del input hidden del html
         Usuario login = (Usuario) session.getAttribute("usuariosession");
         if (login == null) {
-            return "redirect:/inicio";
+            return "redirect:/";
         }
         try {
             Libro libro = libroServicio.buscarLibroPorId(idLibro);
@@ -97,46 +91,15 @@ public class PrestamoController {
 //            Usuario usuario = usuarioServicio.buscarUsuarioPorId(idUsuario);
             Usuario usuario = usuarioServicio.buscarUsuarioPorId(login.getId());
             prestamoServicio.registrar(fechaPrestamo, fechaDevolucion, libro, usuario);
-            return "redirect:/inicio"; //cambiar return
+            return "redirect:/libros"; //cambiar return
         } catch (ErrorServicio e) {
 
             return "inicio.html";
         }
     }
 
-//    @GetMapping("/registro-prestamo")
-//    public String registroPrestamo(HttpSession session, ModelMap model) {
-//        //colocamos la fecha actual para al crear el prestamo nos setee la fecha del dia en q se hizo
-//        model.addAttribute("fechaPrestamo", LocalDate.now());
-//
-//        List<Libro> libros = libroRepositorio.findAll();
-//        model.put("libros", libros);
-//
-//        return "add-prestamo.html";
-//    }
-//
-//    @PostMapping("/registrar-prestamo")
-//    public String registrarPrestamo(ModelMap modelo, HttpSession session, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaPrestamo, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaDevolucion, @RequestParam String idLibro, @RequestParam String idUsuario) {
-//        try {
-//            Libro libro = libroServicio.buscarLibroPorId(idLibro);
-//            Usuario usuario = usuarioServicio.buscarUsuarioPorId(idUsuario);
-//            prestamoServicio.registrar(fechaPrestamo, fechaDevolucion, libro, usuario);
-//        } catch (ErrorServicio ex) {
-//            modelo.put("error", ex.getMessage());
-//            List<Libro> libros = libroRepositorio.findAll();
-//            modelo.put("libros", libros);
-//            modelo.put("fechaPrestamo", fechaPrestamo);
-//            modelo.put("fechaDevolucion", fechaDevolucion);
-//            modelo.put("idLibro", idLibro);
-//            modelo.put("idUsuario", idUsuario);
-//
-//            return "add-prestamo.html";
-//        }
-//        modelo.put("titulo", "Registro exitoso!");
-//        modelo.put("descripcion", "El prestamo ingresado fue registrado correctamente.");
-//        return "exito.html";
-//    }
-    @GetMapping("/modificar-prestamo")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/modificar")
     public String modificarPrestamo(ModelMap modelo, @RequestParam Integer id) {
 
         List<Libro> libros = libroRepositorio.findAll();
@@ -155,7 +118,8 @@ public class PrestamoController {
         return "modificar-prestamo.html";
     }
 
-    @PostMapping("/actualizar-prestamo")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PostMapping("/actualizar")
     public String modificarPrestamo(ModelMap modelo, @RequestParam Integer id, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaPrestamo, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaDevolucion, @RequestParam String idLibro, @RequestParam String idUsuario) {
         Prestamo prestamo = null;
         try {
@@ -163,7 +127,7 @@ public class PrestamoController {
             Libro libro = libroServicio.buscarLibroPorId(idLibro);
             Usuario usuario = usuarioServicio.buscarUsuarioPorId(idUsuario);
             prestamoServicio.modificar(id, fechaPrestamo, fechaDevolucion, libro, usuario);
-            return "redirect:/prestamos/mostrar";
+            return "redirect:/prestamos";
         } catch (ErrorServicio ex) {
             List<Libro> libros = libroRepositorio.findAll();
             modelo.put("libros", libros);
@@ -179,6 +143,7 @@ public class PrestamoController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/baja")
     public String baja(ModelMap modelo, @RequestParam Integer id) {
         try {
@@ -186,9 +151,10 @@ public class PrestamoController {
         } catch (ErrorServicio ex) {
             modelo.put("error", ex.getMessage());
         }
-        return "redirect:/prestamos/mostrar";
+        return "redirect:/prestamos";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/alta")
     public String alta(ModelMap modelo, @RequestParam Integer id) {
         try {
@@ -196,9 +162,10 @@ public class PrestamoController {
         } catch (ErrorServicio ex) {
             modelo.put("error", ex.getMessage());
         }
-        return "redirect:/prestamos/mostrar";
+        return "redirect:/prestamos";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/eliminar")
     public String eliminar(ModelMap modelo, @RequestParam Integer id) {
         try {
@@ -206,6 +173,6 @@ public class PrestamoController {
         } catch (ErrorServicio ex) {
             modelo.put("error", ex.getMessage());
         }
-        return "redirect:/prestamos/mostrar";
+        return "redirect:/prestamos";
     }
 }

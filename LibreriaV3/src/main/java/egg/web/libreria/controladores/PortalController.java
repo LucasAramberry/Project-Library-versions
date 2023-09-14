@@ -6,7 +6,10 @@ import egg.web.libreria.errores.ErrorServicio;
 import egg.web.libreria.repositorios.ZonaRepositorio;
 import egg.web.libreria.servicios.*;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +33,8 @@ public class PortalController {
     private AutorServicio autorServicio;
     @Autowired
     private EditorialServicio editorialServicio;
+    @Autowired
+    private PrestamoServicio prestamoServicio;
 
     @GetMapping("/")
     public String index(ModelMap modelo) {
@@ -83,8 +88,19 @@ public class PortalController {
         return "exito.html";
     }
 
+//    @GetMapping("/libros")
+//    public String libros(ModelMap modelo) {
+//
+//        List<Libro> librosActivos = libroServicio.listarLibrosActivos();
+//        modelo.put("librosA", librosActivos);
+//
+//        List<Libro> libros = libroServicio.listarLibros();
+//        modelo.addAttribute("libros", libros);
+//
+//        return "libros.html";
+//    }
     @GetMapping("/libros")
-    public String libros(ModelMap modelo) {
+    public String libros(ModelMap modelo, @RequestParam(required = false) String idAutor, @RequestParam(required = false) String idEditorial) {
 
         List<Libro> librosActivos = libroServicio.listarLibrosActivos();
         modelo.put("librosA", librosActivos);
@@ -92,6 +108,31 @@ public class PortalController {
         List<Libro> libros = libroServicio.listarLibros();
         modelo.addAttribute("libros", libros);
 
+//        //autores
+//        List<Autor> listaActivos = autorServicio.listaAutoresActivos();
+//        modelo.addAttribute("autoresA", listaActivos);
+//
+//        List<Autor> autores = autorServicio.listarAutores();
+//        modelo.addAttribute("autores", autores);
+//
+//        modelo.addAttribute("autorSelected", null);
+//
+//        //editoriales
+//        List<Editorial> listaEditoriales = editorialServicio.listarEditoriales();
+//        modelo.addAttribute("editoriales", listaEditoriales);
+//
+//        List<Editorial> listaEditorialesActivas = editorialServicio.listaEditorialesActivas();
+//        modelo.addAttribute("editorialesA", listaEditorialesActivas);
+//
+//        modelo.addAttribute("editorialSelected", null);
+//
+//        if (idAutor != null) {
+//            List<Libro> librosPorAutor = libroServicio.buscarLibrosPorAutor(idAutor);
+//            modelo.addAttribute("libros", librosPorAutor);
+//        } else if (idEditorial != null) {
+//            List<Libro> librosPorEditorial = libroServicio.buscarLibrosPorEditorial(idEditorial);
+//            modelo.addAttribute("libros", librosPorEditorial);
+//        }
         return "libros.html";
     }
 
@@ -106,8 +147,17 @@ public class PortalController {
 
         modelo.addAttribute("autorSelected", null);
 
-        List<Libro> libros = libroServicio.buscarLibrosPorAutor(idAutor);
-        modelo.addAttribute("libros", libros);
+        if (idAutor != null) {
+            try {
+                List<Libro> libros = libroServicio.buscarLibrosPorAutor(idAutor);
+                modelo.addAttribute("libros", libros);
+                
+                Autor autor = autorServicio.buscarAutorPorId(idAutor);
+                modelo.addAttribute("autores", autor);
+            } catch (ErrorServicio ex) {
+                
+            }
+        }
 
         return "autores.html";
     }
@@ -127,5 +177,23 @@ public class PortalController {
         modelo.addAttribute("libros", libros);
 
         return "editoriales.html";
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @GetMapping("/prestamos")
+    public String mostrar(ModelMap model, @RequestParam(required = false) String idUsuario) {
+        List<Usuario> listaActivos = usuarioServicio.findAll();
+        model.addAttribute("usuarios", listaActivos);
+
+        model.addAttribute("usuarioSelected", null);
+
+        if (idUsuario != null) {
+            List<Prestamo> prestamosUsuario = prestamoServicio.buscarPrestamosPorUsuario(idUsuario);
+            model.put("prestamos", prestamosUsuario);
+        } else {
+            List<Prestamo> prestamos = prestamoServicio.listaPrestamos();
+            model.put("prestamos", prestamos);
+        }
+        return "prestamos.html";
     }
 }

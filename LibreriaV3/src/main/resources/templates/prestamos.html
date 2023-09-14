@@ -7,52 +7,74 @@
 <body>
     <nav th:replace="/fragments/navbar :: nav"></nav>
 
-    <h1>Lista Prestamos</h1>
+    <h1 sec:authorize="hasRole('ROLE_USUARIO')" >Mis Prestamos</h1>
+    <h1 sec:authorize="hasRole('ROLE_ADMIN')" >Lista Prestamos</h1>
 
-    <table class="table table-dark table-striped">
-        <thead>
-            <tr>
-                <th scope="col">Fecha prestamo</th>
-                <th scope="col">Fecha devolucion</th>
-                <th scope="col">Libro</th>
-                <th scope="col">Usuario</th>
-                <th scope="col">Alta/Baja</th>
-                <th scope="col">Editar</th>
-                <th scope="col">Eliminar</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="prestamo : ${prestamos}">
-                <td th:text="${prestamo.fechaPrestamo}"></td>
-                <td th:text="${prestamo.fechaDevolucion}"></td>
-                <td th:text="${prestamo.libro.titulo}"></td>
-                <td th:text="${prestamo.usuario.mail}"></td>
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <div class="form-group2 centrar-boton text-center">
+            <a href="/prestamos/registro" class="btn btn-dark" tabindex="-1" role="button">Agregar prestamo</a>
+        </div>
 
-                <td>
-                    <a th:if="${prestamo.alta == false}" th:href="@{/prestamos/alta(id=__${prestamo.id}__)}">
-                        <button type="button" class="btn btn-success btn-sm">Dar alta</button>
-                    </a>
-                    <a th:unless="${prestamo.alta == false}" th:href="@{/prestamos/baja(id=__${prestamo.id}__)}">
-                        <button type="button" class="btn btn-danger btn-sm">Dar baja</button>
-                    </a>
-                </td>
+        <div class="filtrar bg-dark text-white">
+            <div>
+                <h5>Buscar prestamo por Usuario</h5>
+            </div>
+            <div>
+                <form action="/prestamos/mostrar" method="GET" enctype="multipart/form-data">
 
-                <td>
-                    <a th:href="@{/prestamos/modificar-prestamo(id=__${prestamo.id}__)}">
-                        <button type="button" class="btn btn-primary btn-sm">Modificar</button>
-                    </a>
-                </td>
-                <td>
-                    <a th:href="@{/prestamos/eliminar(id=__${prestamo.id}__)}">
-                        <button type="button" class="btn btn-primary btn-sm">Eliminar</button>
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    <select class="filtrar-select" name="idUsuario">
+                        <option th:if="${usuarioSelected} == null" selected disabled value="">Todos</option>
+                        <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.mail}"></option>
+                    </select>
 
-    <div class="d-grid gap-2 col-6 mx-auto">
-        <a href="/prestamos/registro-prestamo" class="btn btn-warning" tabindex="-1" role="button">Agregar prestamo</a>
+                    <div class="filtrar-boton">
+                        <button th:if="${usuarioSelected} != null" type="submit" class="btn btn-dark" formaction="/prestamos/mostrar" formmethod="GET">Borrar filtro</button>
+                        <button type="submit" class="btn btn-warning">Filtrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="contenedor">
+        <div class="contenedorHijo" th:each="prestamo : ${prestamos}">
+            <div class="card mb-3 bg-dark text-white">
+                <div class="row g-0">
+                    <div>
+                        <div class="card-body">
+                            <ul class="lista-prestamos">
+                                <strong class="text-center text-success" th:if="${prestamo.baja == null}" th:text="'ACTIVO'"></strong>
+                                <strong class="text-center text-danger" th:unless="${prestamo.baja == null}" th:text="'INACTIVO'"></strong>
+                                <li sec:authorize="hasRole('ADMIN')" th:text="'USUARIO: ' + ${prestamo.usuario.mail}"></li>
+                                <li th:text="'FECHA PRESTAMO: ' + ${prestamo.fechaPrestamo}"></li>
+                                <li th:text="'FECHA DEVOLUCION: ' + ${prestamo.fechaDevolucion}"></li>
+                                <li th:text="'LIBRO: ' + ${prestamo.libro.titulo}"></li>
+                                <li th:text="'AUTOR: ' + ${prestamo.libro.autor.nombre}"></li>
+                                <li th:text="'EDITORIAL: ' + ${prestamo.libro.editorial.nombre}"></li>
+                                <li sec:authorize="hasRole('ADMIN')" th:text="'ALTA: ' + ${prestamo.alta}"></li>
+                                <li sec:authorize="hasRole('ADMIN')" th:text="'BAJA: ' + ${prestamo.baja}"></li>
+                            </ul>
+
+                            <div sec:authorize="hasRole('ADMIN')" class="text-center">
+                                <a th:if="${prestamo.baja != null}" th:href="@{/prestamos/alta(id=__${prestamo.id}__)}">
+                                    <button type="button" class="btn btn-success btn-sm">Dar alta</button>
+                                </a>
+                                <a th:unless="${prestamo.baja != null}" th:href="@{/prestamos/baja(id=__${prestamo.id}__)}">
+                                    <button type="button" class="btn btn-danger btn-sm">Dar baja</button>
+                                </a>
+                                <a th:href="@{/prestamos/modificar(id=__${prestamo.id}__)}">
+                                    <button type="button" class="btn btn-warning btn-sm">Modificar</button>
+                                </a>
+                                <a th:href="@{/prestamos/eliminar(id=__${prestamo.id}__)}">
+                                    <button type="button" class="btn btn-danger btn-sm">Eliminar</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <footer th:replace="/fragments/footer :: footer"></footer>

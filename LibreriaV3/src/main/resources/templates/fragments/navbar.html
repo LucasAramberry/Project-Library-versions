@@ -28,7 +28,7 @@
                     <a class="nav-link" href="/editoriales">Editoriales</a>
                 </li>
                 <li class="nav-item" th:if="${session.usuariosession != null}" sec:authorize="hasRole('ROLE_ADMIN')">
-                    <a class="nav-link" href="/prestamos/mostrar">Prestamos</a>
+                    <a class="nav-link" href="/prestamos">Prestamos</a>
                 </li>
                 <li class="nav-item" th:if="${session.usuariosession != null}" sec:authorize="hasRole('ROLE_ADMIN')">
                     <a class="nav-link" href="/usuario/mostrar">Usuarios</a>
@@ -42,7 +42,7 @@
                     <a class="nav-link" href="/login" th:if="${session.usuariosession == null}">Ingresa</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/prestamo/mis-prestamos/__${session.usuariosession.id}__}" th:if="${session.usuariosession != null}"  sec:authorize="hasRole('USUARIO')">Mis Prestamos</a>
+                    <a class="nav-link" th:href="@{/prestamos/mis-prestamos}" th:if="${session.usuariosession != null}"  sec:authorize="hasRole('ROLE_USUARIO')">Mis Prestamos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/usuario/editar-perfil(id=__${session.usuariosession.id}__)}" th:if="${session.usuariosession != null}" >Editar Perfil</a>

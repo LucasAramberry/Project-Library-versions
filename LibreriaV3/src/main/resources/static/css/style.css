@@ -30,6 +30,10 @@ a{
     text-decoration: none;
 }
 
+ul{
+    list-style: circle;
+}
+
 .boton-libro{
     margin-bottom: 75px;
 }
@@ -238,12 +242,17 @@ li:hover{
 
 .card-body1{
     margin: 2% auto;
+    padding: 0.2rem;
 }
 
 .card-prestamo{
     /*    display: flex;
         justify-content: space-around;*/
     margin: 2% auto;
+}
+
+.lista-prestamos{
+    padding-left: 5px;
 }
 
 .fechas{
@@ -276,4 +285,14 @@ li:hover{
         font-size: 2.5rem;
         margin-bottom: 2%;
     }
+    /****************************************ESTILOS FILTRAR**************************************/
+
+    .filtrar{
+        width: 300px;
+    }
+
+    .filtrar-select{
+        width: 275px;
+    }
+
 }
