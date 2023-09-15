@@ -3,6 +3,7 @@ package egg.web.libreria.controladores;
 import egg.web.libreria.entidades.Usuario;
 import egg.web.libreria.entidades.Libro;
 import egg.web.libreria.entidades.Prestamo;
+import egg.web.libreria.enumeraciones.Rol;
 import egg.web.libreria.errores.ErrorServicio;
 import egg.web.libreria.repositorios.UsuarioRepositorio;
 import egg.web.libreria.repositorios.LibroRepositorio;
@@ -60,19 +61,26 @@ public class PrestamoController {
         return "prestamos.html";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USUARIO')")
     @GetMapping("/registro")
     public String registroPrestamo(HttpSession session, ModelMap model) {
 
-//        Usuario login = (Usuario) session.getAttribute("usuariosession");
-//        if (login == null) {
-//            return "redirect:/inicio";
-//        }
+        Usuario login = (Usuario) session.getAttribute("usuariosession");
+        if (login == null) {
+            return "redirect:/inicio";
+        }
+
+        //Verificamos si es un administrador para pasarle la lista de usuarios
+        if (login.getRol().equals(Rol.ADMIN)) {
+            List<Usuario> usuarios = usuarioServicio.findAll();
+            model.put("usuarios", usuarios);
+        }
+        
         model.addAttribute("fechaPrestamo", LocalDate.now());
         List<Libro> libros = libroRepositorio.findAll();
         model.put("libros", libros);
 
-        return "add-prestamo.html";
+        return "registro-prestamo.html";
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USUARIO')")
@@ -85,16 +93,23 @@ public class PrestamoController {
             return "redirect:/";
         }
         try {
-            Libro libro = libroServicio.buscarLibroPorId(idLibro);
-            //Si buscamos el usuario asi tenemos q habilitar el input hidden del html y 
-            //colocar el atributo como requerido y comentar el login ya q no haria falta
+            //verificamos si es usuario y sacamos el id de la sesion y si es admin mandamos lista de usuarios
+            if (login.getRol().equals(Rol.USUARIO)) {
+                Libro libro = libroServicio.buscarLibroPorId(idLibro);
+                //Si buscamos el usuario asi tenemos q habilitar el input hidden del html y 
+                //colocar el atributo como requerido y comentar el login ya q no haria falta
 //            Usuario usuario = usuarioServicio.buscarUsuarioPorId(idUsuario);
-            Usuario usuario = usuarioServicio.buscarUsuarioPorId(login.getId());
-            prestamoServicio.registrar(fechaPrestamo, fechaDevolucion, libro, usuario);
-            return "redirect:/libros"; //cambiar return
+                Usuario usuario = usuarioServicio.buscarUsuarioPorId(login.getId());
+                prestamoServicio.registrar(fechaPrestamo, fechaDevolucion, libro, usuario);
+                return "redirect:/prestamos/mis-prestamos"; //cambiar return
+            } else {
+                Libro libro = libroServicio.buscarLibroPorId(idLibro);
+                Usuario usuario = usuarioServicio.buscarUsuarioPorId(idUsuario);
+                prestamoServicio.registrar(fechaPrestamo, fechaDevolucion, libro, usuario);
+                return "redirect:/prestamos";
+            }
         } catch (ErrorServicio e) {
-
-            return "inicio.html";
+            return "redirect:/";
         }
     }
 

@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author Lucas
  */
-@PreAuthorize("hasAnyRole('ROLE_USUARIO')")
+//@PreAuthorize("hasAnyRole('ROLE_USUARIO')")
 @Controller
 @RequestMapping("/autores")
 public class AutorController {
@@ -29,12 +29,12 @@ public class AutorController {
     @Autowired
     private AutorRepositorio autorRepositorio;
 
-    @GetMapping("/registro-autor")
+    @GetMapping("/registro")
     public String registroAutor() {
         return "registro-autor.html";
     }
 
-    @PostMapping("/registrar-autor")
+    @PostMapping("/registrar")
     public String registrarAutor(ModelMap modelo, MultipartFile archivo, @RequestParam String nombre) {
         try {
             autorServicio.registrar(archivo, nombre);
@@ -50,7 +50,7 @@ public class AutorController {
         return "exito.html";
     }
 
-    @GetMapping("/modificar-autor")
+    @GetMapping("/modificar")
     public String modificarAutor(ModelMap modelo, @RequestParam String id) {
 
         try {
@@ -63,7 +63,7 @@ public class AutorController {
         return "modificar-autor.html";
     }
 
-    @PostMapping("/actualizar-autor")
+    @PostMapping("/actualizar")
     public String modificarAutor(ModelMap modelo, MultipartFile archivo, @RequestParam String id, @RequestParam String nombre) {
 
         Autor autor = null;

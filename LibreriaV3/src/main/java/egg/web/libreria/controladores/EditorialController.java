@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author Lucas
  */
-@PreAuthorize("hasAnyRole('ROLE_USUARIO')")
+//@PreAuthorize("hasAnyRole('ROLE_USUARIO')")
 @Controller
 @RequestMapping("/editoriales")
 public class EditorialController {
@@ -29,12 +29,12 @@ public class EditorialController {
     @Autowired
     private EditorialRepositorio editorialRepositorio;
 
-    @GetMapping("/registro-editorial")
+    @GetMapping("/registro")
     public String registroEditorial() {
         return "registro-editorial.html";
     }
 
-    @PostMapping("/registrar-editorial")
+    @PostMapping("/registrar")
     public String registrarEditorial(ModelMap modelo, MultipartFile archivo, @RequestParam String nombre) {
         try {
             editorialServicio.registrar(archivo, nombre);
@@ -50,7 +50,7 @@ public class EditorialController {
         return "exito.html";
     }
 
-    @GetMapping("/modificar-editorial")
+    @GetMapping("/modificar")
     public String modificarEditorial(ModelMap modelo, @RequestParam String id) {
 
         try {
@@ -63,7 +63,7 @@ public class EditorialController {
         return "modificar-editorial.html";
     }
 
-    @PostMapping("/actualizar-editorial")
+    @PostMapping("/actualizar")
     public String modificarEditorial(ModelMap modelo, MultipartFile archivo, @RequestParam String id, @RequestParam String nombre) {
 
         Editorial editorial = null;

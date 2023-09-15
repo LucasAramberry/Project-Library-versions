@@ -100,14 +100,21 @@ public class PortalController {
 //        return "libros.html";
 //    }
     @GetMapping("/libros")
-    public String libros(ModelMap modelo, @RequestParam(required = false) String idAutor, @RequestParam(required = false) String idEditorial) {
+    public String libros(ModelMap modelo, @RequestParam(required = false) String idLibro, @RequestParam(required = false) String idAutor, @RequestParam(required = false) String idEditorial) {
+        try {
+            List<Libro> librosActivos = libroServicio.listarLibrosActivos();
+            modelo.put("librosA", librosActivos);
 
-        List<Libro> librosActivos = libroServicio.listarLibrosActivos();
-        modelo.put("librosA", librosActivos);
+            List<Libro> libros = libroServicio.listarLibros();
+            modelo.addAttribute("libros", libros);
 
-        List<Libro> libros = libroServicio.listarLibros();
-        modelo.addAttribute("libros", libros);
+            modelo.addAttribute("libroSelected", null);
 
+            if (idLibro != null) {
+                Libro libroPorTitulo = libroServicio.buscarLibroPorId(idLibro);
+                modelo.addAttribute("libros", libroPorTitulo);
+            }
+            return "libros.html";
 //        //autores
 //        List<Autor> listaActivos = autorServicio.listaAutoresActivos();
 //        modelo.addAttribute("autoresA", listaActivos);
@@ -133,7 +140,9 @@ public class PortalController {
 //            List<Libro> librosPorEditorial = libroServicio.buscarLibrosPorEditorial(idEditorial);
 //            modelo.addAttribute("libros", librosPorEditorial);
 //        }
-        return "libros.html";
+        } catch (ErrorServicio ex) {
+            return "libros.html";
+        }
     }
 
     @GetMapping("/autores")
@@ -151,11 +160,11 @@ public class PortalController {
             try {
                 List<Libro> libros = libroServicio.buscarLibrosPorAutor(idAutor);
                 modelo.addAttribute("libros", libros);
-                
+
                 Autor autor = autorServicio.buscarAutorPorId(idAutor);
                 modelo.addAttribute("autores", autor);
             } catch (ErrorServicio ex) {
-                
+                return "redirect:/autores";
             }
         }
 
@@ -173,8 +182,17 @@ public class PortalController {
 
         modelo.addAttribute("editorialSelected", null);
 
-        List<Libro> libros = libroServicio.buscarLibrosPorEditorial(idEditorial);
-        modelo.addAttribute("libros", libros);
+        if (idEditorial != null) {
+            try {
+                List<Libro> libros = libroServicio.buscarLibrosPorEditorial(idEditorial);
+                modelo.addAttribute("libros", libros);
+
+                Editorial editorial = editorialServicio.buscarEditorialPorId(idEditorial);
+                modelo.addAttribute("editoriales", editorial);
+            } catch (ErrorServicio ex) {
+                return "redirect:/editoriales";
+            }
+        }
 
         return "editoriales.html";
     }

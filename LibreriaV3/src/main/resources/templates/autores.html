@@ -7,56 +7,10 @@
 <body>
     <nav th:replace="/fragments/navbar :: nav"></nav>
 
-    <!--    <h1>Lista Autores</h1>
-    
-        <table class="table table-dark table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Alta/Baja</th>
-                    <th scope="col">Editar autor</th>
-                    <th scope="col">Eliminar autor</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="autor : ${autores}">
-    
-                    <td th:text="${autor.nombre}"></td>
-    
-                    <td>
-                        <a th:if="${autor.baja != null}" th:href="@{/autores/alta(id=__${autor.id}__)}">
-                            <button type="button" class="btn btn-success btn-sm">Dar alta</button>
-                        </a>
-                        <a th:unless="${autor.baja != null}" th:href="@{/autores/baja(id=__${autor.id}__)}">
-                            <button type="button" class="btn btn-danger btn-sm">Dar baja</button>
-                        </a>
-                    </td>
-                    <td>
-                        <a th:href="@{/autores/modificar-autor(id=__${autor.id}__)}">
-                            <button type="button" class="btn btn-primary btn-sm">Modificar</button>
-                        </a>
-                    </td>
-                    <td>
-                        <a th:href="@{/autores/eliminar(id=__${autor.id}__)}">
-                            <button type="button" class="btn btn-primary btn-sm">Eliminar</button>
-                        </a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    
-        <div class="d-grid gap-2 col-6 mx-auto">
-            <a
-                href="/autores/registro-autor"
-                class="btn btn-warning"
-                tabindex="-1"
-                role="button"
-                >Agregar autor</a>
-        </div>-->
-
     <!--SECCION USUARIO-->
     <!--<div sec:authorize="hasRole('USUARIO')">-->
 
+    <!--FILTRAR-->
     <div class="filtrar bg-dark text-white">
         <div><h5>Buscar libro por Autor</h5></div>
         <div>
@@ -68,14 +22,15 @@
                 </select>
                 <div class="filtrar-boton">
                     <button th:if="${autorSelected} != null" type="submit" class="btn btn-dark" formaction="/autores" formmethod="GET">Borrar filtro</button>
-                    <button type="submit" class="btn btn-warning">Filtrar</button>
+                    <button type="submit" class="btn btn-warning">Buscar</button>
                 </div>
             </form>
         </div>
     </div>
-
-    <h1 sec:authorize="hasRole('ADMIN')">GESTIONAR AUTORES</h1>
-    <h1>AUTORES</h1>
+    
+    <div sec:authorize="hasRole('ADMIN')" class="form-group2 centrar-boton text-center">
+        <a href="/autores/registro" class="btn btn-dark" tabindex="-1" role="button">Agregar autor</a>
+    </div>
 
     <div class="contenedor">
         <div class="contenedorHijo" th:each="autor : ${autores}">
@@ -91,10 +46,22 @@
                                 <li sec:authorize="hasRole('ADMIN')" th:text="'ALTA: ' + ${autor.alta}"></li>
                                 <li sec:authorize="hasRole('ADMIN')" th:text="'BAJA: ' + ${autor.baja}"></li>
                             </ul>
-                            <div class="form-group2 text-center">
-                                <a sec:authorize="hasRole('ADMIN')" th:if="${autor.baja != null}" th:href="@{/autores/alta(id=__${autor.id}__)}" title="Alta"><i class="fa fa-arrow-up text-success"></i></a>
-                                <a sec:authorize="hasRole('ADMIN')" th:unless="${autor.baja != null}" th:href="@{/autores/baja(id=__${autor.id}__)}" title="Baja"><i class="fa fa-ban text-danger"></i></a> 
-                                <a sec:authorize="hasRole('ADMIN')" th:href="@{/autores/modificar-autor(id=__${autor.id}__)}" title="Modificar"><i class="fas fa-feather-alt text-warning"></i></a>
+                            <div sec:authorize="hasRole('ADMIN')" class="form-group2 text-center">
+                                <a th:if="${autor.baja != null}" th:href="@{/autores/alta(id=__${autor.id}__)}">
+                                    <button type="button" class="btn btn-success btn-sm">Dar alta</button>
+                                </a>
+                                <a th:unless="${autor.baja != null}" th:href="@{/autores/baja(id=__${autor.id}__)}">
+                                    <button type="button" class="btn btn-danger btn-sm">Dar baja</button>
+                                </a>
+                                <a th:href="@{/autores/modificar(id=__${autor.id}__)}">
+                                    <button type="button" class="btn btn-warning btn-sm">Modificar</button>
+                                </a>
+                                <a th:href="@{/autores/eliminar(id=__${autor.id}__)}">
+                                    <button type="button" class="btn btn-danger btn-sm">Eliminar</button>
+                                </a>
+                                <!--<a sec:authorize="hasRole('ADMIN')" th:if="${autor.baja != null}" th:href="@{/autores/alta(id=__${autor.id}__)}" title="Alta"><i class="fa fa-arrow-up text-success"></i></a>-->
+                                <!--<a sec:authorize="hasRole('ADMIN')" th:unless="${autor.baja != null}" th:href="@{/autores/baja(id=__${autor.id}__)}" title="Baja"><i class="fa fa-ban text-danger"></i></a>--> 
+                                <!--<a sec:authorize="hasRole('ADMIN')" th:href="@{/autores/modificar-autor(id=__${autor.id}__)}" title="Modificar"><i class="fas fa-feather-alt text-warning"></i></a>-->
                                 <!--<a sec:authorize="hasRole('ADMIN')" th:href="@{/autores/eliminar(id=__${autor.id}__)}" title="Eliminar"><i class="fas fa-archive text-danger"></i></a>-->
                             </div>
                         </div>
@@ -133,12 +100,6 @@
             </div>
         </div>
     </div>
-    <!--</div>-->
-
-
-    <!--SECCION ADMINISTRADOR-->
-    <!--<div sec:authorize="hasRole('ADMIN')">-->
-
     <!--</div>-->
 
     <footer th:replace="/fragments/footer :: footer"></footer>

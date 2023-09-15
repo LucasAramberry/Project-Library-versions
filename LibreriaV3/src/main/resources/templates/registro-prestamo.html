@@ -8,7 +8,10 @@
 <body>
     <nav th:replace="/fragments/navbar :: nav"></nav>
 
-    <a href="/prestamos/mostrar">
+    <a sec:authorize="hasRole('ROLE_ADMIN')" href="/prestamos">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    <a sec:authorize="hasRole('ROLE_USUARIO')" href="/prestamos/mis-prestamos">
         <i class="fas fa-arrow-left"></i>
     </a>
 
@@ -18,7 +21,7 @@
         <div class="w-75 text-light d-flex justify-content-center">
             <div class="mb-3">
 
-                <form th:action="@{/prestamos/registrar-prestamo}" method="POST" enctype="multipart/form-data">
+                <form th:action="@{/prestamos/registrar}" method="POST" enctype="multipart/form-data">
 
                     <p th:if="${error != null}" th:text="${error}" class="error"></p>
 
@@ -39,24 +42,20 @@
                     <div class="mb-3">
                         <label for="idLibro" class="col col-form-label">Libro</label>
                         <div class="col-sm-10 w-100">
-                            <select class="form-control" id="idLibro"  name="idLibro">
+                            <select class="form-select" id="idLibro"  name="idLibro">
                                 <option th:each="libro : ${libros}" th:value="${libro.id}" th:text="${libro.titulo}"></option>
                             </select>
                         </div>
                     </div>
 
-                    <!--                    <div class="mb-3">
-                                            <label for="idUsuario" class="col col-form-label">Usuario</label>
-                                            <div class="col-sm-10 w-100">
-                                                <select class="form-control" id="idUsuario"  name="idUsuario">
-                                                    <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nombre}"></option>
-                                                </select>
-                                            </div>
-                                        </div>-->
-<!--                    este input lo activamos si en el controlador activamos que el id venga del html 
-                    colocando el atributo como requerido-->
-                    
-                    <!--<input type="hidden" class="form-control" id="idUsuario" name="idUsuario" th:value="${session.usuariosession.id}"/>-->
+                    <div sec:authorize="hasRole('ROLE_ADMIN')" class="mb-3">
+                        <label for="idUsuario" class="col col-form-label">Usuario</label>
+                        <div class="col-sm-10 w-100">
+                            <select class="form-select" id="idUsuario"  name="idUsuario">
+                                <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.mail}"></option>
+                            </select>
+                        </div>
+                    </div>
 
                     <div class="d-grid gap-2 col-6 mx-auto boton-libro">
                         <button type="submit" class="btn btn-primary">Agregar</button>
