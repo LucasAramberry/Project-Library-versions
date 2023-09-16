@@ -192,6 +192,24 @@ public class UsuarioServicio implements UserDetailsService {
         }
     }
 
+    @Transactional
+    public void cambiarRol(String id) throws ErrorServicio {
+        Optional<Usuario> respuesta = usuarioRepositorio.findById(id);
+
+        if (respuesta.isPresent()) {
+            Usuario usuario = respuesta.get();
+            if (usuario.getRol().equals(Rol.ADMIN)) {
+                usuario.setRol(Rol.USUARIO);
+            }else{
+                usuario.setRol(Rol.ADMIN);
+            }
+
+            usuarioRepositorio.save(usuario);
+        } else {
+            throw new ErrorServicio("Error al cambiar el rol del usuario solicitado");
+        }
+    }
+
     /**
      * Metodo para buscar usuario por id
      *

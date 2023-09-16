@@ -4,13 +4,8 @@ import egg.web.libreria.entidades.Usuario;
 import egg.web.libreria.entidades.Zona;
 import egg.web.libreria.enumeraciones.Sexo;
 import egg.web.libreria.errores.ErrorServicio;
-import egg.web.libreria.repositorios.UsuarioRepositorio;
-import egg.web.libreria.repositorios.LibroRepositorio;
-import egg.web.libreria.repositorios.PrestamoRepositorio;
 import egg.web.libreria.repositorios.ZonaRepositorio;
 import egg.web.libreria.servicios.UsuarioServicio;
-import egg.web.libreria.servicios.LibroServicio;
-import egg.web.libreria.servicios.PrestamoServicio;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,27 +22,17 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author Lucas
  */
-@PreAuthorize("hasAnyRole('ROLE_USUARIO')")
+@PreAuthorize("hasAnyRole('ROLE_USUARIO', 'ROLE_ADMIN')")
 @Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
 
     @Autowired
-    private PrestamoRepositorio prestamoRepositorio;
-    @Autowired
-    private PrestamoServicio prestamoServicio;
-    @Autowired
-    private LibroServicio libroServicio;
-    @Autowired
-    private LibroRepositorio libroRepositorio;
-    @Autowired
-    private UsuarioRepositorio usuarioRepositorio;
-    @Autowired
     private UsuarioServicio usuarioServicio;
     @Autowired
     private ZonaRepositorio zonaRepositorio;
 
-    @PreAuthorize("hasAnyRole('ROLE_USUARIO')")
+    @PreAuthorize("hasAnyRole('ROLE_USUARIO', 'ROLE_ADMIN')")
     @GetMapping("/editar-perfil")
     public String editarPerfil(HttpSession session, ModelMap modelo, @RequestParam String id) {
 
@@ -58,7 +43,7 @@ public class UsuarioController {
 
         Usuario login = (Usuario) session.getAttribute("usuariosession");
         if (login == null || !login.getId().equals(id)) {
-            return "redirect:/inicio";
+            return "redirect:/";
         }
 
         try {
@@ -71,14 +56,14 @@ public class UsuarioController {
         return "perfil.html";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USUARIO')")
+    @PreAuthorize("hasAnyRole('ROLE_USUARIO', 'ROLE_ADMIN')")
     @PostMapping("/actualizar-perfil")
     public String actualizarPerfil(ModelMap modelo, HttpSession session, MultipartFile archivo, @RequestParam String id, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String documento, @RequestParam String telefono, @RequestParam Sexo sexo, @RequestParam String idZona, @RequestParam String mail, @RequestParam String clave, @RequestParam String clave2) {
         Usuario usuario = null;
         try {
             Usuario login = (Usuario) session.getAttribute("usuariosession");
             if (login == null || !login.getId().equals(id)) {
-                return "redirect:/inicio";
+                return "redirect:/";
             }
 
             usuario = usuarioServicio.buscarUsuarioPorId(id);
@@ -94,15 +79,6 @@ public class UsuarioController {
 
             return "perfil.html";
         }
-    }
-
-    @GetMapping("/mostrar")
-    public String mostrar(ModelMap model) {
-
-        List<Usuario> usuarios = usuarioRepositorio.findAll();
-        model.put("usuarios", usuarios);
-
-        return "usuarios.html";
     }
 
 //    @GetMapping("/registro-usuario")
@@ -132,7 +108,19 @@ public class UsuarioController {
 //        modelo.put("descripcion", "El usuario ingresado fue registrado correctamente.");
 //        return "exito.html";
 //    }
+    
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/cambiar-rol")
+    public String cambiarRol(ModelMap modelo, @RequestParam String id) {
+        try {
+            usuarioServicio.cambiarRol(id);
+        } catch (ErrorServicio ex) {
+            modelo.put("error", ex.getMessage());
+        }
+        return "redirect:/usuarios";
+    }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USUARIO')")
     @GetMapping("/baja")
     public String baja(ModelMap modelo, @RequestParam String id) {
         try {
@@ -140,9 +128,10 @@ public class UsuarioController {
         } catch (ErrorServicio ex) {
             modelo.put("error", ex.getMessage());
         }
-        return "redirect:/usuario/mostrar";
+        return "redirect:/usuarios";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/alta")
     public String alta(ModelMap modelo, @RequestParam String id) {
         try {
@@ -150,9 +139,10 @@ public class UsuarioController {
         } catch (ErrorServicio ex) {
             modelo.put("error", ex.getMessage());
         }
-        return "redirect:/usuario/mostrar";
+        return "redirect:/usuarios";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/eliminar")
     public String eliminar(ModelMap modelo, @RequestParam String id) {
         try {
@@ -160,6 +150,6 @@ public class UsuarioController {
         } catch (ErrorServicio ex) {
             modelo.put("error", ex.getMessage());
         }
-        return "redirect:/usuario/mostrar";
+        return "redirect:/usuarios";
     }
 }

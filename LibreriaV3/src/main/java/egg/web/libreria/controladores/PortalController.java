@@ -1,13 +1,12 @@
 package egg.web.libreria.controladores;
 
 import egg.web.libreria.entidades.*;
+import egg.web.libreria.enumeraciones.Rol;
 import egg.web.libreria.enumeraciones.Sexo;
 import egg.web.libreria.errores.ErrorServicio;
 import egg.web.libreria.repositorios.ZonaRepositorio;
 import egg.web.libreria.servicios.*;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -199,7 +198,7 @@ public class PortalController {
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/prestamos")
-    public String mostrar(ModelMap model, @RequestParam(required = false) String idUsuario) {
+    public String prestamos(ModelMap model, @RequestParam(required = false) String idUsuario) {
         List<Usuario> listaActivos = usuarioServicio.findAll();
         model.addAttribute("usuarios", listaActivos);
 
@@ -213,5 +212,31 @@ public class PortalController {
             model.put("prestamos", prestamos);
         }
         return "prestamos.html";
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @GetMapping("/usuarios")
+    public String usuarios(ModelMap model, @RequestParam(required = false) String idUsuario) {
+        model.put("rolAdmin", Rol.ADMIN);
+        model.put("rolUsuario", Rol.USUARIO);
+        
+        List<Usuario> listaActivos = usuarioServicio.findAll();
+        model.addAttribute("usuarios", listaActivos);
+
+        model.addAttribute("usuarioSelected", null);
+
+        if (idUsuario != null) {
+            Usuario usuario;
+            try {
+                usuario = usuarioServicio.buscarUsuarioPorId(idUsuario);
+                model.put("usuarios", usuario);
+            } catch (ErrorServicio ex) {
+                return "redirect:/";
+            }
+        } else {
+            List<Usuario> listaUsuarios = usuarioServicio.findAll();
+            model.addAttribute("usuarios", listaUsuarios);
+        }
+        return "usuarios.html";
     }
 }

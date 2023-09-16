@@ -7,76 +7,144 @@
 <body>
     <nav th:replace="/fragments/navbar :: nav"></nav>
 
-    <h1>Lista Usuarios</h1>
+    <!--    <h1>Lista Usuarios</h1>
+    
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellido</th>
+                    <th scope="col">Documento</th>
+                    <th scope="col">Telefono</th>
+                    <th scope="col">Zona</th>
+                    <th scope="col">Sexo</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Fecha alta</th>
+                    <th scope="col">Fecha baja</th>
+                    <th scope="col">Alta/Baja</th>
+                    <th scope="col">Editar autor</th>
+                    <th scope="col">Eliminar autor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="usuario : ${usuarios}">
+    
+                    <td th:text="${usuario.nombre}"></td>
+    
+                    <td th:text="${usuario.apellido}"></td>
+    
+                    <td th:text="${usuario.documento}"></td>
+    
+                    <td th:text="${usuario.telefono}"></td>
+                    
+                    <td th:text="${usuario.zona.nombre}"></td>
+                    
+                    <td th:text="${usuario.sexo}"></td>
+                    
+                    <td th:text="${usuario.mail}"></td>
+                    
+                    <td th:text="${usuario.alta}"></td>
+                    
+                    <td th:text="${usuario.baja}"></td>
+    
+                    <td>
+                        <a th:if="${usuario.baja != null}" th:href="@{/usuario/alta(id=__${usuario.id}__)}">
+                            <button type="button" class="btn btn-success btn-sm">Dar alta</button>
+                        </a>
+                        <a th:unless="${usuario.baja != null}" th:href="@{/usuario/baja(id=__${usuario.id}__)}">
+                            <button type="button" class="btn btn-danger btn-sm">Dar baja</button>
+                        </a>
+                    </td>
+                    <td>
+                        <a th:href="@{/usuario/modificar-usuario(id=__${usuario.id}__)}">
+                            <button type="button" class="btn btn-primary btn-sm">Modificar</button>
+                        </a>
+                    </td>
+                    <td>
+                        <a th:href="@{/usuario/eliminar(id=__${usuario.id}__)}">
+                            <button type="button" class="btn btn-primary btn-sm">Eliminar</button>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <a
+                href="/usuario/registro"
+                class="btn btn-warning"
+                tabindex="-1"
+                role="button"
+                >Agregar usuario</a
+            >
+        </div>-->
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <h1>Lista Usuarios</h1>
 
-    <table class="table table-dark table-striped">
-        <thead>
-            <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Apellido</th>
-                <th scope="col">Documento</th>
-                <th scope="col">Telefono</th>
-                <th scope="col">Zona</th>
-                <th scope="col">Sexo</th>
-                <th scope="col">E-mail</th>
-                <th scope="col">Fecha alta</th>
-                <th scope="col">Fecha baja</th>
-                <th scope="col">Alta/Baja</th>
-                <th scope="col">Editar autor</th>
-                <th scope="col">Eliminar autor</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="usuario : ${usuarios}">
+        <div class="form-group2 centrar-boton text-center">
+            <a href="/registro" class="btn btn-dark" tabindex="-1" role="button">Agregar usuario</a>
+        </div>
 
-                <td th:text="${usuario.nombre}"></td>
+        <div>
+            <div class="filtrar bg-dark text-white">
+                <div>
+                    <h5>Buscar usuario</h5>
+                </div>
+                <div>
+                    <form action="/usuarios" method="GET" enctype="multipart/form-data">
 
-                <td th:text="${usuario.apellido}"></td>
+                        <select class="filtrar-select" name="idUsuario">
+                            <option th:if="${usuarioSelected} == null" selected disabled value="">Todos</option>
+                            <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.mail}"></option>
+                        </select>
 
-                <td th:text="${usuario.documento}"></td>
+                        <div class="filtrar-boton">
+                            <button th:if="${usuarioSelected} != null" type="submit" class="btn btn-dark" formaction="/usuarios" formmethod="GET">Borrar filtro</button>
+                            <button type="submit" class="btn btn-warning">Buscar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-                <td th:text="${usuario.telefono}"></td>
-                
-                <td th:text="${usuario.zona.nombre}"></td>
-                
-                <td th:text="${usuario.sexo}"></td>
-                
-                <td th:text="${usuario.mail}"></td>
-                
-                <td th:text="${usuario.alta}"></td>
-                
-                <td th:text="${usuario.baja}"></td>
-
-                <td>
-                    <a th:if="${usuario.baja != null}" th:href="@{/usuario/alta(id=__${usuario.id}__)}">
-                        <button type="button" class="btn btn-success btn-sm">Dar alta</button>
-                    </a>
-                    <a th:unless="${usuario.baja != null}" th:href="@{/usuario/baja(id=__${usuario.id}__)}">
-                        <button type="button" class="btn btn-danger btn-sm">Dar baja</button>
-                    </a>
-                </td>
-                <td>
-                    <a th:href="@{/usuario/modificar-usuario(id=__${usuario.id}__)}">
-                        <button type="button" class="btn btn-primary btn-sm">Modificar</button>
-                    </a>
-                </td>
-                <td>
-                    <a th:href="@{/usuario/eliminar(id=__${usuario.id}__)}">
-                        <button type="button" class="btn btn-primary btn-sm">Eliminar</button>
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="d-grid gap-2 col-6 mx-auto">
-        <a
-            href="/usuario/registro"
-            class="btn btn-warning"
-            tabindex="-1"
-            role="button"
-            >Agregar usuario</a
-        >
+        <div class="contenedor">
+            <div class="contenedorHijo" th:each="usuario : ${usuarios}">
+                <div class="card mb-3 bg-dark text-white">
+                    <div class="row g-0">
+                        <div class="col-md-4 imagen-card">
+                            <img th:src="@{'/foto/usuario/' + ${usuario.id}}" class="img-fluid rounded-start" alt="Foto usuario">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <strong class="text-center text-success" th:if="${usuario.baja == null}" th:text="'ACTIVO '"></strong>
+                                <strong class="text-center text-danger" th:unless="${usuario.baja == null}" th:text="'INACTIVO '"></strong>
+                                
+                                <a th:if="${usuario.baja != null}" th:href="@{/usuario/alta(id=__${usuario.id}__)}" title="Alta"><i class="fa fa-arrow-up text-success"></i></a>
+                                <a th:unless="${usuario.baja != null}" th:href="@{/usuario/baja(id=__${usuario.id}__)}" title="Baja"><i class="fa fa-arrow-down text-danger"></i></a> 
+                                
+                                <a th:if="${usuario.rol} != ${rolAdmin}" th:href="@{/usuario/cambiar-rol(id=__${usuario.id}__)}" title="Cambiar a Administrador"><i class="fa fa-star text-warning"></i></a>
+                                <a th:unless="${usuario.rol} != ${rolAdmin}" th:href="@{/usuario/cambiar-rol(id=__${usuario.id}__)}" title="Cambiar a Usuario"><i class="fa fa-user text-primary"></i></a> 
+                                
+                                <a th:href="@{/usuario/editar-perfil(id=__${usuario.id}__)}" title="Modificar"><i class="fas fa-feather-alt text-warning"></i></a>
+                                
+                                <ul class="lista-prestamos">
+                                    <li class="fw-bold" th:text="'ROL: ' + ${usuario.rol}"></li>
+                                    <li th:text="'USUARIO: ' + ${usuario.mail}"></li>
+                                    <li th:text="'NOMBRE: ' + ${usuario.nombre}"></li>
+                                    <li th:text="'APELLIDO: ' + ${usuario.apellido}"></li>
+                                    <li th:text="'DOCUMENTO: ' + ${usuario.documento}"></li>
+                                    <li th:text="'TELEFONO: ' + ${usuario.telefono}"></li>
+                                    <li th:text="'SEXO: ' + ${usuario.sexo}"></li>
+                                    <li th:text="'ZONA: ' + ${usuario.zona.nombre}"></li>
+                                    <li th:text="'ALTA: ' + ${usuario.alta}"></li>
+                                    <li th:text="'BAJA: ' + ${usuario.baja}"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <footer th:replace="/fragments/footer :: footer"></footer>
