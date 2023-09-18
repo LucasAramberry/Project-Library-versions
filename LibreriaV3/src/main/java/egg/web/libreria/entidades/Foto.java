@@ -22,6 +22,9 @@ public class Foto {
     @Basic(fetch = FetchType.LAZY)
     private byte[] contenido;
 
+    public Foto() {
+    }
+
     public String getId() {
         return id;
     }

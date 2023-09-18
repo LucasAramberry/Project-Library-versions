@@ -15,10 +15,14 @@
     <h1 class="mb-3">Modificar libro</h1>
 
     <div class="d-flex justify-content-center">
-        <div class="w-75 text-light d-flex justify-content-center">
+        <div class="w-75 direction text-light">
+            <div>
+                <div class="img-mod">
+                    <img th:if="${libro.foto != null}" class="rounded mx-auto d-block" th:src="@{'/foto/libro/' + ${libro.id}}" width="180px" height="250px" alt="Imagen"/>
+                </div>
+            </div>
             <div class="mb-3">
-
-                <form th:action="@{/libros/actualizar-libro}" method="POST">
+                <form th:action="@{/libros/actualizar}" method="POST" enctype="multipart/form-data">
 
                     <p th:if="${error != null}" th:text="${error}" class="error"></p>
 
@@ -107,29 +111,13 @@
                     <div class="d-grid gap-2 col-6 mx-auto boton-libro">
                         <button type="submit" class="btn btn-primary">Modificar</button>
                     </div>
-
                 </form>
-
-            </div>
-            <div class="w-25">
-                <div class="img-usuario">
-                    <img th:if="${libro.foto != null}" class="rounded mx-auto d-block" th:src="@{'/foto/libro/' + ${libro.id}}" width="180px" height="190px" alt="Imagen"/>
-                </div>
             </div>
         </div>
     </div>
 
     <footer th:replace="/fragments/footer :: footer"></footer>
 
-    <script
-        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-        crossorigin="anonymous"
-    ></script>
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
-        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
-        crossorigin="anonymous"
-    ></script>
+    <script th:replace="/fragments/script :: script"></script>
 </body>
 </html>

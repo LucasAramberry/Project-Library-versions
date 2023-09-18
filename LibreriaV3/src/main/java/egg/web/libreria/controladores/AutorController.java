@@ -2,9 +2,7 @@ package egg.web.libreria.controladores;
 
 import egg.web.libreria.entidades.Autor;
 import egg.web.libreria.errores.ErrorServicio;
-import egg.web.libreria.repositorios.AutorRepositorio;
 import egg.web.libreria.servicios.AutorServicio;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -19,21 +17,21 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author Lucas
  */
-//@PreAuthorize("hasAnyRole('ROLE_USUARIO')")
+//@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 @Controller
 @RequestMapping("/autores")
 public class AutorController {
 
     @Autowired
     private AutorServicio autorServicio;
-    @Autowired
-    private AutorRepositorio autorRepositorio;
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/registro")
     public String registroAutor() {
         return "registro-autor.html";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/registrar")
     public String registrarAutor(ModelMap modelo, MultipartFile archivo, @RequestParam String nombre) {
         try {
@@ -50,6 +48,7 @@ public class AutorController {
         return "exito.html";
     }
 
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/modificar")
     public String modificarAutor(ModelMap modelo, @RequestParam String id) {
 
@@ -63,6 +62,7 @@ public class AutorController {
         return "modificar-autor.html";
     }
 
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/actualizar")
     public String modificarAutor(ModelMap modelo, MultipartFile archivo, @RequestParam String id, @RequestParam String nombre) {
 
@@ -71,7 +71,7 @@ public class AutorController {
         try {
             autor = autorServicio.buscarAutorPorId(id);
             autorServicio.modificar(archivo, id, nombre);
-            return "redirect:/autores/mostrar";
+            return "redirect:/autores";
         } catch (ErrorServicio ex) {
             modelo.put("autor", autor);
             modelo.put("error", ex.getMessage());
@@ -79,6 +79,7 @@ public class AutorController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/baja")
     public String baja(ModelMap modelo, @RequestParam String id) {
         try {
@@ -86,9 +87,10 @@ public class AutorController {
         } catch (ErrorServicio ex) {
             modelo.put("error", ex.getMessage());
         }
-        return "redirect:/autores/mostrar";
+        return "redirect:/autores";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/alta")
     public String alta(ModelMap modelo, @RequestParam String id) {
         try {
@@ -96,9 +98,10 @@ public class AutorController {
         } catch (ErrorServicio ex) {
             modelo.put("error", ex.getMessage());
         }
-        return "redirect:/autores/mostrar";
+        return "redirect:/autores";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/eliminar")
     public String eliminar(ModelMap modelo, @RequestParam String id) {
         try {
@@ -106,6 +109,6 @@ public class AutorController {
         } catch (ErrorServicio ex) {
             modelo.put("error", ex.getMessage());
         }
-        return "redirect:/autores/mostrar";
+        return "redirect:/autores";
     }
 }

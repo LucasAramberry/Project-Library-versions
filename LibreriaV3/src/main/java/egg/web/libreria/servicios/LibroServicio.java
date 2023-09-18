@@ -345,7 +345,7 @@ public class LibroServicio {
         if (titulo == null || titulo.isEmpty()) {
             throw new ErrorServicio("El titulo no puede ser nulo");
         }
-        if (descripcion == null || descripcion.isEmpty()) {
+        if (descripcion == null || descripcion.isEmpty() || descripcion.length() > 255) {
             throw new ErrorServicio("La descripcion no puede ser nula");
         }
         if (fechaPublicacion == null || fechaPublicacion.getYear() > 2023) {

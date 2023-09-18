@@ -280,7 +280,7 @@ public class UsuarioServicio implements UserDetailsService {
         if (!clave.equals(clave2)) {
             throw new ErrorServicio("Las contraseñas deben ser iguales.");
         }
-        if (sexo == null) {
+        if (sexo == null || (!sexo.equals(Sexo.Hombre) && !sexo.equals(Sexo.Mujer))) {
             throw new ErrorServicio("El sexo no puede ser nulo.");
         }
     }

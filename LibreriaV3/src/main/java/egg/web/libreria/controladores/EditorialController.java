@@ -2,9 +2,7 @@ package egg.web.libreria.controladores;
 
 import egg.web.libreria.entidades.Editorial;
 import egg.web.libreria.errores.ErrorServicio;
-import egg.web.libreria.repositorios.EditorialRepositorio;
 import egg.web.libreria.servicios.EditorialServicio;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -19,21 +17,21 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author Lucas
  */
-//@PreAuthorize("hasAnyRole('ROLE_USUARIO')")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 @Controller
 @RequestMapping("/editoriales")
 public class EditorialController {
 
     @Autowired
     private EditorialServicio editorialServicio;
-    @Autowired
-    private EditorialRepositorio editorialRepositorio;
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/registro")
     public String registroEditorial() {
         return "registro-editorial.html";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/registrar")
     public String registrarEditorial(ModelMap modelo, MultipartFile archivo, @RequestParam String nombre) {
         try {
@@ -50,6 +48,7 @@ public class EditorialController {
         return "exito.html";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/modificar")
     public String modificarEditorial(ModelMap modelo, @RequestParam String id) {
 
@@ -63,6 +62,7 @@ public class EditorialController {
         return "modificar-editorial.html";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/actualizar")
     public String modificarEditorial(ModelMap modelo, MultipartFile archivo, @RequestParam String id, @RequestParam String nombre) {
 
@@ -71,7 +71,7 @@ public class EditorialController {
         try {
             editorial = editorialServicio.buscarEditorialPorId(id);
             editorialServicio.modificar(archivo, id, nombre);
-            return "redirect:/editoriales/mostrar";
+            return "redirect:/editoriales";
         } catch (ErrorServicio ex) {
             modelo.put("editorial", editorial);
             modelo.put("error", ex.getMessage());
@@ -79,6 +79,7 @@ public class EditorialController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/baja")
     public String baja(ModelMap modelo, @RequestParam String id) {
         try {
@@ -86,9 +87,10 @@ public class EditorialController {
         } catch (ErrorServicio ex) {
             modelo.put("error", ex.getMessage());
         }
-        return "redirect:/editoriales/mostrar";
+        return "redirect:/editoriales";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/alta")
     public String alta(ModelMap modelo, @RequestParam String id) {
         try {
@@ -96,9 +98,10 @@ public class EditorialController {
         } catch (ErrorServicio ex) {
             modelo.put("error", ex.getMessage());
         }
-        return "redirect:/editoriales/mostrar";
+        return "redirect:/editoriales";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/eliminar")
     public String eliminar(ModelMap modelo, @RequestParam String id) {
         try {
@@ -106,6 +109,6 @@ public class EditorialController {
         } catch (ErrorServicio ex) {
             modelo.put("error", ex.getMessage());
         }
-        return "redirect:/editoriales/mostrar";
+        return "redirect:/editoriales";
     }
 }

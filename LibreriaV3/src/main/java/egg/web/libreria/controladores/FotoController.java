@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  * @author Lucas
  */
-//@PreAuthorize("hasAnyRole('ROLE_USUARIO')")
 @Controller
 @RequestMapping("/foto")
 public class FotoController {
@@ -32,6 +31,7 @@ public class FotoController {
     @Autowired
     private EditorialServicio editorialServicio;
 
+    @PreAuthorize("hasAnyRole('ROLE_USUARIO', 'ROLE_ADMIN')")
     @GetMapping("/usuario/{id}")
     public ResponseEntity<byte[]> fotoUsuario(@PathVariable String id) {
         try {

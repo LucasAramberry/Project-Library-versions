@@ -21,11 +21,6 @@ h1 {
     color: #fff;
 }
 
-table {
-    text-align: center;
-    align-content: center;
-}
-
 a{
     text-decoration: none;
 }
@@ -43,7 +38,6 @@ ul{
 }
 
 .logout{
-    color: green;
     font-size: 0.8rem;
     margin-bottom: 0;
 }
@@ -52,7 +46,8 @@ ul{
     background-image: none;
 }
 
-/*animacioness titulo*/
+/*******************************animacioness titulo****************************/
+
 .t-stroke {
     color: transparent;
     -moz-text-stroke-width: 2px;
@@ -115,14 +110,14 @@ ul{
     color: darkgray;
 }
 
-.img-usuario{
-    margin-top: 60%;
-    margin-left: 25%;
+.direction{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
-.img-a-e{
-    margin-top: 10%;
-    margin-left: 25%;
+.img-mod{
+    padding: 1rem;
 }
 
 .contenedor{
@@ -153,9 +148,7 @@ ul{
     align-items: center;
 }
 
-.filtrar{
-    margin-bottom: 1rem;
-}
+/****************************************ESTILOS FOOTER**************************************/
 
 .pie {
     margin-top: 5rem;
@@ -213,7 +206,8 @@ li:hover{
     text-align: center;
     border-style: double;
     border-color: #212529;
-    margin: 1% auto
+    margin: 1% auto;
+    margin-bottom: 1rem;
 }
 
 .filtrar-select{
@@ -278,13 +272,16 @@ li:hover{
 
 /* Estilos para pantallas pequeñas (ejemplo: teléfonos móviles) */
 @media screen and (max-width: 768px) {
+
     body {
         font-size: 14px;/*Tamaño de fuente más pequeño para pantallas pequeñas*/
     }
+
     .titulo{
         font-size: 2.5rem;
         margin-bottom: 2%;
     }
+
     /****************************************ESTILOS FILTRAR**************************************/
 
     .filtrar{
@@ -295,4 +292,12 @@ li:hover{
         width: 275px;
     }
 
+    .direction{
+        flex-direction: column;
+        margin-bottom: 4rem;
+    }
+
+    .img-mod{
+        padding: 1rem;
+    }
 }

@@ -9,7 +9,7 @@
     <nav th:replace="/fragments/navbar :: nav"></nav>
 
     <section class="text-center text-light centrar">
-        <h1 class="titulo font-monospace t-stroke t-shadow-halftone glitch" data-text="¡Bienvenidos a la Libreria!">¡Bienvenido a la Libreria!</h1>
+        <h1 class="titulo font-monospace t-stroke t-shadow-halftone glitch" data-text="¡Bienvenido a la Libreria!">¡Bienvenido a la Libreria!</h1>
 
         <h1 class="nombreUsuario" th:if="${session.usuariosession != null}" th:text="${session.usuariosession.nombre + ' ' + session.usuariosession.apellido}"></h1>
 
@@ -22,7 +22,7 @@
         </h2>
 
         <div>
-            <a th:if="${session.usuariosession != null}" class="enlaces-sub" th:href="@{/prestamos/mis-prestamos}">
+            <a sec:authorize="hasRole('USUARIO')"  th:if="${session.usuariosession != null}" class="enlaces-sub" th:href="@{/prestamos/mis-prestamos}">
                 <button type="button" class="btn btn-dark btn">Mis prestamos</button>
             </a>
             <a th:if="${session.usuariosession != null}" class="enlaces-sub" th:href="@{/usuario/editar-perfil(id=__${session.usuariosession.id}__)}">
@@ -33,15 +33,6 @@
 
     <footer th:replace="/fragments/footer :: footer"></footer>
 
-    <script
-        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
-        crossorigin="anonymous"
-    ></script>
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
-        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
-        crossorigin="anonymous"
-    ></script>
+    <script th:replace="/fragments/script :: script"></script>
 </body>
 </html>

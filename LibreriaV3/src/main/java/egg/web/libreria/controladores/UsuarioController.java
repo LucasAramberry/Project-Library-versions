@@ -80,34 +80,6 @@ public class UsuarioController {
             return "perfil.html";
         }
     }
-
-//    @GetMapping("/registro-usuario")
-//    public String registroUsuario(ModelMap model) {
-//        List<Usuario> usuario = usuarioRepositorio.findAll();
-//        model.put("usuarios", usuario);
-//
-//        return "add-usuario.html";
-//    }
-//
-//    @PostMapping("/registrar-usuario")
-//    public String registrarUsuario(ModelMap modelo, @RequestParam String nombre, @RequestParam String apellido, @RequestParam String documento, @RequestParam String telefono) {
-//
-//        try {
-//            usuarioServicio.registar(nombre, apellido, documento, telefono);
-//        } catch (ErrorServicio ex) {
-//            modelo.put("error", ex.getMessage());
-//
-//            modelo.put("nombre", nombre);
-//            modelo.put("apellido", apellido);
-//            modelo.put("documento", documento);
-//            modelo.put("telefono", telefono);
-//
-//            return "add-usuario.html";
-//        }
-//        modelo.put("titulo", "Registro exitoso!");
-//        modelo.put("descripcion", "El usuario ingresado fue registrado correctamente.");
-//        return "exito.html";
-//    }
     
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/cambiar-rol")

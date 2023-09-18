@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author Lucas
  */
+//@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USUARIO')")
 @Controller
 @RequestMapping("/libros")
 public class LibroController {
@@ -40,20 +41,19 @@ public class LibroController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USUARIO')")
     @GetMapping("/mostrar/{id}")
     public String mostrarLibros(@PathVariable String id, ModelMap modelo) {
-
         try {
             //pasamos la fecha actual por si qremos realizar el prestamo
             modelo.addAttribute("fechaPrestamo", LocalDate.now());
             
             modelo.put("libro", libroServicio.buscarLibroPorId(id));
 
-            return "mostrarLibro.html";
+            return "libro.html";
         } catch (ErrorServicio ex) {
             return "redirect:/libros";
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/registro")
     public String registroLibro(ModelMap modelo) {
         List<Autor> autores = autorRepositorio.findAll();
@@ -62,10 +62,10 @@ public class LibroController {
         modelo.put("autores", autores);
         modelo.put("editoriales", editoriales);
 
-        return "add-libro.html";
+        return "registro-libro.html";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/registrar")
     public String registrarLibro(ModelMap modelo, MultipartFile archivo, @RequestParam String isbn, @RequestParam String titulo, @RequestParam String descripcion, @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaPublicacion, @RequestParam Integer cantidadPaginas, @RequestParam Integer ejemplares, @RequestParam Integer ejemplaresPrestados, @RequestParam String idAutor, @RequestParam String idEditorial) {
 
@@ -90,7 +90,7 @@ public class LibroController {
             modelo.put("idAutor", idAutor);
             modelo.put("idEditorial", idEditorial);
 
-            return "add-libro.html";
+            return "registro-libro.html";
         }
         modelo.put("titulo", "Registro exitoso!");
         modelo.put("descripcion", "El libro ingresado fue registrado correctamente.");
@@ -124,7 +124,7 @@ public class LibroController {
         try {
             libro = libroServicio.buscarLibroPorId(id);
             libroServicio.modificar(archivo, id, isbn, titulo, descripcion, fechaPublicacion, cantidadPaginas, ejemplares, ejemplaresPrestados, idAutor, idEditorial);
-            return "redirect:/libros/mostrar";
+            return "redirect:/libros";
         } catch (ErrorServicio ex) {
             List<Autor> autores = autorRepositorio.findAll();
             modelo.put("autores", autores);

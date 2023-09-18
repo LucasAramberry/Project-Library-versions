@@ -152,7 +152,7 @@ public class AutorServicio {
             throw new ErrorServicio("No se encontro el autor solicitado por id.");
         }
     }
-    
+
     /**
      * metodo para buscar autor por nombre
      *
@@ -169,14 +169,14 @@ public class AutorServicio {
             throw new ErrorServicio("No se encontro el autor solicitado por nombre.");
         }
     }
-    
+
     /**
      * Metodo para listar autores
      *
      * @return
      */
     @Transactional
-    public List<Autor> listarAutores(){
+    public List<Autor> listarAutores() {
         return autorRepositorio.findAll();
     }
 

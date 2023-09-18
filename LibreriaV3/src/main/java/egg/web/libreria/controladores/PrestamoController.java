@@ -1,16 +1,10 @@
 package egg.web.libreria.controladores;
 
-import egg.web.libreria.entidades.Usuario;
-import egg.web.libreria.entidades.Libro;
-import egg.web.libreria.entidades.Prestamo;
+import egg.web.libreria.entidades.*;
 import egg.web.libreria.enumeraciones.Rol;
 import egg.web.libreria.errores.ErrorServicio;
-import egg.web.libreria.repositorios.UsuarioRepositorio;
-import egg.web.libreria.repositorios.LibroRepositorio;
-import egg.web.libreria.repositorios.PrestamoRepositorio;
-import egg.web.libreria.servicios.UsuarioServicio;
-import egg.web.libreria.servicios.LibroServicio;
-import egg.web.libreria.servicios.PrestamoServicio;
+import egg.web.libreria.repositorios.*;
+import egg.web.libreria.servicios.*;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;

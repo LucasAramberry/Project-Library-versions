@@ -45,7 +45,6 @@ public class PortalController {
         if (error != null) {
             model.put("error", "Email o contraseña incorrectos.");
         }
-        //No funciona el mensaje resolver
         if (logout != null) {
             model.put("logout", "Ha salido correctamente de la plataforma.");
         }
@@ -77,27 +76,17 @@ public class PortalController {
             modelo.put("apellido", apellido);
             modelo.put("documento", documento);
             modelo.put("telefono", telefono);
+            modelo.put("sexo", sexo);
             modelo.put("idZona", idZona);
             modelo.put("mail", mail);
 
             return "registro.html";
         }
-        modelo.put("titulo", "Bienvenido a la Libreria!");
+        modelo.put("titulo", "¡Bienvenido a la Libreria!");
         modelo.put("descripcion", "Tu usuario fue registrado de manera satisfactoria.");
         return "exito.html";
     }
 
-//    @GetMapping("/libros")
-//    public String libros(ModelMap modelo) {
-//
-//        List<Libro> librosActivos = libroServicio.listarLibrosActivos();
-//        modelo.put("librosA", librosActivos);
-//
-//        List<Libro> libros = libroServicio.listarLibros();
-//        modelo.addAttribute("libros", libros);
-//
-//        return "libros.html";
-//    }
     @GetMapping("/libros")
     public String libros(ModelMap modelo, @RequestParam(required = false) String idLibro, @RequestParam(required = false) String idAutor, @RequestParam(required = false) String idEditorial) {
         try {
@@ -107,38 +96,11 @@ public class PortalController {
             List<Libro> libros = libroServicio.listarLibros();
             modelo.addAttribute("libros", libros);
 
-            modelo.addAttribute("libroSelected", null);
-
             if (idLibro != null) {
                 Libro libroPorTitulo = libroServicio.buscarLibroPorId(idLibro);
                 modelo.addAttribute("libros", libroPorTitulo);
             }
             return "libros.html";
-//        //autores
-//        List<Autor> listaActivos = autorServicio.listaAutoresActivos();
-//        modelo.addAttribute("autoresA", listaActivos);
-//
-//        List<Autor> autores = autorServicio.listarAutores();
-//        modelo.addAttribute("autores", autores);
-//
-//        modelo.addAttribute("autorSelected", null);
-//
-//        //editoriales
-//        List<Editorial> listaEditoriales = editorialServicio.listarEditoriales();
-//        modelo.addAttribute("editoriales", listaEditoriales);
-//
-//        List<Editorial> listaEditorialesActivas = editorialServicio.listaEditorialesActivas();
-//        modelo.addAttribute("editorialesA", listaEditorialesActivas);
-//
-//        modelo.addAttribute("editorialSelected", null);
-//
-//        if (idAutor != null) {
-//            List<Libro> librosPorAutor = libroServicio.buscarLibrosPorAutor(idAutor);
-//            modelo.addAttribute("libros", librosPorAutor);
-//        } else if (idEditorial != null) {
-//            List<Libro> librosPorEditorial = libroServicio.buscarLibrosPorEditorial(idEditorial);
-//            modelo.addAttribute("libros", librosPorEditorial);
-//        }
         } catch (ErrorServicio ex) {
             return "libros.html";
         }
@@ -152,8 +114,6 @@ public class PortalController {
 
         List<Autor> autores = autorServicio.listarAutores();
         modelo.addAttribute("autores", autores);
-
-        modelo.addAttribute("autorSelected", null);
 
         if (idAutor != null) {
             try {
@@ -178,8 +138,6 @@ public class PortalController {
 
         List<Editorial> listaActivos = editorialServicio.listaEditorialesActivas();
         modelo.addAttribute("editorialesA", listaActivos);
-
-        modelo.addAttribute("editorialSelected", null);
 
         if (idEditorial != null) {
             try {
@@ -207,6 +165,11 @@ public class PortalController {
         if (idUsuario != null) {
             List<Prestamo> prestamosUsuario = prestamoServicio.buscarPrestamosPorUsuario(idUsuario);
             model.put("prestamos", prestamosUsuario);
+            try {
+                model.addAttribute("usuarioSelected", usuarioServicio.buscarUsuarioPorId(idUsuario));
+            } catch (ErrorServicio ex) {
+                return "prestamos.html";
+            }
         } else {
             List<Prestamo> prestamos = prestamoServicio.listaPrestamos();
             model.put("prestamos", prestamos);
@@ -219,10 +182,13 @@ public class PortalController {
     public String usuarios(ModelMap model, @RequestParam(required = false) String idUsuario) {
         model.put("rolAdmin", Rol.ADMIN);
         model.put("rolUsuario", Rol.USUARIO);
-        
-        List<Usuario> listaActivos = usuarioServicio.findAll();
-        model.addAttribute("usuarios", listaActivos);
 
+        List<Usuario> listaBuscarUsuarios = usuarioServicio.findAll();
+        model.addAttribute("usuariosLista", listaBuscarUsuarios);
+
+        List<Usuario> listaUsuarios = usuarioServicio.findAll();
+        model.addAttribute("usuarios", listaUsuarios);
+        
         model.addAttribute("usuarioSelected", null);
 
         if (idUsuario != null) {
@@ -230,12 +196,10 @@ public class PortalController {
             try {
                 usuario = usuarioServicio.buscarUsuarioPorId(idUsuario);
                 model.put("usuarios", usuario);
+                model.addAttribute("usuarioSelected", usuario);
             } catch (ErrorServicio ex) {
-                return "redirect:/";
+                return "usuarios.html";
             }
-        } else {
-            List<Usuario> listaUsuarios = usuarioServicio.findAll();
-            model.addAttribute("usuarios", listaUsuarios);
         }
         return "usuarios.html";
     }
