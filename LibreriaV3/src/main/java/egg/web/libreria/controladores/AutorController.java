@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author Lucas
  */
-//@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 @Controller
 @RequestMapping("/autores")
 public class AutorController {
@@ -48,7 +48,7 @@ public class AutorController {
         return "exito.html";
     }
 
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/modificar")
     public String modificarAutor(ModelMap modelo, @RequestParam String id) {
 
@@ -62,7 +62,7 @@ public class AutorController {
         return "modificar-autor.html";
     }
 
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/actualizar")
     public String modificarAutor(ModelMap modelo, MultipartFile archivo, @RequestParam String id, @RequestParam String nombre) {
 
